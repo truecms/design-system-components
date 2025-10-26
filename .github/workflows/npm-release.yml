@@ -3,16 +3,16 @@ name: npm Release
 on:
   workflow_dispatch:
     inputs:
-      semver_bump:
-        description: 'Lerna publish argument (from-package, patch, minor, major, prerelease)'
-        default: from-package
-        required: true
+      npm_scope:
+        description: 'npm scope to publish packages under (include leading @)'
+        default: '@truecms'
+        required: false
       dist_tag:
         description: 'npm dist-tag to apply to published packages'
         default: latest
-        required: true
+        required: false
       dry_run:
-        description: 'Run lerna publish with --dry-run for verification'
+        description: 'Run Changesets publish with --dry-run to validate pipeline'
         type: boolean
         default: true
   release:
@@ -24,18 +24,22 @@ jobs:
     timeout-minutes: 45
     env:
       CI: true
-      NPM_PUBLISH_SCOPE: '@truecms'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-          cache: npm
+          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Configure npm authentication
@@ -46,52 +50,44 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Bootstrap workspaces
-        run: npm run bootstrap
+        run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: npm run build
+        run: pnpm run build
 
-      - name: Publish packages with Lerna
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Publish packages with Changesets
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
-          INPUT_BUMP: ${{ inputs.semver_bump }}
+          INPUT_SCOPE: ${{ inputs.npm_scope }}
           INPUT_DIST_TAG: ${{ inputs.dist_tag }}
           INPUT_DRY_RUN: ${{ inputs.dry_run }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
-          bump="$INPUT_BUMP"
-          dist_tag="$INPUT_DIST_TAG"
-          dry_run_flag="$INPUT_DRY_RUN"
 
-          if [ -z "$bump" ]; then
-            bump="from-package"
-          fi
-
-          if [ -z "$dist_tag" ]; then
-            dist_tag="latest"
-          fi
-
-          if [ -z "$dry_run_flag" ]; then
-            dry_run_flag="true"
-          fi
+          scope="${INPUT_SCOPE:-@truecms}"
+          dist_tag="${INPUT_DIST_TAG:-latest}"
+          dry_run_flag="${INPUT_DRY_RUN:-true}"
 
           if [ "$GITHUB_EVENT_NAME" = "release" ]; then
-            bump="from-package"
-            dist_tag="latest"
             dry_run_flag="false"
+            dist_tag="latest"
           fi
 
-          extra_flags=""
+          export NPM_PUBLISH_SCOPE="$scope"
+          npm config set scope "${scope#@}"
+
+          args=(--tag "$dist_tag")
           if [ "$dry_run_flag" = "true" ]; then
-            extra_flags="--dry-run"
+            args+=(--dry-run)
           fi
 
-          npx lerna publish "$bump" --yes --dist-tag "$dist_tag" --no-private $extra_flags
+          pnpm run release -- "${args[@]}"
 
       - name: Post-release cleanup
         if: always()
-        run: npm cache verify
+        run: pnpm store prune

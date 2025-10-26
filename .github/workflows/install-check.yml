@@ -28,6 +28,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:

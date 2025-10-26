@@ -1,0 +1,5 @@
+# Shared browser support targets (mirrors legacy Autoprefixer configuration)
+last 2 versions
+ie 8
+ie 9
+ie 10

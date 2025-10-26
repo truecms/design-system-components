@@ -1,49 +1,54 @@
 {
-	"name": "auds",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/govau/design-system-components"
-	},
-	"devDependencies": {
-		"autoprefixer": "^9.4.10",
-		"cfonts": "^2.4.2",
-		"chalk": "^2.4.2",
-		"express": "^4.16.4",
-		"inquirer": "6.2.2",
-		"jest-cli": "^24.7.1",
-		"lerna": "^3.14.1",
-		"node-sass": "^4.14.0",
-		"pa11y": "^5.1.0",
-		"postcss": "^8.2.10",
-		"puppeteer": "^1.13.0",
-		"rimraf": "^2.6.3",
-		"semver": "^5.6.0",
-		"treeify": "^1.1.0"
-	},
-	"scripts": {
-		"scaffolding": "node ./scripts/helper.js scaffolding",
-		"bootstrap": "lerna bootstrap --hoist",
-		"build": "lerna run build",
-		"publish": "lerna version --no-git-tag-version --no-push",
-		"nuke": "npm run delete:node_modules | npm run delete:lib",
-		"delete:node_modules": "lerna clean --yes && rimraf node_modules",
-		"delete:lib": "rimraf packages/*/lib",
-		"test:unit-test": "jest",
-		"test": "node scripts/helper.js test && node ./scripts/a11y.js"
-	},
-	"jest": {
-		"testRegex": "\\.spec.js$",
-		"collectCoverageFrom": [
-			"packages/*/lib/js/*.js"
-		],
-		"coverageThreshold": {
-			"global": {
-				"branches": 0,
-				"functions": 0,
-				"lines": 0,
-				"statements": 0
-			}
-		}
-	}
+  "name": "auds",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/govau/design-system-components"
+  },
+  "devDependencies": {
+    "@lerna/legacy-package-management": "^7.4.2",
+    "autoprefixer": "^10.4.21",
+    "cfonts": "^3.3.1",
+    "chalk": "^5.6.2",
+    "express": "^4.21.2",
+    "inquirer": "^9.3.8",
+    "jest": "^29.7.0",
+    "lerna": "^7.4.2",
+    "pa11y": "^9.0.1",
+    "postcss": "^8.4.35",
+    "puppeteer": "^24.26.1",
+    "rimraf": "^5.0.10",
+    "sass": "^1.71.0",
+    "semver": "^7.7.3",
+    "treeify": "^1.1.0"
+  },
+  "scripts": {
+    "scaffolding": "node ./scripts/helper.js scaffolding",
+    "bootstrap": "lerna bootstrap --hoist --ignore-scripts",
+    "build": "lerna run build",
+    "publish": "lerna version --no-git-tag-version --no-push --yes",
+    "nuke": "npm run delete:node_modules && npm run delete:lib",
+    "delete:node_modules": "lerna clean --yes && rimraf node_modules",
+    "delete:lib": "rimraf packages/*/lib",
+    "test:unit-test": "jest --runInBand",
+    "test": "npm run test:unit-test && node scripts/helper.js test && node ./scripts/a11y.js"
+  },
+  "jest": {
+    "testRegex": "\\.spec.js$",
+    "collectCoverageFrom": [
+      "packages/*/lib/js/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    }
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  }
 }

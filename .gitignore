@@ -16,3 +16,14 @@ packages/*/lib/
 npm-debug.log
 lerna-debug.log
 /index.html
+dist/
+build/
+coverage/
+.env
+.env.local
+.env.*
+*.log
+.vscode/
+Thumbs.db
+*.tmp
+*.swp

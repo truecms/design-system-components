@@ -9,6 +9,8 @@ Australian Government Design System Components
 
 **Full documentation at [designsystem.gov.au](http://designsystem.gov.au/)**
 
+Contributor onboarding? Read the [Repository Guidelines](./AGENTS.md) for build, testing, and PR expectations.
+
 ---
 
 ## Installation
@@ -618,4 +620,3 @@ npm run test
 - [govau/design-system-sketch-file](https://github.com/govau/design-system-sketch-file)
 
 **[⬆ back to top](#contents)**
-

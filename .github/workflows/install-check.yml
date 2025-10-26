@@ -1,0 +1,94 @@
+name: Install Check
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  install-check:
+    name: Node ${{ matrix.node-version }} install sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['22.x', 'lts/*']
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Bootstrap workspaces
+        run: npm run bootstrap
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Verify package tarballs install cleanly
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/dist/tarballs"
+          node <<'NODE'
+          const { execSync } = require('child_process');
+          const fs = require('fs');
+          const path = require('path');
+          const os = require('os');
+
+          const workspace = process.env.GITHUB_WORKSPACE;
+          const runnerTemp = process.env.RUNNER_TEMP || os.tmpdir();
+          const packages = JSON.parse(execSync('npx lerna list --json --all', { encoding: 'utf8' }));
+
+          for (const pkg of packages) {
+            process.stdout.write(`::group::Packing ${pkg.name}\n`);
+            const packOutput = execSync(`npm pack --pack-destination "${path.join(workspace, 'dist/tarballs')}"`, {
+              cwd: pkg.location,
+              encoding: 'utf8'
+            });
+            const lines = packOutput.trim().split(/\r?\n/);
+            const tarball = lines[lines.length - 1];
+            const safeName = pkg.name.replace(/[^A-Za-z0-9.-]/g, '-');
+            const installDir = path.join(runnerTemp, `install-${safeName}`);
+
+            fs.rmSync(installDir, { recursive: true, force: true });
+            fs.mkdirSync(installDir, { recursive: true });
+
+            execSync('npm init -y', { cwd: installDir, stdio: 'inherit' });
+            execSync(`npm install "${path.join(workspace, 'dist/tarballs', tarball)}"`, {
+              cwd: installDir,
+              stdio: 'inherit'
+            });
+
+            process.stdout.write('::endgroup::\n');
+          }
+          NODE
+
+      - name: Clean tarballs
+        if: always()
+        run: rm -rf dist/tarballs

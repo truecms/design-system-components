@@ -1,0 +1,97 @@
+name: npm Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      semver_bump:
+        description: 'Lerna publish argument (from-package, patch, minor, major, prerelease)'
+        default: from-package
+        required: true
+      dist_tag:
+        description: 'npm dist-tag to apply to published packages'
+        default: latest
+        required: true
+      dry_run:
+        description: 'Run lerna publish with --dry-run for verification'
+        type: boolean
+        default: true
+  release:
+    types: [published]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: true
+      NPM_PUBLISH_SCOPE: '@truecms'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure npm authentication
+        run: |
+          npm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
+          npm whoami || npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Bootstrap workspaces
+        run: npm run bootstrap
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Publish packages with Lerna
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
+          INPUT_BUMP: ${{ inputs.semver_bump }}
+          INPUT_DIST_TAG: ${{ inputs.dist_tag }}
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          bump="$INPUT_BUMP"
+          dist_tag="$INPUT_DIST_TAG"
+          dry_run_flag="$INPUT_DRY_RUN"
+
+          if [ -z "$bump" ]; then
+            bump="from-package"
+          fi
+
+          if [ -z "$dist_tag" ]; then
+            dist_tag="latest"
+          fi
+
+          if [ -z "$dry_run_flag" ]; then
+            dry_run_flag="true"
+          fi
+
+          if [ "$GITHUB_EVENT_NAME" = "release" ]; then
+            bump="from-package"
+            dist_tag="latest"
+            dry_run_flag="false"
+          fi
+
+          extra_flags=""
+          if [ "$dry_run_flag" = "true" ]; then
+            extra_flags="--dry-run"
+          fi
+
+          npx lerna publish "$bump" --yes --dist-tag "$dist_tag" --no-private $extra_flags
+
+      - name: Post-release cleanup
+        if: always()
+        run: npm cache verify

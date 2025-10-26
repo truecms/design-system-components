@@ -12,13 +12,51 @@
  */
 const Autoprefixer = require('autoprefixer');
 const Postcss = require('postcss');
-const Sass = require('node-sass');
-const Chalk = require(`chalk`);
+const Sass = require('sass');
+const Chalk = require(`chalk`).default;
 const Path = require(`path`);
 const Fs = require(`fs`);
 const Os = require(`os`);
 
 const PKG = require( Path.normalize(`${ process.cwd() }/package.json`) );
+
+const ROOT_DIR = Path.resolve(__dirname, '..');
+
+const loadBrowserslistTargets = (() => {
+	let cache;
+
+	return () => {
+		if( cache ) {
+			return cache;
+		}
+
+		const candidates = [
+			Path.resolve(process.cwd(), '.browserslistrc'),
+			Path.resolve(ROOT_DIR, '.browserslistrc')
+		];
+
+		for( const candidate of candidates ) {
+			if( Fs.existsSync( candidate ) ) {
+				cache = Fs.readFileSync( candidate, 'utf-8' )
+					.split(/\r?\n/)
+					.map( line => line.trim() )
+					.filter( line => line.length > 0 && !line.startsWith('#') );
+
+				if( cache.length > 0 ) {
+					return cache;
+				}
+			}
+		}
+
+		cache = [];
+		return cache;
+	};
+})();
+
+const createAutoprefixerPlugin = () => {
+	const targets = loadBrowserslistTargets();
+	return targets.length > 0 ? Autoprefixer({ overrideBrowserslist: targets }) : Autoprefixer();
+};
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -182,12 +220,13 @@ const GetFolders = ( thisPath, verbose ) => {
  * @param  {string} css  - The location where the CSS should be written to
  */
 const Sassify = ( scss, css ) => {
+	const includePaths = [ Path.resolve(process.cwd(), 'lib', 'sass') ];
 	const compiled = Sass.renderSync({
 		file: scss,
 		indentType: 'tab',
 		precision: 8,
-		includePaths: [ './lib/sass/' ],
-		outputStyle: 'compressed',
+		includePaths,
+		style: 'compressed',
 	});
 
 	Fs.writeFileSync( css, compiled.css );
@@ -203,8 +242,9 @@ const Sassify = ( scss, css ) => {
  */
 const Autoprefix = ( file ) => {
 	const data = Fs.readFileSync( file, 'utf-8' );
+	const plugin = createAutoprefixerPlugin();
 
-	Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
+	return Postcss([ plugin ])
 		.process( data, { from: file, to: file } )
 		.then( ( prefixed ) => {
 			prefixed
@@ -216,7 +256,12 @@ const Autoprefix = ( file ) => {
 			Fs.writeFileSync( file, prefixed.css );
 
 			HELPER.log.success(`Autoprefixed file ${ Chalk.yellow( file ) }`);
-	});
+		})
+		.catch( ( error ) => {
+			HELPER.log.error(`Autoprefixer failed for ${ Chalk.yellow( file ) }`);
+			console.error( error );
+			process.exit( 1 );
+		});
 };
 
 

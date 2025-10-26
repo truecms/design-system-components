@@ -48,34 +48,35 @@ const DisplayResults = results => {
 // RUN TESTS
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const RunPa11y = async ( urls ) => {
-	// Start the browser
-	const browser = await Puppeteer.launch();
+	const browser = await Puppeteer.launch({ headless: 'new' });
 
-	// For each url create a new page and run the Pa11y Test
-	const tests = urls.map( async ( url ) => {
-		const page = await browser.newPage();
+	try {
+		await Promise.all( urls.map( async ( url ) => {
+			const page = await browser.newPage();
 
-		// Run the Pa11y test
-		await Pa11y( url, {
-			browser,
-			page,
-			...OPTIONS,
-		})
-		.then( result => {
-			console.log( `Pa11y automated ${ result.documentTitle }` );
-			DisplayResults( result );
-		})
-		.catch( error => Helper.log.error( error ) );
+			try {
+				const result = await Pa11y( url, {
+					browser,
+					page,
+					...OPTIONS,
+				});
 
-		// Close the page
-		await page.close();
-	});
-
-	// Wait for all the tests to finish
-	await Promise.all( tests );
-
-	// Close the browser
-	await browser.close();
+				console.log( `Pa11y automated ${ result.documentTitle }` );
+				DisplayResults( result );
+			}
+			catch( error ) {
+				Helper.log.error(`Pa11y failed for ${ url }`);
+				console.error( error );
+				throw error;
+			}
+			finally {
+				await page.close();
+			}
+		}) );
+	}
+	finally {
+		await browser.close();
+	}
 }
 
 
@@ -86,28 +87,28 @@ const TestURL   = 'http://localhost:8080';
 
 // Start the test - immediatley executed async function
 ( async() => {
-	// Start express at port 8080
-	const App    = Express();
+	const App = Express();
 	const Server = App.listen( '8080' );
 
-	// Set up the server localhost:8080 and the current directory
 	App.use( Express.static( './' ) );
 
-	// Default one url to test
 	let urls = [ `${ TestURL }/tests/site` ];
 
-	// If there is a auds.json file we should test all the components
-	if( Fs.existsSync( audsJson ) ){
-
-		// Create a url based off the keys in the auds.json
-		urls = Object.keys( require( audsJson ) ).map( key => {
-			return `${ TestURL }/packages/${ key.substring( 8 ) }/tests/site`
-		});
+	if( Fs.existsSync( audsJson ) ) {
+		urls = Object.keys( require( audsJson ) ).map( key => `${ TestURL }/packages/${ key.substring( 8 ) }/tests/site` );
 	}
 
-	// Run all of the tests
-	await RunPa11y( urls );
-
-	// Close the express server
-	Server.close();
+	try {
+		await RunPa11y( urls );
+	}
+	catch( error ) {
+		Helper.log.error('Accessibility checks failed');
+		console.error( error );
+		process.exitCode = 1;
+	}
+	finally {
+		await new Promise( ( resolve, reject ) => {
+			Server.close( ( closeError ) => closeError ? reject( closeError ) : resolve() );
+		});
+	}
 })();

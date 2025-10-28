@@ -1,4 +1,4 @@
-@gov.au/animate
+@truecms/animate
 ============
 
 > A JavaScript function to open, close and toggle the display of page elements.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/animate
+pnpm add @truecms/animate
 ```
 
 ```shell
-npm install @gov.au/animate
+npm install @truecms/animate
 ```
 
 
@@ -140,7 +140,7 @@ animate
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/animate/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/animate/tests/site/
 
 Run `jest` for the unit tests
 

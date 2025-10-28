@@ -1,4 +1,4 @@
-@gov.au/progress-indicator
+@truecms/progress-indicator
 ============
 
 > Indicator of progress through a multitude of pages mostly used for forms.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/progress-indicator
+pnpm add @truecms/progress-indicator
 ```
 
 ```shell
-npm install @gov.au/progress-indicator
+npm install @truecms/progress-indicator
 ```
 
 
@@ -96,7 +96,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/progress-indicator/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/progress-indicator/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -121,7 +121,7 @@ progress-indicator
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/progress-indicator/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/progress-indicator/tests/site/
 
 
 **[⬆ back to top](#contents)**

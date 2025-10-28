@@ -1,7 +1,7 @@
-@gov.au/core
+@truecms/core
 ============
 
-> The core module all [gov.au components modules](https://github.com/govau/design-system-components/) depend on.
+> The core module all [gov.au components modules](https://github.com/truecms/design-system-components/) depend on.
 
 
 ## Contents
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/core
+pnpm add @truecms/core
 ```
 
 ```shell
-npm install @gov.au/core
+npm install @truecms/core
 ```
 
 
@@ -244,7 +244,7 @@ core
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/core/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/core/tests/site/
 
 
 **[⬆ back to top](#contents)**

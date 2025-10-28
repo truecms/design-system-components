@@ -1,6 +1,6 @@
 # Contributing to the Node 22 modernisation
 
-Thanks for helping keep the Australian Government Design System components alive. This fork modernises the tooling for Node.js 22, replaces the legacy Lerna/npm workflows with pnpm and Changesets, and republishes packages under the `@truecms` scope. The guidelines below describe how to prepare your environment, verify changes, and collaborate through GitHub.
+Thanks for helping keep the Australian Government Design System components alive. The codebase now lives in the TrueCMS organisation so that support can continue for agencies and vendors that still depend on the legacy GOV.AU packages. This fork modernises the tooling for Node.js 22, replaces the legacy Lerna/npm workflows with pnpm and Changesets, and republishes packages under the `@truecms` scope while mirroring the old names for downstream consumers. The guidelines below describe how to prepare your environment, verify changes, and collaborate through GitHub.
 
 ## Before you start
 
@@ -37,8 +37,8 @@ Complete the checklist below before opening a pull request or requesting review:
    ```
 4. When focusing on a single package, scope commands with pnpm filters, for example:
    ```sh
-   pnpm --filter @gov.au/buttons run build
-   pnpm --filter @gov.au/buttons run test
+   pnpm --filter @truecms/buttons run build
+   pnpm --filter @truecms/buttons run test
    ```
 5. Generate or update a Changeset describing your changes:
    ```sh

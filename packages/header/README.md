@@ -1,4 +1,4 @@
-@gov.au/header
+@truecms/header
 ============
 
 > Headers provide a consistent start to pages.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/header
+pnpm add @truecms/header
 ```
 
 ```shell
-npm install @gov.au/header
+npm install @truecms/header
 ```
 
 
@@ -86,7 +86,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/header/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/header/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -111,7 +111,7 @@ header
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/header/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/header/tests/site/
 
 
 **[⬆ back to top](#contents)**

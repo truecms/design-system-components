@@ -3,7 +3,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/govau/design-system-components"
+    "url": "https://github.com/truecms/design-system-components"
   },
   "devDependencies": {
     "@changesets/changelog-git": "^0.2.1",

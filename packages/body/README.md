@@ -1,4 +1,4 @@
-@gov.au/body
+@truecms/body
 ============
 
 > Basic body styles for body HTML elements.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/body
+pnpm add @truecms/body
 ```
 
 ```shell
-npm install @gov.au/body
+npm install @truecms/body
 ```
 
 
@@ -50,7 +50,7 @@ body
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/body/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/body/tests/site/
 
 
 **[⬆ back to top](#contents)**

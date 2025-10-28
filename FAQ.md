@@ -4,6 +4,9 @@
 
 ## Modernisation overview
 
+### Why is the project now under the TrueCMS organisation?
+The design-system packages still power production services across multiple agencies and vendors. Moving the fork into the TrueCMS organisation gives those legacy customers an active maintainer group, funded support path, and a neutral namespace on npm (`@truecms`) while continuing to mirror the historical `@gov.au/*` tags for gradual migration. Licences, accessibility requirements, and contribution guidelines remain the same as the original project.
+
 ### What changed in the Node 22 release?
 - Node.js `>=22.0.0` is now the baseline runtime for development, CI, and published packages.
 - The toolchain now relies on Dart Sass (`sass` npm package) instead of the deprecated `node-sass` bindings.

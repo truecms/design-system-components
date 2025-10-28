@@ -1,4 +1,4 @@
-@gov.au/page-alerts
+@truecms/page-alerts
 ============
 
 > Use page alerts to notify users of important information and state changes to the page.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/page-alerts
+pnpm add @truecms/page-alerts
 ```
 
 ```shell
-npm install @gov.au/page-alerts
+npm install @truecms/page-alerts
 ```
 
 
@@ -71,7 +71,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/page-alerts/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/page-alerts/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**

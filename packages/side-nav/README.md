@@ -1,4 +1,4 @@
-@gov.au/side-nav
+@truecms/side-nav
 ============
 
 > A vertical list of links for site navigation typically placed next to the body content.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/side-nav
+pnpm add @truecms/side-nav
 ```
 
 ```shell
-npm install @gov.au/side-nav
+npm install @truecms/side-nav
 ```
 
 
@@ -99,7 +99,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/accordion/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/accordion/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -132,7 +132,7 @@ side-nav
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/side-nav/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/side-nav/tests/site/
 
 
 **[⬆ back to top](#contents)**

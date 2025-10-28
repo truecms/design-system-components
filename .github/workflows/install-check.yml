@@ -33,62 +33,97 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Bootstrap workspaces
-        run: npm run bootstrap
+        run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: npm run build
+        run: pnpm run build
 
       - name: Run tests
-        run: npm run test
+        run: pnpm run test
 
       - name: Verify package tarballs install cleanly
         run: |
           set -euo pipefail
-          mkdir -p "$GITHUB_WORKSPACE/dist/tarballs"
           node <<'NODE'
           const { execSync } = require('child_process');
           const fs = require('fs');
-          const path = require('path');
           const os = require('os');
+          const path = require('path');
 
           const workspace = process.env.GITHUB_WORKSPACE;
+          const tarballDir = path.join(workspace, 'dist', 'tarballs');
           const runnerTemp = process.env.RUNNER_TEMP || os.tmpdir();
-          const packages = JSON.parse(execSync('npx lerna list --json --all', { encoding: 'utf8' }));
 
-          for (const pkg of packages) {
-            process.stdout.write(`::group::Packing ${pkg.name}\n`);
-            const packOutput = execSync(`npm pack --pack-destination "${path.join(workspace, 'dist/tarballs')}"`, {
-              cwd: pkg.location,
-              encoding: 'utf8'
-            });
-            const lines = packOutput.trim().split(/\r?\n/);
-            const tarball = lines[lines.length - 1];
-            const safeName = pkg.name.replace(/[^A-Za-z0-9.-]/g, '-');
+          fs.rmSync(tarballDir, { recursive: true, force: true });
+          fs.mkdirSync(tarballDir, { recursive: true });
+
+          process.stdout.write('::group::Packing workspace packages with pnpm\n');
+          execSync(`pnpm -r --workspace-concurrency 1 pack --pack-destination "${tarballDir}"`, {
+            cwd: workspace,
+            stdio: 'inherit'
+          });
+          process.stdout.write('::endgroup::\n');
+
+          const tarballs = fs
+            .readdirSync(tarballDir)
+            .filter((file) => file.endsWith('.tgz'))
+            .sort((a, b) => a.localeCompare(b));
+
+          if (tarballs.length === 0) {
+            throw new Error('No tarballs were produced by pnpm pack');
+          }
+
+          const summary = [];
+
+          for (const tarball of tarballs) {
+            const safeName = tarball.replace(/[^A-Za-z0-9.-]/g, '-').replace(/\.tgz$/, '');
             const installDir = path.join(runnerTemp, `install-${safeName}`);
+            const tarballPath = path.join(tarballDir, tarball);
+
+            process.stdout.write(`::group::Verifying ${tarball}\n`);
 
             fs.rmSync(installDir, { recursive: true, force: true });
             fs.mkdirSync(installDir, { recursive: true });
+            const installPackageJson = {
+              name: `verify-${safeName}`.toLowerCase(),
+              private: true,
+              version: '0.0.0'
+            };
+            fs.writeFileSync(
+              path.join(installDir, 'package.json'),
+              JSON.stringify(installPackageJson, null, 2)
+            );
+            execSync(`pnpm add "${tarballPath}"`, { cwd: installDir, stdio: 'inherit' });
 
-            execSync('npm init -y', { cwd: installDir, stdio: 'inherit' });
-            execSync(`npm install "${path.join(workspace, 'dist/tarballs', tarball)}"`, {
-              cwd: installDir,
-              stdio: 'inherit'
+            summary.push({
+              tarball: tarball,
+              installDir: path.relative(workspace, installDir)
             });
 
             process.stdout.write('::endgroup::\n');
           }
+
+          fs.writeFileSync(
+            path.join(tarballDir, 'pack-summary.json'),
+            JSON.stringify(summary, null, 2)
+          );
           NODE
 
       - name: Clean tarballs
         if: always()
-        run: rm -rf dist/tarballs
+        run: |
+          rm -rf dist/tarballs
+          pnpm store prune

@@ -1,4 +1,4 @@
-@gov.au/searchbox
+@truecms/searchbox
 ============
 
 > 
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/searchbox
+pnpm add @truecms/searchbox
 ```
 
 ```shell
-npm install @gov.au/searchbox
+npm install @truecms/searchbox
 ```
 
 
@@ -54,7 +54,7 @@ searchbox
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/searchbox/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/searchbox/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -107,7 +107,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import AUsearchbox from '@gov.au/searchbox';
+import AUsearchbox from '@truecms/searchbox';
 
 <AUsearchbox 
 	label="Search" 

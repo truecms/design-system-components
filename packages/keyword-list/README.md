@@ -1,4 +1,4 @@
-@gov.au/keyword-list
+@truecms/keyword-list
 ============
 
 > A list style for emphasising parts of a list item, useful for repeating phrases across that list’s items.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/keyword-list
+pnpm add @truecms/keyword-list
 ```
 
 ```shell
-npm install @gov.au/keyword-list
+npm install @truecms/keyword-list
 ```
 
 
@@ -95,7 +95,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/keyword-list/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/keyword-list/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -124,7 +124,7 @@ keyword-list
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/keyword-list/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/keyword-list/tests/site/
 
 
 **[⬆ back to top](#contents)**

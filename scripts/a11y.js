@@ -26,6 +26,18 @@ const OPTIONS = {
 	hideElements: '.sr-only, .is-visuallyhidden, .visuallyhidden, .no-a11y-test, .auds-page-alerts__sronly, .auds-skip-link',
 }
 
+const trimScope = ( name ) => {
+	if( typeof name !== 'string' ) {
+		return '';
+	}
+
+	if( name.startsWith('@') && name.includes('/') ) {
+		return name.slice( name.indexOf('/') + 1 );
+	}
+
+	return name;
+};
+
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLI OUTPUT FORMATTING
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -95,7 +107,7 @@ const TestURL   = 'http://localhost:8080';
 	let urls = [ `${ TestURL }/tests/site` ];
 
 	if( Fs.existsSync( audsJson ) ) {
-		urls = Object.keys( require( audsJson ) ).map( key => `${ TestURL }/packages/${ key.substring( 8 ) }/tests/site` );
+	urls = Object.keys( require( audsJson ) ).map( key => `${ TestURL }/packages/${ trimScope( key ) }/tests/site` );
 	}
 
 	try {

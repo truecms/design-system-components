@@ -1,4 +1,4 @@
-@gov.au/footer
+@truecms/footer
 ============
 
 > Footers help users who reach the bottom of a page without finding what they want.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/footer
+pnpm add @truecms/footer
 ```
 
 ```shell
-npm install @gov.au/footer
+npm install @truecms/footer
 ```
 
 
@@ -79,7 +79,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/footer/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/footer/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -104,7 +104,7 @@ footer
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/footer/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/footer/tests/site/
 
 
 **[⬆ back to top](#contents)**

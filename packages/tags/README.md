@@ -1,4 +1,4 @@
-@gov.au/tags
+@truecms/tags
 ============
 
 > Use tags to apply a taxonomy and link to similar content.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/tags
+pnpm add @truecms/tags
 ```
 
 ```shell
-npm install @gov.au/tags
+npm install @truecms/tags
 ```
 
 
@@ -116,7 +116,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/tags/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/tags/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -141,7 +141,7 @@ tags
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/tags/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/tags/tests/site/
 
 
 **[⬆ back to top](#contents)**

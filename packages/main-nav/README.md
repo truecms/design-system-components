@@ -1,4 +1,4 @@
-@gov.au/main-nav
+@truecms/main-nav
 ============
 
 > Horizontal list of links to key areas on the website. Usually located in the header.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/main-nav
+pnpm add @truecms/main-nav
 ```
 
 ```shell
-npm install @gov.au/main-nav
+npm install @truecms/main-nav
 ```
 
 
@@ -158,7 +158,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/accordion/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/accordion/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -224,7 +224,7 @@ main-nav
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/main-nav/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/main-nav/tests/site/
 
 
 **[⬆ back to top](#contents)**

@@ -1,7 +1,7 @@
-@gov.au/header CHANGELOG
+@truecms/header CHANGELOG
 ======================
 
-> Part of the [gov.au components](https://github.com/govau/design-system-components/) ecosystem.
+> Part of the [gov.au components](https://github.com/truecms/design-system-components/) ecosystem.
 
 
 ## Contents
@@ -171,7 +171,7 @@
 ### v1.0.0
 
 - Removed the side spacing so you can now use your own grid system to align the headline to your content
-	([#147](https://github.com/govau/design-system-components/issues/147))
+	([#147](https://github.com/truecms/design-system-components/issues/147))
 
 
 ### v0.1.0

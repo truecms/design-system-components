@@ -36,7 +36,7 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-modernise-
 
 - **Triggers**: `push`, `pull_request`, `workflow_dispatch`
 - **Node matrix**: `['22.x', 'lts/*']`
-- **Key steps**: `npm ci`, `npm run bootstrap`, `npm run build`, `npm run test`, per-package `npm pack` with installation verification.
+- **Key steps**: `pnpm install --frozen-lockfile`, `pnpm run build`, `pnpm run test`, `pnpm -r pack --pack-destination dist/tarballs` followed by automated installation verification for every tarball.
 - **When to run manually**: After dependency upgrades or package manifest changes. Use the GitHub UI (Actions → Install Check → Run workflow) or `gh workflow run install-check.yml`.
 - **Artifacts**: Tarball summaries are stored under `dist/tarballs` during the job and cleaned up automatically.
 
@@ -69,13 +69,13 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-modernise-
 
 | Symptom | Diagnosis | Resolution |
 |---------|-----------|------------|
-| Install Check fails during `npm pack` | Legacy dependency requires Node <22 | Replace or upgrade the dependency; rerun the workflow. |
+| Install Check fails during `pnpm pack` | Legacy dependency requires Node <22 | Replace or upgrade the dependency; rerun the workflow. |
 | npm Release dry run reports `EBADENGINE` | Workflow ran under the wrong Node version | Ensure the job uses Node 22 (default in workflow). Do not override `node-version`. |
 | pnpm install fails locally | Corepack not enabled or pnpm version drift | Re-run `corepack enable` and `corepack prepare pnpm@9 --activate`. |
 
 ## Next steps
 
 - Replace remaining `@gov.au/pancake-*` dependencies with Node 22 compatible alternatives (tracked in Phase 6 tasks).
-- Convert the Install Check workflow to pnpm commands once the Pancake migration is complete (Task T205).
+- Keep the Install Check workflow on pnpm commands and monitor tarball verification after Pancake replacements land (Task T205 complete).
 - Complete the package README/CHANGELOG sweep using the checklist.
 - Continue recording compatibility runs and escalations in `specs/001-modernise-library-run/research.md` to satisfy monitoring requirement FR-005.

@@ -1,4 +1,4 @@
-@gov.au/table
+@truecms/table
 ============
 
 > Used to display tabular data
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/table
+pnpm add @truecms/table
 ```
 
 ```shell
-npm install @gov.au/table
+npm install @truecms/table
 ```
 
 
@@ -50,7 +50,7 @@ table
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/table/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/table/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -101,7 +101,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import AUtable, {AUtableResponsiveWrapper, AUtableCaption, AUtableCell, AUtableHead, AUtableHeader, AUtableBody, AUtableRow} from '@gov.au/table';
+import AUtable, {AUtableResponsiveWrapper, AUtableCaption, AUtableCell, AUtableHead, AUtableHeader, AUtableBody, AUtableRow} from '@truecms/table';
 
 //simple example
 <AUtable 

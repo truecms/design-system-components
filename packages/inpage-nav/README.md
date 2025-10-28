@@ -1,4 +1,4 @@
-@gov.au/inpage-nav
+@truecms/inpage-nav
 ============
 
 > Use inpage-nav links to help users scan and jump to content of a page.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/inpage-nav
+pnpm add @truecms/inpage-nav
 ```
 
 ```shell
-npm install @gov.au/inpage-nav
+npm install @truecms/inpage-nav
 ```
 
 
@@ -102,7 +102,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/inpage-nav/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/inpage-nav/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -131,7 +131,7 @@ inpage-nav
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/inpage-nav/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/inpage-nav/tests/site/
 
 
 **[⬆ back to top](#contents)**

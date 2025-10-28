@@ -1,4 +1,4 @@
-@gov.au/cta-link
+@truecms/cta-link
 ============
 
 > Use cta links to draw attention to a primary call to action.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/cta-link
+pnpm add @truecms/cta-link
 ```
 
 ```shell
-npm install @gov.au/cta-link
+npm install @truecms/cta-link
 ```
 
 
@@ -69,7 +69,7 @@ All props:
 />
 ```
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/cta-link/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/cta-link/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -94,7 +94,7 @@ cta-link
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/cta-link/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/cta-link/tests/site/
 
 
 **[⬆ back to top](#contents)**

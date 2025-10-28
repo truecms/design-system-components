@@ -1,4 +1,4 @@
-@gov.au/select
+@truecms/select
 ============
 
 > The form select element for multiple options
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/select
+pnpm add @truecms/select
 ```
 
 ```shell
-npm install @gov.au/select
+npm install @truecms/select
 ```
 
 
@@ -86,7 +86,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/select/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/select/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -111,7 +111,7 @@ select
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/select/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/select/tests/site/
 
 
 **[⬆ back to top](#contents)**

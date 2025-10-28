@@ -1,4 +1,4 @@
-@gov.au/headings
+@truecms/headings
 ============
 
 > Class styles for display headings.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/headings
+pnpm add @truecms/headings
 ```
 
 ```shell
-npm install @gov.au/headings
+npm install @truecms/headings
 ```
 
 
@@ -68,7 +68,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/headings/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/headings/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -93,7 +93,7 @@ headings
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/headings/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/headings/tests/site/
 
 
 **[⬆ back to top](#contents)**

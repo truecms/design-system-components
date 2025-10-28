@@ -1,7 +1,7 @@
-@gov.au/breadcrumbs CHANGELOG
+@truecms/breadcrumbs CHANGELOG
 ======================
 
-> Part of the [gov.au components](https://github.com/govau/design-system-components/) ecosystem.
+> Part of the [gov.au components](https://github.com/truecms/design-system-components/) ecosystem.
 
 
 ## Contents

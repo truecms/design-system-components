@@ -1,4 +1,4 @@
-@gov.au/responsive-media
+@truecms/responsive-media
 ============
 
 > Caters for video/slideshow dimensions and aspect ratios across various viewports/widths.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/responsive-media
+pnpm add @truecms/responsive-media
 ```
 
 ```shell
-npm install @gov.au/responsive-media
+npm install @truecms/responsive-media
 ```
 
 
@@ -50,7 +50,7 @@ responsive-media
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/responsive-media/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/responsive-media/tests/site/
 
 
 **[⬆ back to top](#contents)**

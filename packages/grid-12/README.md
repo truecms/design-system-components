@@ -1,4 +1,4 @@
-@gov.au/grid-12
+@truecms/grid-12
 ============
 
 > Implementation of the Bootstrap 3 grid.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/grid-12
+pnpm add @truecms/grid-12
 ```
 
 ```shell
-npm install @gov.au/grid-12
+npm install @truecms/grid-12
 ```
 
 
@@ -50,7 +50,7 @@ grid-12
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/grid-12/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/grid-12/tests/site/
 
 
 **[⬆ back to top](#contents)**

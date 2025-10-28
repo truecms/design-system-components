@@ -1,4 +1,4 @@
-@gov.au/skip-link
+@truecms/skip-link
 ============
 
 > Provide skip links to navigation and content.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/skip-link
+pnpm add @truecms/skip-link
 ```
 
 ```shell
-npm install @gov.au/skip-link
+npm install @truecms/skip-link
 ```
 
 
@@ -82,7 +82,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/skip-link/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/skip-link/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -107,7 +107,7 @@ skip-link
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/skip-link/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/skip-link/tests/site/
 
 
 **[⬆ back to top](#contents)**

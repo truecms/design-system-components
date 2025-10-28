@@ -1,6 +1,8 @@
 # GOV.AU Design System Components (Node 22 modernisation)
 
-> This repository is a modernisation fork of the Australian Government Design System components. The upstream service was decommissioned in 2020; this fork keeps the packages maintained, updates the tooling for Node.js 22, and republishes releases under the `@truecms` npm scope while mirroring the legacy `@gov.au/*` structure.
+> This repository is a modernisation fork of the Australian Government Design System components. The upstream service was decommissioned in 2020; to keep long-running programmes unblocked we migrated the code to the TrueCMS GitHub organisation, continue to publish under the new `@truecms` npm scope, and mirror the legacy `@gov.au/*` tags so existing consumers remain supported.
+
+This migration allows the maintainers to provide funded support for agencies and vendors who still rely on the original component APIs. Active development now happens in the open under the TrueCMS banner, but compatibility guarantees, accessibility goals, and public licensing remain unchanged.
 
 ## Documentation & previews
 
@@ -41,7 +43,7 @@ Earlier Node releases are no longer supported. Automated workflows and published
    ```sh
    pnpm run test
    ```
-6. For targeted component checks you can scope commands, for example `pnpm --filter @gov.au/buttons run build`.
+6. For targeted component checks you can scope commands, for example `pnpm --filter @truecms/buttons run build`.
 
 All scripts assume Node 22. Running them under earlier versions will emit `EBADENGINE` warnings or fail during dependency installation.
 
@@ -66,7 +68,7 @@ Releases are orchestrated with Changesets and pnpm:
 
 ## Support and escalation
 
-Open issues or questions on the [GitHub issue tracker](https://github.com/govau/design-system-components/issues). The modernization maintainers triage Node compatibility reports twice weekly and follow the escalation path documented in [`SUPPORT.md`](./SUPPORT.md) to keep FR-005 monitoring requirements in place.
+Open issues or questions on the [GitHub issue tracker](https://github.com/truecms/design-system-components/issues). The modernization maintainers triage Node compatibility reports twice weekly and follow the escalation path documented in [`SUPPORT.md`](./SUPPORT.md) to keep FR-005 monitoring requirements in place.
 
 ## Repository layout
 

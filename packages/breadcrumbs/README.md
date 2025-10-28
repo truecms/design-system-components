@@ -1,4 +1,4 @@
-@gov.au/breadcrumbs
+@truecms/breadcrumbs
 ============
 
 > Breadcrumbs help users understand where they are in the service and how they got there.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/breadcrumbs
+pnpm add @truecms/breadcrumbs
 ```
 
 ```shell
-npm install @gov.au/breadcrumbs
+npm install @truecms/breadcrumbs
 ```
 
 
@@ -90,7 +90,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/breadcrumbs/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/breadcrumbs/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -119,7 +119,7 @@ breadcrumbs
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/breadcrumbs/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/breadcrumbs/tests/site/
 
 
 **[⬆ back to top](#contents)**

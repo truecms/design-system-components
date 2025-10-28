@@ -1,4 +1,4 @@
-@gov.au/callout
+@truecms/callout
 ============
 
 > Use callout to notify and alert users of important snippets of information.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/callout
+pnpm add @truecms/callout
 ```
 
 ```shell
-npm install @gov.au/callout
+npm install @truecms/callout
 ```
 
 
@@ -92,7 +92,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/callout/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/callout/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -117,7 +117,7 @@ callout
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/callout/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/callout/tests/site/
 
 
 **[⬆ back to top](#contents)**

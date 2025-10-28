@@ -1,4 +1,4 @@
-@gov.au/card
+@truecms/card
 ============
 
 > Cards are used to organise information related to a single topic. Cards can contain multiple elements, such as images, links, buttons or text.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/card
+pnpm add @truecms/card
 ```
 
 ```shell
-npm install @gov.au/card
+npm install @truecms/card
 ```
 
 
@@ -50,7 +50,7 @@ card
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/card/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/card/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -105,7 +105,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import AUcard, { AUcardInner, AUcardHeader, AUcardDivider, AUcardLink, AUcardFooter } from '@gov.au/card';
+import AUcard, { AUcardInner, AUcardHeader, AUcardDivider, AUcardLink, AUcardFooter } from '@truecms/card';
 
 	<AUcard className="au-body">
 		<img className="au-responsive-media-img" src="http://placehold.it/1200x500" />

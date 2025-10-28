@@ -1,4 +1,4 @@
-@gov.au/control-input
+@truecms/control-input
 ============
 
 > Control inputs include radio buttons and checkboxes. They allow users to select one or more options.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/control-input
+pnpm add @truecms/control-input
 ```
 
 ```shell
-npm install @gov.au/control-input
+npm install @truecms/control-input
 ```
 
 
@@ -82,7 +82,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/control-input/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/control-input/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -107,7 +107,7 @@ control-input
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/control-input/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/control-input/tests/site/
 
 
 **[⬆ back to top](#contents)**

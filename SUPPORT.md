@@ -1,12 +1,12 @@
 # Support and escalation policy
 
-The official Australian Government Design System was decommissioned in 2020. This fork continues support for the reusable component packages while modernising the tooling for Node.js 22. Please use the channels and escalation paths below when you need assistance.
+The official Australian Government Design System was decommissioned in 2020. To keep long-term adopters supported, the project was migrated into the TrueCMS GitHub organisation, where the maintainers continue to ship updates and publish packages under the `@truecms` scope while mirroring the legacy names. This fork maintains the reusable component packages, modernises the tooling for Node.js 22, and remains committed to accessibility and stability guarantees. Please use the channels and escalation paths below when you need assistance.
 
 ## Primary support channels
 
 | Scenario | Channel | Notes |
 |----------|---------|-------|
-| Bug reports, upgrade blockers, compatibility questions | [GitHub issues](https://github.com/govau/design-system-components/issues/new/choose) | Apply the `node-22-support` label for faster triage. |
+| Bug reports, upgrade blockers, compatibility questions | [GitHub issues](https://github.com/truecms/design-system-components/issues/new/choose) | Apply the `node-22-support` label for faster triage. |
 | Security disclosures or credential problems | Private GitHub issue addressed to the maintainers | Avoid emailing legacy DTA addresses; they are no longer monitored. |
 | Release coordination and npm token access | GitHub issue or discussion tagged `maintainer` | Maintainers respond within one business day. |
 

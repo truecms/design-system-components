@@ -34,8 +34,8 @@
     "pancake-module": {
       "version": "1.0.0",
       "plugins": [
-        "@gov.au/pancake-js",
-        "@gov.au/pancake-json"
+        "@truecms/pancake-js",
+        "@truecms/pancake-json"
       ],
       "js": {
         "path": "lib/js/module.js"
@@ -48,16 +48,15 @@
   },
   "main": "lib/js/module.js",
   "dependencies": {
-    "@gov.au/pancake": "^1.4.1",
-    "@gov.au/pancake-js": "^1.2.1",
-    "@gov.au/pancake-json": "^1.2.0"
+    "@truecms/pancake": "^2.0.0",
+    "@truecms/pancake-js": "^2.0.0",
+    "@truecms/pancake-json": "^2.0.0"
   },
-  "peerDependencies": {},
   "devDependencies": {
-    "browser-sync": "^2.26.7",
-    "jest-cli": "^24.7.1",
+    "browser-sync": "^3.0.4",
+    "jest-cli": "^30.2.0",
     "npm-run-all": "^4.1.5",
-    "onchange": "^5.2.0"
+    "onchange": "^7.1.0"
   },
   "files": [
     "lib/*"
@@ -78,7 +77,8 @@
   },
   "engines": {
     "node": ">=22.0.0",
-    "npm": ">=10.0.0"
+    "npm": ">=10.0.0",
+    "pnpm": ">=9.0.0"
   },
   "repository": {
     "type": "git",
@@ -87,12 +87,12 @@
   "homepage": "https://design-system-components.truecms.com.au/components/animate",
   "bugs": {
     "url": "https://github.com/truecms/design-system-components/issues",
-    "email": "designsystem@digital.gov.au"
+    "email": "engineering@truecms.com.au"
   },
   "author": {
-    "name": "Commonwealth of Australia, DTA",
-    "email": "designsystem@digital.gov.au",
-    "url": "https://www.dta.gov.au/"
+    "name": "TrueCMS Engineering",
+    "email": "engineering@truecms.com.au",
+    "url": "https://www.truecms.com.au/"
   },
   "contributors": [
     {

@@ -45,6 +45,19 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
+      - name: Enforce Node 22 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_version="$(node -v)"
+          echo "Active Node version: ${node_version}"
+          major="${node_version#v}"
+          major="${major%%.*}"
+          if [ "${major}" -lt 22 ]; then
+            echo '::error::Node 22 or newer is required for this workflow. Update the matrix entry or run `nvm use 22` locally before re-running.'
+            exit 1
+          fi
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -53,6 +66,20 @@ jobs:
 
       - name: Run tests
         run: pnpm run test
+
+      - name: Build site distribution bundle
+        run: pnpm run build:site-dist
+
+      - name: Audit production dependencies
+        run: |
+          set -euo pipefail
+          pnpm audit --prod --json > install-check-audit-report.json
+          if [ "$(jq '.vulnerabilities | length' install-check-audit-report.json)" -gt 0 ]; then
+            echo '::error::Vulnerabilities detected in production dependency graph'
+            cat install-check-audit-report.json
+            exit 1
+          fi
+        shell: bash
 
       - name: Verify package tarballs install cleanly
         run: |
@@ -117,10 +144,20 @@ jobs:
           }
 
           fs.writeFileSync(
-            path.join(tarballDir, 'pack-summary.json'),
+            path.join(tarballDir, 'install-check-pack-summary.json'),
             JSON.stringify(summary, null, 2)
           );
           NODE
+
+      - name: Upload install-check artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: install-check-artifacts-${{ matrix.node-version }}
+          path: |
+            install-check-audit-report.json
+            dist/tarballs/install-check-pack-summary.json
+          if-no-files-found: ignore
 
       - name: Clean tarballs
         if: always()

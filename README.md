@@ -8,30 +8,31 @@ This migration allows the maintainers to provide funded support for agencies and
 
 - Production preview site: <https://design-system-components.truecms.com.au/>
 - Pull requests trigger Cloudflare preview builds linked from the Checks tab.
+- Contributor guides live under [`docs/`](./docs/) with focused walkthroughs for publishing, Drupal integration, and migration steps.
 
 ## Runtime requirements
 
-| Tool  | Minimum | Recommended |
-|-------|---------|-------------|
-| Node.js | 22.0.0 | 22.x (Active LTS) |
-| npm   | 10.0.0 | 10.x bundled with Node 22 |
-| pnpm  | 9.0.0  | 9.12.x via Corepack |
+| Tool    | Minimum | Recommended |
+|---------|---------|-------------|
+| Node.js | 22.0.0  | 22.x (Active LTS) |
+| npm     | 10.0.0  | 10.x bundled with Node 22 |
+| pnpm    | 9.0.0   | 9.12.x via Corepack |
 
 Earlier Node releases are no longer supported. Automated workflows and published packages declare these engine constraints to prevent accidental installs on unsupported runtimes.
 
 ## Local development
 
-1. Activate the project’s pinned Node version via `.nvmrc`:
+1. Use `nvm` (or your preferred version manager) to select Node 22:
    ```sh
+   nvm install 22
    nvm use 22
    ```
-   If you do not already have Node 22 installed locally, run `nvm install 22` once before the command above.
 2. Enable Corepack so pnpm 9 is available:
    ```sh
    corepack enable
    corepack prepare pnpm@9 --activate
    ```
-3. Install workspace dependencies and generate the pnpm lockfile:
+3. Install workspace dependencies and refresh the lockfile:
    ```sh
    pnpm run bootstrap
    ```
@@ -39,7 +40,7 @@ Earlier Node releases are no longer supported. Automated workflows and published
    ```sh
    pnpm run build
    ```
-5. Execute the full verification sweep (Jest unit tests, Pa11y accessibility, and script smoke tests):
+5. Execute the full verification sweep (Jest unit tests, Pa11y accessibility, helper smoke tests, and bundle parity checks):
    ```sh
    pnpm run test
    ```
@@ -51,9 +52,9 @@ All scripts assume Node 22. Running them under earlier versions will emit `EBADE
 
 | Workflow | Location | Trigger | Purpose |
 |----------|----------|---------|---------|
-| Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Runs Node 22 and latest LTS matrices, performs clean `npm ci` installs, bootstraps, builds, and validates every package tarball using `npm pack` to guard against packaging regressions. |
+| Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Runs Node 22 and latest LTS matrices, performs clean `pnpm install --frozen-lockfile` installs, builds the workspace, runs tests, audits dependencies, builds the site bundle, and verifies that every package tarball installs cleanly. |
 | Cloudflare Pages Deploy | `.github/workflows/cloudflare-pages.yml` | `push` (main), `pull_request` | Builds the documentation site with Node 22 and deploys previews and production releases to Cloudflare Pages using the configured secrets. |
-| npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release` | Authenticates with npm, runs the pnpm build/test pipeline, and publishes packages through Changesets to the configurable npm scope (default `@truecms`) and dist-tag. |
+| npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release`, `push` tags | Authenticates with npm, runs the pnpm build/test pipeline (including audits and site build), and publishes packages through Changesets to the configurable npm scope (default `@truecms`) and dist-tag, with provenance enabled. |
 
 Refer to [`CONTRIBUTING.md`](./CONTRIBUTING.md) for details on invoking these workflows manually during reviews.
 
@@ -63,8 +64,8 @@ Releases are orchestrated with Changesets and pnpm:
 
 1. Collect changes using `pnpm changeset` and merge the generated markdown files.
 2. When ready to publish, trigger the **npm Release** workflow from the GitHub Actions tab. Supply `dry_run=false` once a release candidate is approved, or keep the default `true` for validation.
-3. The workflow runs `pnpm run build`, `pnpm run test`, and `pnpm run release` (Changesets publish) before pushing tags to npm under the selected scope.
-4. Release artefacts are mirrored to the legacy `@gov.au/*` names via npm dist-tags so downstream teams can opt-in at their own pace.
+3. The workflow runs `pnpm run build`, `pnpm run test`, `pnpm run build:site-dist`, and `pnpm run release` (Changesets publish) before pushing tags to npm under the selected scope.
+4. Release artefacts are mirrored to the legacy `@gov.au/*` names via npm dist-tags so downstream teams can opt in at their own pace.
 
 ## Support and escalation
 
@@ -73,8 +74,9 @@ Open issues or questions on the [GitHub issue tracker](https://github.com/truecm
 ## Repository layout
 
 - `packages/` – component packages, each with its own README and CHANGELOG.
-- `scripts/` – build helpers for Sass/PostCSS and accessibility automation.
+- `scripts/` – build helpers for Sass/PostCSS, accessibility automation, and migration tooling.
 - `.github/workflows/` – Install Check, Cloudflare Pages, and npm Release pipelines.
-- `specs/001-modernise-library-run/` – design artefacts driving the Node 22 initiative (plan, research, tasks, and checklists).
+- `specs/001-already-began-task/` – design artefacts driving the Node 22 initiative (plan, research, tasks, and checklists).
+- `docs/` – platform-specific guides such as Drupal integration, publishing, and migration from the legacy namespace.
 
-For additional implementation context, see [`docs/wiki/node-22-modernisation.md`](./docs/wiki/node-22-modernisation.md) and the research log in `specs/001-modernise-library-run/research.md`.
+For additional implementation context, see [`docs/wiki/node-22-modernisation.md`](./docs/wiki/node-22-modernisation.md) and the research log in `specs/001-already-began-task/research.md`.

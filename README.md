@@ -21,11 +21,11 @@ Earlier Node releases are no longer supported. Automated workflows and published
 
 ## Local development
 
-1. Use `nvm` (or your preferred version manager) to select Node 22:
+1. Activate the project’s pinned Node version via `.nvmrc`:
    ```sh
-   nvm install 22
    nvm use 22
    ```
+   If you do not already have Node 22 installed locally, run `nvm install 22` once before the command above.
 2. Enable Corepack so pnpm 9 is available:
    ```sh
    corepack enable

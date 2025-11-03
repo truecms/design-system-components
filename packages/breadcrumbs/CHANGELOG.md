@@ -1,20 +1,29 @@
 @truecms/breadcrumbs CHANGELOG
-======================
+
+## 4.0.0
+
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - @truecms/core@5.0.0
+  - # @truecms/link-list@4.0.0
 
 > Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
-
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v400)
 * [v3.0.6 - Update core package dependency to use the latest version](#v306)
 * [v3.0.5 - Remove --save-dev flag from readme instructions](#v305)
 * [v3.0.4 - Removed unused `Fragment` React import](#v304)
@@ -34,41 +43,40 @@
 * [v0.2.0 - Added react component](#v020)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v4.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- @truecms/core@5.0.0
+- # @truecms/link-list@4.0.0
 
 ### v3.0.6
 
 - Update core package dependency to use the latest version
 
-
 ### v3.0.5
 
 - Remove --save-dev flag from readme instructions
-
 
 ### v3.0.4
 
 - Removed unused `Fragment` React import
 
-
 ### v3.0.3
 
 - Removed uikit references
-
 
 ### v3.0.2
 
 - Update dependencies
 
-
 ### v3.0.1
 
 - Removing web pack dev server, updating dependencies
-
 
 ### v3.0.0
 
@@ -76,37 +84,30 @@
 - Moved location of link-list children from inside `a` to inside parent `li`
 - Fixed build scripts for Windows
 
-
 ### v2.1.1
 
 - Replace node-sass with sass
-
 
 ### v2.1.0
 
 - Support react router
 - Change npm run watch browser-sync location
 
-
 ### v2.0.3
 
 - Update dependencies
-
 
 ### v2.0.2
 
 - Changing homepage link
 
-
 ### v2.0.1
 
 - Fixed dependencies
 
-
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
-
 
 ### v1.0.0
 
@@ -114,11 +115,9 @@
 - Added new color themes with dark and alt variants
 - Added a new 4px based spacing system via line-height
 
-
 ### v0.3.1
 
 - Fixed interdependency with link-list
-
 
 ### v0.3.0
 
@@ -127,18 +126,14 @@
 - Added compiled css file that is automatically imported by ES5 react file
 - Fixed background repeat bug
 
-
 ### v0.2.0
 
 - Added react component
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

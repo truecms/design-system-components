@@ -1,20 +1,29 @@
 @truecms/accordion CHANGELOG
-======================
+
+## 8.0.0
+
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - @truecms/animate@2.0.0
+  - # @truecms/core@5.0.0
 
 > Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
-
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v8.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v800)
 * [v7.0.9 - Update core package dependency to use the latest version](#v709)
 * [v7.0.8 - Remove --save-dev flag from readme instructions](#v708)
 * [v7.0.7 - Removed unused `Fragment` React import](#v707)
@@ -47,86 +56,76 @@
 * [v0.2.0 - Added react and jQuery component](#v020)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v8.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- @truecms/animate@2.0.0
+- # @truecms/core@5.0.0
 
 ### v7.0.9
 
 - Update core package dependency to use the latest version
 
-
 ### v7.0.8
 
 - Remove --save-dev flag from readme instructions
-
 
 ### v7.0.7
 
 - Removed unused `Fragment` React import
 
-
 ### v7.0.6
 
 - Resolve autoprefixer warning
-
 
 ### v7.0.5
 
 - Corrected an issue where certain components were published referencing a `src/` folder rather than `lib/`.
 
-
 ### v7.0.4
 
 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`
-
 
 ### v7.0.3
 
 - Remove aria-selected from accordion button, as [`role="button"` doesn't support `aria-selected`](https://www.w3.org/TR/wai-aria-1.1/#button)
 
-
 ### v7.0.2
 
 - Removed uikit references
-
 
 ### v7.0.1
 
 - Fix issue with parent component re-rendering causing accordion to open and close
 
-
 ### v7.0.0
 
 - Changed accordion title element to use `<button>` instead of `<a>`
-
 
 ### v6.0.1
 
 - Fix issues with state not firing
 
-
 ### v6.0.0
 
 - Add accordion group in a unordered list, remove `role="tab"`
-
 
 ### v5.0.2
 
 - Update dependencies
 
-
 ### v5.0.1
 
 - Removing web pack dev server, updating dependencies
 
-
 ### v5.0.0
 
 - Removing unecessary aria-hidden as css display toggles screen reader ability
-
 
 ### v4.0.0
 
@@ -135,62 +134,50 @@
 - Fix react test
 - Fixed build scripts for Windows
 
-
 ### v3.0.5
 
 - Replace node-sass with sass
-
 
 ### v3.0.4
 
 - Fix the serve script for npm
 
-
 ### v3.0.3
 
 - `au-body--dark` now changes accordion title colour
-
 
 ### v3.0.2
 
 - Update dependencies
 
-
 ### v3.0.1
 
 - Updating documentation
-
 
 ### v3.0.0
 
 - React accordion open by default
 - Removed open property replaced it with closed
 
-
 ### v2.0.3
 
 - Update homepage link
-
 
 ### v2.0.2
 
 - Fix issue with scope inside AU.animate.Run
 
-
 ### v2.0.1
 
 - Fixed dependencies
-
 
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
 
-
 ### v1.0.1
 
 - IE8 spacing above triangle fixed [309](https://github.com/truecms/design-system-components/issues/309)
-
 
 ### v1.0.0
 
@@ -198,25 +185,20 @@
 - Added new color themes with dark and alt variants
 - Added a new 4px based spacing system via line-height
 
-
 ### v0.3.0
 
 - Added pancake-react plugin
 - Added transpiled react ES5 file as main entry file for `package.json`
 - Added compiled css file that is automatically imported by ES5 react file
 
-
 ### v0.2.0
 
 - Added react and jQuery component
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

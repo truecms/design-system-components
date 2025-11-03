@@ -143,6 +143,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/side-n
 
 ## Release History
 
+* v6.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v5.0.9 - Update core package dependency to use the latest version
 * v5.0.8 - Remove --save-dev flag from readme instructions
 * v5.0.7 - Removed unused `Fragment` React import

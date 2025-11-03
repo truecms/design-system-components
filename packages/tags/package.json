@@ -1,6 +1,6 @@
 {
   "name": "@truecms/tags",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Use tags to apply a taxonomy and link to similar content.",
   "keywords": [
     "auds",
@@ -58,7 +58,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^4.0.0"
+    "@truecms/core": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

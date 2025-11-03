@@ -1,20 +1,28 @@
 @truecms/form CHANGELOG
-======================
+
+## 1.0.0
+
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - # @truecms/core@5.0.0
 
 > Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
-
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v100)
 * [v0.1.6 - Update core package dependency to use the latest version](#v016)
 * [v0.1.5 - Update version for the dependency: @truecms/core](#v015)
 * [v0.1.4 - Add margin between text area and form labels, hint text and error messages.](#v014)
@@ -23,48 +31,44 @@
 * [v0.1.1 - Update selector to add `margin-top` for all `input` elements that are preceded by a label element](#v011)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v1.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- # @truecms/core@5.0.0
 
 ### v0.1.6
 
 - Update core package dependency to use the latest version
 
-
 ### v0.1.5
 
 - Update version for the dependency: @truecms/core
-
 
 ### v0.1.4
 
 - Add margin between text area and form labels, hint text and error messages.
 
-
 ### v0.1.3
 
 - Remove --save-dev flag from readme instructions
-
 
 ### v0.1.2
 
 - Remove hint text colours as they are now in core
 
-
 ### v0.1.1
 
 - Update selector to add `margin-top` for all `input` elements that are preceded by a label element
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

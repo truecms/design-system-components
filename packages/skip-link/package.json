@@ -1,6 +1,6 @@
 {
   "name": "@truecms/skip-link",
-  "version": "2.0.17",
+  "version": "3.0.0",
   "description": "Provide skip links to navigation and content.",
   "keywords": [
     "auds",
@@ -60,7 +60,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^4.0.0"
+    "@truecms/core": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -1,6 +1,6 @@
 {
   "name": "@truecms/headings",
-  "version": "2.0.12",
+  "version": "3.0.0",
   "description": "Class styles for display headings.",
   "keywords": [
     "auds",
@@ -60,7 +60,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^4.0.0"
+    "@truecms/core": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -65,6 +65,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/search
 
 ## Release History
 
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v0.2.3 - Display search icon for XS breakpoint when responsive (Fix based on the new grid breakpoints)
 * v0.2.2 - Increase size for icon
 * v0.2.1 - Add styling for secondary buttons

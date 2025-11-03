@@ -1,20 +1,31 @@
 @truecms/side-nav CHANGELOG
-======================
+
+## 6.0.0
+
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - @truecms/accordion@8.0.0
+  - @truecms/animate@2.0.0
+  - @truecms/core@5.0.0
+  - # @truecms/link-list@4.0.0
 
 > Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
-
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v6.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v600)
 * [v5.0.9 - Update core package dependency to use the latest version](#v509)
 * [v5.0.8 - Remove --save-dev flag from readme instructions](#v508)
 * [v5.0.7 - Removed unused `Fragment` React import](#v507)
@@ -39,132 +50,115 @@
 * [v0.1.1 - Updating dependency in accordion](#v011)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v6.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- @truecms/accordion@8.0.0
+- @truecms/animate@2.0.0
+- @truecms/core@5.0.0
+- # @truecms/link-list@4.0.0
 
 ### v5.0.9
 
 - Update core package dependency to use the latest version
 
-
 ### v5.0.8
 
 - Remove --save-dev flag from readme instructions
-
 
 ### v5.0.7
 
 - Removed unused `Fragment` React import
 
-
 ### v5.0.6
 
 - Resolve autoprefixer warning
-
 
 ### v5.0.5
 
 - Fix pancake build path
 
-
 ### v5.0.4
 
 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`
-
 
 ### v5.0.3
 
 - Remove aria-selected from side-nav toggle button, as [`role="button"` does not support "aria-selected"](https://www.w3.org/TR/wai-aria-1.1/#button)
 
-
 ### v5.0.2
 
 - Removed uikit references
-
 
 ### v5.0.1
 
 - Update accordion dependency
 
-
 ### v5.0.0
 
 - Update accordion dependency (use `<button>` instead of `<a>` for title)
-
 
 ### v4.0.1
 
 - Update accordion, add a test with state toggle
 - Update side-nav react test examples
 
-
 ### v4.0.0
 
 - Active items are no longer wrapped in `<a>` for accessibility
 - Active items are now wrapped in a `<span>`, this allows for the child links to retain full width interaction
-
 
 ### v3.0.0
 
 - Updated accordion dependency
 - Removed role tab from accordion dependency
 
-
 ### v2.0.6
 
 - Added an aria-label attribute to the aside element
-
 
 ### v2.0.5
 
 - Fix active state children getting active style
 
-
 ### v2.0.4
 
 - Update dependencies
 
-
 ### v2.0.3
 
 - Fixing order of dependencies
-
 
 ### v2.0.2
 
 - Added active state for react
 - Removing web pack dev server, updating dependencies
 
-
 ### v2.0.1
 
 - Removed incorrect margin from desktop side navigation
-
 
 ### v2.0.0
 
 - Update side-nav to use `<aside>` instead of `<nav>`
 
-
 ### v1.0.0
 
 - Update pancake dependency, release first version
-
 
 ### v0.1.1
 
 - Updating to use the latest version of accordion
 
-
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

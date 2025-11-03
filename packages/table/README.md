@@ -61,6 +61,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/table/
 
 ## Release History
 
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v0.2.1 - Update core package dependency to use the latest version
 * v0.2.0 - Refactor sass, first cell header option
 * v0.1.3 - Remove pancake js plugin from package json

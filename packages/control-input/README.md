@@ -118,6 +118,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/contro
 
 ## Release History
 
+* v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v3.0.2 - Update core package dependency to use the latest version
 * v3.0.1 - Remove --save-dev flag from readme instructions
 * v3.0.0 - Use explicit labelling instead of implicit labelling for control inputs. Remove `margin-top` for control input block that is not followed by another control input block. Removed unused `Fragment` React import

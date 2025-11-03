@@ -152,6 +152,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/tags/t
 
 ## Release History
 
+* v5.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v4.0.1 - Update core package dependency to use the latest version
 * v4.0.0 - Refactor tags so they don't have to be in a list
 * v3.1.7 - Remove --save-dev flag from readme instructions

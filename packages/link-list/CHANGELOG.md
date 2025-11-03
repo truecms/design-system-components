@@ -1,20 +1,29 @@
 @truecms/link-list CHANGELOG
-======================
+
+## 4.0.0
+
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - @truecms/body@3.0.0
+  - # @truecms/core@5.0.0
 
 > Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
-
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v400)
 * [v3.0.9 - Update core package dependency to use the latest version](#v309)
 * [v3.0.8 - Update incorrect proptype for onClick prop](#v308)
 * [v3.0.7 - Remove --save-dev flag from readme instructions](#v307)
@@ -36,73 +45,66 @@
 * [v0.2.0 - Added react component](#v020)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v4.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- @truecms/body@3.0.0
+- # @truecms/core@5.0.0
 
 ### v3.0.9
 
 - Update core package dependency to use the latest version
 
-
 ### v3.0.8
 
 - Update incorrect proptype for onClick prop
-
 
 ### v3.0.7
 
 - Remove --save-dev flag from readme instructions
 
-
 ### v3.0.6
 
 - Added `onClick` event handler prop
-
 
 ### v3.0.5
 
 - Removed unused `Fragment` React import
 
-
 ### v3.0.4
 
 - Removed uikit references
-
 
 ### v3.0.3
 
 - Fixing bug in link-list au-body
 
-
 ### v3.0.2
 
 - Update dependencies
 
-
 ### v3.0.1
 
 - Removing web pack dev server, updating dependencies
-
 
 ### v3.0.0
 
 - Move react children location
 - Fixed build scripts for Windows
 
-
 ### v2.1.1
 
 - Replace node-sass with sass
-
 
 ### v2.1.0
 
 - Support react router
 - Change npm run watch browser-sync location
-
 
 ### v2.0.3
 
@@ -110,21 +112,17 @@
 - Text parameter changed from string to node
 - Update dependencies
 
-
 ### v2.0.2
 
 - Change homepage links
-
 
 ### v2.0.1
 
 - Fixed dependencies
 
-
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
-
 
 ### v1.0.0
 
@@ -132,25 +130,20 @@
 - Added new color themes with dark and alt variants
 - Added a new 4px based spacing system via line-height
 
-
 ### v0.3.0
 
 - Added pancake-react plugin
 - Added transpiled react ES5 file as main entry file for `package.json`
 - Added compiled css file that is automatically imported by ES5 react file
 
-
 ### v0.2.0
 
 - Added react component
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

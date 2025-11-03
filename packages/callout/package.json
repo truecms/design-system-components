@@ -1,6 +1,6 @@
 {
   "name": "@truecms/callout",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "description": "Use callout to notify and alert users of important snippets of information.",
   "keywords": [
     "auds",
@@ -60,7 +60,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^4.0.0"
+    "@truecms/core": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -107,6 +107,8 @@ page-alerts
 
 ## Release History
 
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v2.1.4 - Update core package dependency to use the latest version
 * v2.1.3 - Remove --save-dev flag from readme instructions
 * v2.1.2 - Removed unused `Fragment` React import

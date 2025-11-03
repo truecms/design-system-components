@@ -153,6 +153,8 @@ Run `jest` for the unit tests
 
 ## Release History
 
+* v2.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v1.0.14 - Fix unsafe-eval CSP issue
 * v1.0.13 - Remove --save-dev flag from readme instructions
 * v1.0.12 - Removed uikit references

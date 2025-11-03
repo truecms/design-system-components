@@ -61,6 +61,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/card/t
 
 ## Release History
 
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v0.3.3 - Update core package dependency to use the latest version
 * v0.3.2 - Move `overflow:hidden` property from the shadow class to the `.au-card` class
 * v0.3.1 - Use unit instead of rem

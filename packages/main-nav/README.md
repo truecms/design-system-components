@@ -235,6 +235,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/main-n
 
 ## Release History
 
+* v2.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v1.0.9 - main nav to be collapsible upto MD breakpoint (Fix based on the new grid breakpoints)
 * v1.0.8 - Add aria-expanded to main nav menu button
 * v1.0.7 - Remove --save-dev flag from readme instructions

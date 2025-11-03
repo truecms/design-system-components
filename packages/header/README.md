@@ -122,6 +122,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/header
 
 ## Release History
 
+* v5.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v4.1.13 - Header image should be a block element on XS and SM breakpoints (Fix based on the new grid breakpoints)
 * v4.1.12 - Remove --save-dev flag from readme instructions
 * v4.1.11 - Removed unused `Fragment` React import

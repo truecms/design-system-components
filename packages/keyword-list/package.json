@@ -1,6 +1,6 @@
 {
   "name": "@truecms/keyword-list",
-  "version": "3.0.6",
+  "version": "4.0.0",
   "description": "A list style for emphasising parts of a list item, useful for repeating phrases across that list’s items. ",
   "keywords": [
     "auds",
@@ -61,8 +61,8 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^4.0.0",
-    "@truecms/link-list": "^3.0.0"
+    "@truecms/core": "^5.0.0",
+    "@truecms/link-list": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

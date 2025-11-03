@@ -255,6 +255,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/core/t
 
 ## Release History
 
+* v5.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v4.0.0 - Added new breakpoints for xl (extra large) and also xs (extra small)
 * v3.4.2 - Remove --save-dev flag from readme instructions
 * v3.4.1 - Add two new colours: `hint-text` and `hint-text-alt`.

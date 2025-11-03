@@ -1,20 +1,28 @@
 @truecms/grid-12 CHANGELOG
-======================
+
+## 3.0.0
+
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - # @truecms/core@5.0.0
 
 > Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
-
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v300)
 * [v2.1.1 - Layout changes based on the new breakpoints in core](#v211)
 * [v2.1.0 - Remove --save-dev flag from readme instructions](#v210)
 * [v2.0.9 - Removed uikit references](#v209)
@@ -31,88 +39,76 @@
 * [v0.1.1 - Fixed sass rounding precision](#v011)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v3.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- # @truecms/core@5.0.0
 
 ### v2.1.1
 
 - Layout changes based on the new breakpoints in core
 
-
 ### v2.1.0
 
 - Remove --save-dev flag from readme instructions
-
 
 ### v2.0.9
 
 - Removed uikit references
 
-
 ### v2.0.8
 
 - Update dependencies
-
 
 ### v2.0.7
 
 - Removing web pack dev server, updating dependencies
 
-
 ### v2.0.6
 
 - Fixed build scripts for Windows
-
 
 ### v2.0.5
 
 - Replace node-sass with sass
 
-
 ### v2.0.4
 
 - Change npm run watch browser-sync location
-
 
 ### v2.0.3
 
 - Update dependencies
 
-
 ### v2.0.2
 
 - Change homepage link
-
 
 ### v2.0.1
 
 - Fixed dependencies
 
-
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
-
 
 ### v1.0.0
 
 - Moved to AU namespace
 
-
 ### v0.1.1
 
 - Fixed sass rounding precision
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

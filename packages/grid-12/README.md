@@ -61,6 +61,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/grid-1
 
 ## Release History
 
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v2.1.1 - Layout changes based on the new breakpoints in core
 * v2.1.0 - Remove --save-dev flag from readme instructions
 * v2.0.9 - Removed uikit references

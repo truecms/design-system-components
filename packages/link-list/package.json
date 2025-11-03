@@ -1,6 +1,6 @@
 {
   "name": "@truecms/link-list",
-  "version": "3.0.9",
+  "version": "4.0.0",
   "description": "A simple list of inline links.",
   "keywords": [
     "auds",
@@ -60,8 +60,8 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/body": "^2.0.0",
-    "@truecms/core": "^4.0.0"
+    "@truecms/body": "^3.0.0",
+    "@truecms/core": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -108,6 +108,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/button
 
 ## Release History
 
+* v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v3.0.8 - Update core package dependency to use the latest version
 * v3.0.7 - Remove --save-dev flag from readme instructions
 * v3.0.6 - Removed unused `Fragment` React import

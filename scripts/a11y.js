@@ -186,15 +186,24 @@ const RunPa11y = async ( scenarios ) => {
 
 // Global variables
 const audsJson = Path.normalize( `${ process.cwd() }/auds.json` );
-const TestURL   = 'http://localhost:8080';
 
 
 // Start the test - immediatley executed async function
 ( async() => {
-	const App = Express();
-	const Server = App.listen( '8080' );
+    const App = Express();
+    const requestedPort = Number.parseInt( process.env.PA11Y_PORT || '', 10 );
+    const listenPort = Number.isInteger( requestedPort ) && requestedPort > 0 ? requestedPort : 0;
+    // Bind to an ephemeral port by default so parallel CI jobs and local act runs do not collide.
+    const Server = App.listen( listenPort, '127.0.0.1' );
+    if( !Server.listening ) {
+        await new Promise( resolve => Server.once( 'listening', resolve ) );
+    }
 
-	App.use( Express.static( './' ) );
+    const serverAddress = Server.address();
+    const resolvedPort = typeof serverAddress === 'object' && serverAddress ? serverAddress.port : 8080;
+    const TestURL = `http://127.0.0.1:${ resolvedPort }`;
+
+    App.use( Express.static( './' ) );
 
     const scenarios = [
         {

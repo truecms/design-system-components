@@ -36,7 +36,17 @@ jobs:
       - name: Ensure master branch fetched
         run: |
           set -euo pipefail
-          git fetch origin master || true
+          token="${{ secrets.GITHUB_TOKEN }}"
+          repo="${{ github.repository }}"
+          if [ -n "${token}" ]; then
+            git remote set-url origin "https://x-access-token:${token}@github.com/${repo}.git"
+          else
+            git remote set-url origin "https://github.com/${repo}.git"
+          fi
+          git fetch --no-tags --prune origin master || true
+          if git show-ref --verify --quiet refs/remotes/origin/master; then
+            git branch --force master origin/master 2>/dev/null || git branch master origin/master
+          fi
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
@@ -173,7 +183,7 @@ jobs:
           node scripts/performance-metrics.js finalize
 
       - name: Upload release artefacts
-        if: always()
+        if: ${{ always() && env.ACT != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: npm-release-artifacts

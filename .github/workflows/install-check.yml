@@ -113,42 +113,67 @@ jobs:
             'scripts',
             'pack-workspace-tarballs.js'
           ));
-          const { tarballs } = packWorkspaceTarballs({
+          const { tarballs, packages } = packWorkspaceTarballs({
             workspaceDir: workspace,
             destination: tarballDir,
             stdio: 'inherit'
           });
           process.stdout.write('::endgroup::\n');
 
-          const summary = [];
+          const tarballEntries = (packages && packages.length > 0
+            ? packages
+            : tarballs.map((tarball) => {
+                const safeName = tarball.replace(/\.tgz$/, '');
+                const parts = safeName.split('-');
+                const version = parts.pop();
+                const scopeAndName = parts.join('-');
+                const pkgName = scopeAndName.startsWith('truecms-')
+                  ? `@truecms/${scopeAndName.replace(/^truecms-/, '')}`
+                  : scopeAndName;
+                return {
+                  name: pkgName,
+                  version,
+                  tarballFile: tarball,
+                  tarballPath: path.join(tarballDir, tarball)
+                };
+              }));
 
-          for (const tarball of tarballs) {
-            const safeName = tarball.replace(/[^A-Za-z0-9.-]/g, '-').replace(/\.tgz$/, '');
-            const installDir = path.join(runnerTemp, `install-${safeName}`);
-            const tarballPath = path.join(tarballDir, tarball);
-
-            process.stdout.write(`::group::Verifying ${tarball}\n`);
-
-            fs.rmSync(installDir, { recursive: true, force: true });
-            fs.mkdirSync(installDir, { recursive: true });
-            const installPackageJson = {
-              name: `verify-${safeName}`.toLowerCase(),
-              private: true,
-              version: '0.0.0'
-            };
-            fs.writeFileSync(
-              path.join(installDir, 'package.json'),
-              JSON.stringify(installPackageJson, null, 2)
-            );
-            execSync(`pnpm add "${tarballPath}"`, { cwd: installDir, stdio: 'inherit' });
-
-            summary.push({
-              tarball: tarball,
-              installDir: path.relative(workspace, installDir)
-            });
-
-            process.stdout.write('::endgroup::\n');
+          if (tarballEntries.length === 0) {
+            throw new Error('No tarballs found to verify');
           }
+
+          const installDir = path.join(
+            runnerTemp,
+            `install-all-tarballs-${Date.now().toString(36)}`
+          );
+
+          process.stdout.write(`::group::Installing aggregated tarballs in ${installDir}\n`);
+          fs.rmSync(installDir, { recursive: true, force: true });
+          fs.mkdirSync(installDir, { recursive: true });
+          const installPackageJson = {
+            name: 'verify-all-tarballs',
+            private: true,
+            version: '0.0.0',
+            dependencies: {}
+          };
+
+          for (const entry of tarballEntries) {
+            installPackageJson.dependencies[entry.name] = `file:${entry.tarballPath}`;
+          }
+
+          fs.writeFileSync(
+            path.join(installDir, 'package.json'),
+            JSON.stringify(installPackageJson, null, 2)
+          );
+
+          execSync('pnpm install --ignore-scripts', { cwd: installDir, stdio: 'inherit' });
+          process.stdout.write('::endgroup::\n');
+
+          const summary = tarballEntries.map((entry) => ({
+            tarball: entry.tarballFile,
+            package: entry.name,
+            installDir: path.relative(workspace, installDir)
+          }));
 
           fs.writeFileSync(
             path.join(tarballDir, 'install-check-pack-summary.json'),
@@ -160,7 +185,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: install-check-artifacts-${{ matrix.node-version }}
+          name: install-check-artifacts-${{ replace(replace(matrix.node-version, '/', '-'), '*', 'star') }}
           path: |
             install-check-audit-report.json
             dist/tarballs/install-check-pack-summary.json
@@ -248,42 +273,67 @@ jobs:
             'scripts',
             'pack-workspace-tarballs.js'
           ));
-          const { tarballs } = packWorkspaceTarballs({
+          const { tarballs, packages } = packWorkspaceTarballs({
             workspaceDir: workspace,
             destination: tarballDir,
             stdio: 'inherit'
           });
           process.stdout.write('::endgroup::\n');
 
-          const summary = [];
+          const tarballEntries = (packages && packages.length > 0
+            ? packages
+            : tarballs.map((tarball) => {
+                const safeName = tarball.replace(/\.tgz$/, '');
+                const parts = safeName.split('-');
+                const version = parts.pop();
+                const scopeAndName = parts.join('-');
+                const pkgName = scopeAndName.startsWith('truecms-')
+                  ? `@truecms/${scopeAndName.replace(/^truecms-/, '')}`
+                  : scopeAndName;
+                return {
+                  name: pkgName,
+                  version,
+                  tarballFile: tarball,
+                  tarballPath: path.join(tarballDir, tarball)
+                };
+              }));
 
-          for (const tarball of tarballs) {
-            const safeName = tarball.replace(/[^A-Za-z0-9.-]/g, '-').replace(/\.tgz$/, '');
-            const installDir = path.join(runnerTemp, `dry-run-${safeName}`);
-            const tarballPath = path.join(tarballDir, tarball);
-
-            process.stdout.write(`::group::Verifying ${tarball}\n`);
-
-            fs.rmSync(installDir, { recursive: true, force: true });
-            fs.mkdirSync(installDir, { recursive: true });
-            const installPackageJson = {
-              name: `dry-run-${safeName}`.toLowerCase(),
-              private: true,
-              version: '0.0.0'
-            };
-            fs.writeFileSync(
-              path.join(installDir, 'package.json'),
-              JSON.stringify(installPackageJson, null, 2)
-            );
-            execSync(`pnpm add "${tarballPath}"`, { cwd: installDir, stdio: 'inherit' });
-
-            summary.push({
-              tarball,
-              installDir: path.relative(workspace, installDir)
-            });
-
-            process.stdout.write('::endgroup::\n');
+          if (tarballEntries.length === 0) {
+            throw new Error('No tarballs found to verify');
           }
+
+          const installDir = path.join(
+            runnerTemp,
+            `dry-run-all-tarballs-${Date.now().toString(36)}`
+          );
+
+          process.stdout.write(`::group::Installing aggregated tarballs in ${installDir}\n`);
+          fs.rmSync(installDir, { recursive: true, force: true });
+          fs.mkdirSync(installDir, { recursive: true });
+          const installPackageJson = {
+            name: 'dry-run-all-tarballs',
+            private: true,
+            version: '0.0.0',
+            dependencies: {}
+          };
+
+          for (const entry of tarballEntries) {
+            installPackageJson.dependencies[entry.name] = `file:${entry.tarballPath}`;
+          }
+
+          fs.writeFileSync(
+            path.join(installDir, 'package.json'),
+            JSON.stringify(installPackageJson, null, 2)
+          );
+
+          execSync('pnpm install --ignore-scripts', { cwd: installDir, stdio: 'inherit' });
+          process.stdout.write('::endgroup::\n');
+
+          const summary = tarballEntries.map((entry) => ({
+            tarball: entry.tarballFile,
+            package: entry.name,
+            installDir: path.relative(workspace, installDir)
+          }));
 
           fs.writeFileSync(
             path.join(tarballDir, 'pack-summary.json'),

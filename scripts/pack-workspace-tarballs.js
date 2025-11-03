@@ -53,18 +53,37 @@ const packWorkspaceTarballs = ({
     throw new Error('No publishable workspace packages were found.');
   }
 
-  for (const pkg of packages) {
-    process.stdout.write(`Packing ${pkg.name}\n`);
+  const metadata = packages.map((pkg) => {
+    const packageJsonPath = path.join(pkg.path, 'package.json');
+    const { name, version } = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+    if (!name || !version) {
+      throw new Error(`Package at ${pkg.path} is missing name or version in package.json`);
+    }
+
+    const safeName = name.startsWith('@') ? name.slice(1).replace('/', '-') : name;
+    const tarballFile = `${safeName}-${version}.tgz`;
+    const tarballPath = path.join(outputDir, tarballFile);
+
+    process.stdout.write(`Packing ${name}\n`);
     execSync(`pnpm pack --pack-destination "${outputDir}"`, {
       cwd: pkg.path,
       stdio
     });
-  }
 
-  const tarballs = fs
-    .readdirSync(outputDir)
-    .filter((file) => file.endsWith('.tgz'))
-    .sort((a, b) => a.localeCompare(b));
+    if (!fs.existsSync(tarballPath)) {
+      throw new Error(`Expected tarball ${tarballFile} was not generated for ${name}`);
+    }
+
+    return {
+      name,
+      version,
+      tarballFile,
+      tarballPath
+    };
+  });
+
+  const tarballs = metadata.map((entry) => entry.tarballFile);
 
   if (tarballs.length === 0) {
     throw new Error('No tarballs were produced by pnpm pack');
@@ -72,7 +91,8 @@ const packWorkspaceTarballs = ({
 
   return {
     destination: outputDir,
-    tarballs
+    tarballs,
+    packages: metadata
   };
 };
 

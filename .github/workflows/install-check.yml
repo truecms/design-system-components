@@ -181,11 +181,20 @@ jobs:
           );
           NODE
 
+      - name: Derive artifact suffix
+        id: artifact-name
+        run: |
+          set -euo pipefail
+          version="${{ matrix['node-version'] }}"
+          safe="${version//\//-}"
+          safe="${safe//\*/star}"
+          echo "suffix=${safe}" >> "$GITHUB_OUTPUT"
+
       - name: Upload install-check artefacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: install-check-artifacts-${{ replace(replace(matrix.node-version, '/', '-'), '*', 'star') }}
+          name: install-check-artifacts-${{ steps.artifact-name.outputs.suffix }}
           path: |
             install-check-audit-report.json
             dist/tarballs/install-check-pack-summary.json

@@ -19,6 +19,8 @@ This document outlines how releases are produced for the design system component
    - `dist_tag` defaults to `latest`; use `next`, `dev`, or a custom tag to stage releases.
    - `dry_run` defaults to `true`; set to `false` only when you are ready to publish for real.
 
+Pre-release smoke tags ending in `-dev`, `-next`, `-rc`, `-beta`, or `-alpha` automatically map to the appropriate dist-tags and run the publish step in **dry-run mode** unless the repository variable `FORCE_PUBLISH_FROM_TAG` (or `FORCE_PUBLISH`) is set to `true`. This allows maintainers to verify the workflow without contacting npm. When you are ready to publish an actual pre-release, either dispatch the workflow manually with `dry_run=false` or set the repository variable before pushing the tag.
+
 The workflow performs the following checks automatically:
 
 - Installs dependencies using Node 22 and pnpm
@@ -38,6 +40,12 @@ Every pull request also triggers the **Dry run release validation** job inside `
 - Persists `changesets-summary.json` (the raw release plan) and `dist/tarballs/pack-summary.json` as workflow artifacts for auditing.
 
 Download those artifacts from the workflow run to confirm the release plan before tagging.
+
+### Artifact reference
+
+- `install-check-artifacts-<node>`: contains `install-check-audit-report.json`, bundle parity summaries, Pa11y reports for each exercised component, performance metrics, and `dist/tarballs/install-check-pack-summary.json`.
+- `dry-run-release-artifacts`: captures `changesets-summary.json`, the aggregate tarball install summary, bundle parity outputs, the Pa11y report bundle, and performance metrics for the dry run pipeline.
+- `npm-release-artifacts`: stores the final audit output alongside bundle parity, Pa11y logs, and performance summaries so maintainers can prove what was published.
 
 ## Manual Publish (Fallback)
 

@@ -1,8 +1,7 @@
-Update dependenciesalerts CH3NGELOG
-@gov.au/page-aletsCHANGELOG
-======================
+@truecms/page-alerts CHANGELOG
+===============================
 
-> Part of the [gov.au components](https://github.com/truecms/design-system-components/) ecosystem.
+> Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
 
 ## Contents

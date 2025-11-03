@@ -70,18 +70,77 @@ jobs:
 
           echo "Fetching base ref: ${base_ref}"
           git fetch origin "${base_ref}"
+          if [ "${base_ref}" != "master" ]; then
+            echo "Fetching master for Changesets baseline"
+            git fetch origin master || true
+          fi
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          set -euo pipefail
+          suffix="${{ matrix.node-version }}"
+          safe="${suffix//\//-}"
+          safe="${safe//\*/star}"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/install-check-${safe}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${safe}"
+
+          start=$(date +%s)
+          pnpm install --frozen-lockfile
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
       - name: Build packages
-        run: pnpm run build
+        run: |
+          set -euo pipefail
+          suffix="${{ matrix.node-version }}"
+          safe="${suffix//\//-}"
+          safe="${safe//\*/star}"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/install-check-${safe}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${safe}"
+
+          start=$(date +%s)
+          pnpm run build
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step build --duration "$((end - start))"
 
       - name: Run tests
-        run: pnpm run test
+        run: |
+          set -euo pipefail
+          suffix="${{ matrix.node-version }}"
+          safe="${suffix//\//-}"
+          safe="${safe//\*/star}"
+          export BUNDLE_PARITY_REPORT_PATH="dist/reports/install-check-${safe}/bundle-parity.json"
+          export BUNDLE_PARITY_LOG_PATH="dist/reports/install-check-${safe}/bundle-parity.log"
+          export PA11Y_REPORT_DIR="dist/reports/install-check-${safe}/a11y"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/install-check-${safe}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${safe}"
+
+          start=$(date +%s)
+          pnpm run test
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step test --duration "$((end - start))"
 
       - name: Build site distribution bundle
-        run: pnpm run build:site-dist
+        run: |
+          set -euo pipefail
+          suffix="${{ matrix.node-version }}"
+          safe="${suffix//\//-}"
+          safe="${safe//\*/star}"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/install-check-${safe}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${safe}"
+
+          start=$(date +%s)
+          pnpm run build:site-dist
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step 'build:site-dist' --duration "$((end - start))"
 
       - name: Audit production dependencies
         run: |
@@ -190,6 +249,19 @@ jobs:
           safe="${safe//\*/star}"
           echo "suffix=${safe}" >> "$GITHUB_OUTPUT"
 
+      - name: Summarise performance metrics
+        if: always()
+        run: |
+          set -euo pipefail
+          suffix="${{ matrix.node-version }}"
+          safe="${suffix//\//-}"
+          safe="${safe//\*/star}"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/install-check-${safe}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${safe}"
+          export PERFORMANCE_SUMMARY_PATH="dist/reports/install-check-${safe}/performance-summary.json"
+          node scripts/performance-metrics.js finalize
+
       - name: Upload install-check artefacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -198,12 +270,18 @@ jobs:
           path: |
             install-check-audit-report.json
             dist/tarballs/install-check-pack-summary.json
+            dist/reports/install-check-${{ steps.artifact-name.outputs.suffix }}/bundle-parity.json
+            dist/reports/install-check-${{ steps.artifact-name.outputs.suffix }}/bundle-parity.log
+            dist/reports/install-check-${{ steps.artifact-name.outputs.suffix }}/a11y/index.json
+            dist/reports/install-check-${{ steps.artifact-name.outputs.suffix }}/a11y/*.json
+            dist/reports/install-check-${{ steps.artifact-name.outputs.suffix }}/performance.json
+            dist/reports/install-check-${{ steps.artifact-name.outputs.suffix }}/performance-summary.json
           if-no-files-found: ignore
 
       - name: Clean tarballs
         if: always()
         run: |
-          rm -rf dist/tarballs
+          rm -rf dist/tarballs dist/reports
           pnpm store prune
 
   dry-run-release:
@@ -219,6 +297,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Ensure master branch fetched
+        run: |
+          set -euo pipefail
+          git fetch origin master || true
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
@@ -246,16 +329,59 @@ jobs:
           fi
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/dry-run/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="dry-run"
+
+          start=$(date +%s)
+          pnpm install --frozen-lockfile
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
       - name: Build packages
-        run: pnpm run build
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/dry-run/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="dry-run"
+
+          start=$(date +%s)
+          pnpm run build
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step build --duration "$((end - start))"
 
       - name: Run tests
-        run: pnpm run test
+        run: |
+          set -euo pipefail
+          export BUNDLE_PARITY_REPORT_PATH="dist/reports/dry-run/bundle-parity.json"
+          export BUNDLE_PARITY_LOG_PATH="dist/reports/dry-run/bundle-parity.log"
+          export PA11Y_REPORT_DIR="dist/reports/dry-run/a11y"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/dry-run/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="dry-run"
+
+          start=$(date +%s)
+          pnpm run test
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step test --duration "$((end - start))"
 
       - name: Build site distribution bundle
-        run: pnpm run build:site-dist
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/dry-run/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="dry-run"
+
+          start=$(date +%s)
+          pnpm run build:site-dist
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step 'build:site-dist' --duration "$((end - start))"
 
       - name: Dry run publish with Changesets
         run: pnpm run release -- --dry-run
@@ -350,6 +476,16 @@ jobs:
           );
           NODE
 
+      - name: Summarise performance metrics
+        if: always()
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/dry-run/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="dry-run"
+          export PERFORMANCE_SUMMARY_PATH="dist/reports/dry-run/performance-summary.json"
+          node scripts/performance-metrics.js finalize
+
       - name: Upload dry-run artefacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -358,10 +494,16 @@ jobs:
           path: |
             changesets-summary.json
             dist/tarballs/pack-summary.json
+            dist/reports/dry-run/bundle-parity.json
+            dist/reports/dry-run/bundle-parity.log
+            dist/reports/dry-run/a11y/index.json
+            dist/reports/dry-run/a11y/*.json
+            dist/reports/dry-run/performance.json
+            dist/reports/dry-run/performance-summary.json
           if-no-files-found: ignore
 
       - name: Clean tarballs
         if: always()
         run: |
-          rm -rf dist/tarballs
+          rm -rf dist/tarballs dist/reports
           pnpm store prune

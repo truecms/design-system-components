@@ -33,6 +33,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Ensure master branch fetched
+        run: |
+          set -euo pipefail
+          git fetch origin master || true
+
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -45,6 +50,20 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Resolve release parameters
+        id: release-params
+        run: node scripts/determine-release-params.js
+        env:
+          INPUT_SCOPE: ${{ inputs.npm_scope }}
+          INPUT_DIST_TAG: ${{ inputs.dist_tag }}
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+          FORCE_PUBLISH_FROM_TAG: ${{ vars.FORCE_PUBLISH_FROM_TAG }}
+          FORCE_PUBLISH: ${{ vars.FORCE_PUBLISH }}
+          ALLOW_PUBLISH_FROM_TAG: ${{ vars.ALLOW_PUBLISH_FROM_TAG }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
 
       - name: Enforce Node 22 baseline
         shell: bash
@@ -60,6 +79,7 @@ jobs:
           fi
 
       - name: Verify npm token secret configured
+        if: steps.release-params.outputs.dry_run != 'true'
         run: |
           if [ -z "${NPM_TOKEN:-}" ]; then
             echo '::error::NPM_TOKEN_TRUECMS secret is not configured.'
@@ -69,6 +89,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
 
       - name: Configure npm authentication
+        if: steps.release-params.outputs.dry_run != 'true'
         run: |
           pnpm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
           pnpm whoami || pnpm whoami
@@ -76,16 +97,59 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+
+          start=$(date +%s)
+          pnpm install --frozen-lockfile
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
       - name: Build packages
-        run: pnpm run build
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+
+          start=$(date +%s)
+          pnpm run build
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step build --duration "$((end - start))"
 
       - name: Run tests
-        run: pnpm run test
+        run: |
+          set -euo pipefail
+          export BUNDLE_PARITY_REPORT_PATH="dist/reports/release/bundle-parity.json"
+          export BUNDLE_PARITY_LOG_PATH="dist/reports/release/bundle-parity.log"
+          export PA11Y_REPORT_DIR="dist/reports/release/a11y"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+
+          start=$(date +%s)
+          pnpm run test
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step test --duration "$((end - start))"
 
       - name: Build site distribution bundle
-        run: pnpm run build:site-dist
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+
+          start=$(date +%s)
+          pnpm run build:site-dist
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step 'build:site-dist' --duration "$((end - start))"
 
       - name: Audit production dependencies
         run: |
@@ -98,12 +162,29 @@ jobs:
           fi
         shell: bash
 
+      - name: Summarise performance metrics
+        if: always()
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+          export PERFORMANCE_SUMMARY_PATH="dist/reports/release/performance-summary.json"
+          node scripts/performance-metrics.js finalize
+
       - name: Upload release artefacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: npm-release-artifacts
-          path: npm-release-audit-report.json
+          path: |
+            npm-release-audit-report.json
+            dist/reports/release/bundle-parity.json
+            dist/reports/release/bundle-parity.log
+            dist/reports/release/a11y/index.json
+            dist/reports/release/a11y/*.json
+            dist/reports/release/performance.json
+            dist/reports/release/performance-summary.json
           if-no-files-found: ignore
 
       - name: Publish packages with Changesets
@@ -111,38 +192,20 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
           NPM_CONFIG_PROVENANCE: true
-          INPUT_SCOPE: ${{ inputs.npm_scope }}
-          INPUT_DIST_TAG: ${{ inputs.dist_tag }}
-          INPUT_DRY_RUN: ${{ inputs.dry_run }}
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_REF_NAME: ${{ github.ref_name }}
+          RESOLVED_SCOPE: ${{ steps.release-params.outputs.scope }}
+          RESOLVED_DIST_TAG: ${{ steps.release-params.outputs.dist_tag }}
+          RESOLVED_DRY_RUN: ${{ steps.release-params.outputs.dry_run }}
         run: |
           set -euo pipefail
 
-          scope="${INPUT_SCOPE:-@truecms}"
-          dist_tag="${INPUT_DIST_TAG:-latest}"
-          dry_run_flag="${INPUT_DRY_RUN:-true}"
-
-          if [ "$GITHUB_EVENT_NAME" = "release" ]; then
-            dry_run_flag="false"
-            dist_tag="latest"
-          fi
-
-          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "${GITHUB_REF:-}" != "" ] && [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            dry_run_flag="false"
-            tag_name="${GITHUB_REF_NAME:-}" 
-            if [[ "$tag_name" == *"-dev"* ]]; then
-              dist_tag="dev"
-            elif [[ "$tag_name" == *"-next"* ]]; then
-              dist_tag="next"
-            else
-              dist_tag="latest"
-            fi
-          fi
+          scope="${RESOLVED_SCOPE:-@truecms}"
+          dist_tag="${RESOLVED_DIST_TAG:-latest}"
+          dry_run_flag="${RESOLVED_DRY_RUN:-true}"
 
           export NPM_PUBLISH_SCOPE="$scope"
           pnpm config set scope "${scope#@}"
+
+          echo "Publishing with scope ${scope}, dist-tag ${dist_tag}, dry-run ${dry_run_flag}"
 
           args=(--tag "$dist_tag")
           if [ "$dry_run_flag" = "true" ]; then
@@ -153,4 +216,6 @@ jobs:
 
       - name: Post-release cleanup
         if: always()
-        run: pnpm store prune
+        run: |
+          rm -rf dist/reports
+          pnpm store prune

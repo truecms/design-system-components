@@ -1,0 +1,8 @@
+{
+  "component": "page-alerts",
+  "url": "http://localhost:8080/packages/page-alerts/tests/site",
+  "documentTitle": "Test: page-alerts",
+  "issues": [],
+  "status": "passed",
+  "timestamp": "2025-11-03T10:51:49.545Z"
+}

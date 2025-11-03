@@ -28,7 +28,7 @@ This page mirrors the guidance that will be published to the GitHub Wiki. It exp
 5. `pnpm run test`
 6. `pnpm changeset` (record release notes when applicable)
 
-Logs from these runs feed the Compatibility Test Matrix in `specs/001-modernise-library-run/research.md`.
+Logs from these runs feed the Compatibility Test Matrix in `specs/001-already-began-task/research.md`.
 
 ## Continuous integration workflows
 
@@ -56,7 +56,7 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-modernise-
 ## Release checklist
 
 1. Confirm Install Check is green on the release branch.
-2. Ensure all required documentation and package changelog updates are merged (see `specs/001-modernise-library-run/checklists/package-docs.md`).
+2. Ensure all required documentation and package changelog updates are merged (see `specs/001-already-began-task/checklists/package-docs.md`).
 3. Run `pnpm changeset` to add release notes if any are missing.
 4. Trigger the **npm Release** workflow:
    - Scope defaults to `@truecms`; override if publishing under a different namespace.
@@ -78,4 +78,4 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-modernise-
 - Replace remaining `@gov.au/pancake-*` dependencies with Node 22 compatible alternatives (tracked in Phase 6 tasks).
 - Keep the Install Check workflow on pnpm commands and monitor tarball verification after Pancake replacements land (Task T205 complete).
 - Complete the package README/CHANGELOG sweep using the checklist.
-- Continue recording compatibility runs and escalations in `specs/001-modernise-library-run/research.md` to satisfy monitoring requirement FR-005.
+- Continue recording compatibility runs and escalations in `specs/001-already-began-task/research.md` to satisfy monitoring requirement FR-005.

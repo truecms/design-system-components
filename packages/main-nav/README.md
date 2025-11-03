@@ -207,12 +207,12 @@ $('.js-au-main-nav').AUmainNav({
 
 ```shell
 main-nav
-├─ core
 ├─ animate
+├─ core
 └─ link-list
-   ├─ core
-   └─ body
-      └─ core
+   ├─ body
+   │  └─ core
+   └─ core
 ```
 
 

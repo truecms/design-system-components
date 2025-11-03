@@ -105,9 +105,9 @@ For more details have a look at the [usage example](https://github.com/truecms/d
 breadcrumbs
 ├─ core
 └─ link-list
-   ├─ core
-   └─ body
-      └─ core
+   ├─ body
+   │  └─ core
+   └─ core
 ```
 
 

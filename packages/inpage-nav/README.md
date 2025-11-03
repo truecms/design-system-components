@@ -117,9 +117,9 @@ For more details have a look at the [usage example](https://github.com/truecms/d
 inpage-nav
 ├─ core
 └─ link-list
-   ├─ core
-   └─ body
-      └─ core
+   ├─ body
+   │  └─ core
+   └─ core
 ```
 
 

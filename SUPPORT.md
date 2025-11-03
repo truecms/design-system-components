@@ -44,6 +44,6 @@ If you encounter blockers, open a GitHub issue with a reproduction repository or
 - Maintainers review new issues labelled `node-22-support` every **Monday** and **Thursday** (Canberra time).
 - High-severity compatibility regressions (`severity:critical`) trigger an immediate working session among the release engineers and are added to the modernization research log.
 - If a regression blocks a release for more than two business days, escalate to the modernization working group via the issue assignee list and open a draft advisory in the repository discussions board.
-- All escalations are summarised in the fortnightly status update documented in `specs/001-modernise-library-run/research.md`.
+- All escalations are summarised in the fortnightly status update documented in `specs/001-already-began-task/research.md`.
 
 Staying within this cadence keeps monitoring in line with requirement FR-005 and ensures rapid response to any post-release Node 22 issues.

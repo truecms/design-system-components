@@ -189,7 +189,7 @@ const trimScope = ( name ) => {
  */
 const GetDepTree = ( name ) => {
     let tree = {};
-    const pkgPath = Path.normalize(`${ process.cwd() }/../${ trimScope( name ) }/package.json`);
+    const pkgPath = Path.normalize(`${ __dirname }/../packages/${ trimScope( name ) }/package.json`);
     const pkg = require( pkgPath, 'utf-8'); // we use require because we like the caching here
     const peerDeps = pkg.peerDependencies || {};
 

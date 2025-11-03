@@ -110,9 +110,9 @@ For more details have a look at the [usage example](https://github.com/truecms/d
 keyword-list
 ├─ core
 └─ link-list
-   ├─ core
-   └─ body
-      └─ core
+   ├─ body
+   │  └─ core
+   └─ core
 ```
 
 

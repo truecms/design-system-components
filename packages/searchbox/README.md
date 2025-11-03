@@ -38,10 +38,10 @@ npm install @truecms/searchbox
 
 ```shell
 searchbox
-├─ core
-├─ text-inputs
+├─ buttons
 │  └─ core
-└─ buttons
+├─ core
+└─ text-inputs
    └─ core
 ```
 

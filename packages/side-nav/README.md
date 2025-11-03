@@ -112,15 +112,15 @@ For more details have a look at the [usage example](https://github.com/truecms/d
 
 ```shell
 side-nav
-├─ core
-├─ animate
 ├─ accordion
 │  ├─ animate
 │  └─ core
+├─ animate
+├─ core
 └─ link-list
-   ├─ core
-   └─ body
-      └─ core
+   ├─ body
+   │  └─ core
+   └─ core
 ```
 
 

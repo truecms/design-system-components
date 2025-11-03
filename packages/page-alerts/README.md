@@ -84,9 +84,9 @@ For more details have a look at the [usage example](https://github.com/truecms/d
 
 ```shell
 page-alerts
-├─ core
-└─ body
-   └─ core
+├─ body
+│  └─ core
+└─ core
 ```
 
 

@@ -22,7 +22,7 @@ Visit <https://design-system-components.truecms.com.au/>. Cloudflare Pages also 
 ## Compatibility and testing
 
 ### Which Node versions do you test against?
-We support Node.js `>=22.0.0`. The Install Check workflow runs against Node 22.x and the latest LTS release to catch regressions early. Results are recorded in the Compatibility Test Matrix section of `specs/001-modernise-library-run/research.md`.
+We support Node.js `>=22.0.0`. The Install Check workflow runs against Node 22.x and the latest LTS release to catch regressions early. Results are recorded in the Compatibility Test Matrix section of `specs/001-already-began-task/research.md`.
 
 ### Do I need pnpm as well as npm?
 Yes. pnpm 9 drives local workflows and release automation. npm 10 is only used inside the Install Check workflow to verify that packages still install cleanly with the registry defaults. Follow the setup steps in [`README.md`](./README.md#local-development) to activate pnpm via Corepack.
@@ -55,6 +55,6 @@ node scripts/pack-verify.js # or rerun the failing npm pack command
 Update the affected package (often a lingering dependency that is not Node 22 compatible) and push a fix.
 
 ### I still see references to `node-sass`. Is that expected?
-No. All maintained documentation and packages now use Dart Sass. If you find an outdated reference in package docs, raise an issue or submit a pull request so it can be removed. The modernization checklist in `specs/001-modernise-library-run/checklists/package-docs.md` tracks the cleanup effort.
+No. All maintained documentation and packages now use Dart Sass. If you find an outdated reference in package docs, raise an issue or submit a pull request so it can be removed. The modernization checklist in `specs/001-already-began-task/checklists/package-docs.md` tracks the cleanup effort.
 
 Still stuck? Open an issue with logs and the Node version you are using so the maintainers can help.

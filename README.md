@@ -67,6 +67,10 @@ Releases are orchestrated with Changesets and pnpm:
 3. The workflow runs `pnpm run build`, `pnpm run test`, `pnpm run build:site-dist`, and `pnpm run release` (Changesets publish) before pushing tags to npm under the selected scope.
 4. Release artefacts are mirrored to the legacy `@gov.au/*` names via npm dist-tags so downstream teams can opt in at their own pace.
 
+## Drupal 11 compatibility
+
+Maintaining parity with Drupal 11 sites is a project requirement. The [`docs/drupal.md`](./docs/drupal.md) smoke guide documents the verification routine we run before each release: rebuild components on Node 22, publish local tarballs with pnpm, install them into a Drupal 11 sandbox, and manually exercise canonical pages (navigation, accordions, alerts, tables). Workflow issues that threaten Drupal compatibility are triaged with the same urgency as Node runtime regressions.
+
 ## Support and escalation
 
 Open issues or questions on the [GitHub issue tracker](https://github.com/truecms/design-system-components/issues). The modernization maintainers triage Node compatibility reports twice weekly and follow the escalation path documented in [`SUPPORT.md`](./SUPPORT.md) to keep FR-005 monitoring requirements in place.

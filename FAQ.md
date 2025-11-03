@@ -39,7 +39,7 @@ Releases are coordinated through Changesets. Maintainers create Changesets for e
 Yes. The workflow-dispatch input `dry_run` defaults to `true`. Run the workflow from the Actions tab without changing the input to validate credentials, or set it to `false` once you are ready to publish.
 
 ### How do I track what the Install Check workflow does?
-Install Check lives at `.github/workflows/install-check.yml`. It installs dependencies via `npm ci`, runs `npm run bootstrap`, `npm run build`, `npm run test`, and packages every component with `npm pack`. If any tarball installation fails, the job logs which package needs remediation.
+Install Check lives at `.github/workflows/install-check.yml`. It installs dependencies with `pnpm install --frozen-lockfile`, runs `pnpm run build`, `pnpm run test`, builds the documentation bundle, audits production dependencies, and verifies that every tarball produced by `pnpm pack` installs cleanly. A companion dry-run job also executes `pnpm run release -- --dry-run`, records the release plan in `changesets-summary.json`, and uploads `dist/tarballs/pack-summary.json` for auditing.
 
 ## Troubleshooting
 

@@ -14,7 +14,10 @@ This document outlines how releases are produced for the design system component
 1. Merge approved pull requests into `main`.
 2. Run `pnpm changeset` to create or update release notes.
 3. Commit and push the changeset file, then open a pull request.
-4. Once merged, trigger the **npm Release** workflow from the Actions tab or tag a version (`git tag vX.Y.Z && git push --tags`).
+4. Once merged, trigger the **npm Release** workflow from the Actions tab or tag a version (`git tag vX.Y.Z && git push --tags`). When dispatching manually, confirm the inputs:
+   - `npm_scope` defaults to `@truecms` and rarely needs to change.
+   - `dist_tag` defaults to `latest`; use `next`, `dev`, or a custom tag to stage releases.
+   - `dry_run` defaults to `true`; set to `false` only when you are ready to publish for real.
 
 The workflow performs the following checks automatically:
 
@@ -23,6 +26,18 @@ The workflow performs the following checks automatically:
 - Executes `pnpm run build:site-dist` to ensure documentation assets still build
 - Audits production dependencies and fails on any vulnerability
 - Publishes via Changesets with provenance metadata when the npm token is present
+- Uploads the dry-run summary (`changesets-summary.json`) and packed tarball manifest (`pack-summary.json`) when exercising the install check pipeline
+
+## Dry Run Release Validation
+
+Every pull request also triggers the **Dry run release validation** job inside `install-check.yml`. This job:
+
+- Rebuilds packages, reruns the full test suite, and rebuilds the documentation bundle on Node 22.
+- Executes `pnpm run release -- --dry-run` to confirm Changesets can publish without contacting npm.
+- Packs every workspace tarball, installs them in a disposable workspace, and records the results in `dist/tarballs/pack-summary.json`.
+- Persists `changesets-summary.json` (the raw release plan) and `dist/tarballs/pack-summary.json` as workflow artifacts for auditing.
+
+Download those artifacts from the workflow run to confirm the release plan before tagging.
 
 ## Manual Publish (Fallback)
 

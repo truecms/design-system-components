@@ -35,7 +35,7 @@
     "delete:node_modules": "pnpm -r exec rimraf node_modules && rimraf node_modules",
     "delete:lib": "rimraf packages/*/lib",
     "test:unit-test": "jest --runInBand",
-    "test": "pnpm run test:unit-test && node scripts/helper.js test && node ./scripts/a11y.js",
+    "test": "pnpm run test:unit-test && node scripts/helper.js test && node ./scripts/a11y.js && node ./scripts/verify-bundles.js",
     "build:site-dist": "node scripts/build-site-dist.js"
   },
   "jest": {

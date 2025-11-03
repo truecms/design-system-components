@@ -58,6 +58,9 @@ jobs:
             exit 1
           fi
 
+      - name: Fetch main branch for Changesets
+        run: git fetch origin main
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -157,6 +160,147 @@ jobs:
           path: |
             install-check-audit-report.json
             dist/tarballs/install-check-pack-summary.json
+          if-no-files-found: ignore
+
+      - name: Clean tarballs
+        if: always()
+        run: |
+          rm -rf dist/tarballs
+          pnpm store prune
+
+  dry-run-release:
+    name: Dry run release validation
+    runs-on: ubuntu-latest
+    needs: install-check
+    timeout-minutes: 45
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Enforce Node 22 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_version="$(node -v)"
+          echo "Active Node version: ${node_version}"
+          major="${node_version#v}"
+          major="${major%%.*}"
+          if [ "${major}" -lt 22 ]; then
+            echo '::error::Node 22 or newer is required for this workflow. Update the matrix entry or run `nvm use 22` locally before re-running.'
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm run build
+
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Build site distribution bundle
+        run: pnpm run build:site-dist
+
+      - name: Dry run publish with Changesets
+        run: pnpm run release -- --dry-run
+
+      - name: Generate Changesets summary
+        run: pnpm changeset status --output changesets-summary.json
+
+      - name: Pack workspace tarballs for verification
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const { execSync } = require('child_process');
+          const fs = require('fs');
+          const os = require('os');
+          const path = require('path');
+
+          const workspace = process.env.GITHUB_WORKSPACE;
+          const tarballDir = path.join(workspace, 'dist', 'tarballs');
+          const runnerTemp = process.env.RUNNER_TEMP || os.tmpdir();
+
+          fs.rmSync(tarballDir, { recursive: true, force: true });
+          fs.mkdirSync(tarballDir, { recursive: true });
+
+          process.stdout.write('::group::Packing workspace packages with pnpm\n');
+          execSync(`pnpm -r --workspace-concurrency 1 pack --pack-destination "${tarballDir}"`, {
+            cwd: workspace,
+            stdio: 'inherit'
+          });
+          process.stdout.write('::endgroup::\n');
+
+          const tarballs = fs
+            .readdirSync(tarballDir)
+            .filter((file) => file.endsWith('.tgz'))
+            .sort((a, b) => a.localeCompare(b));
+
+          if (tarballs.length === 0) {
+            throw new Error('No tarballs were produced by pnpm pack');
+          }
+
+          const summary = [];
+
+          for (const tarball of tarballs) {
+            const safeName = tarball.replace(/[^A-Za-z0-9.-]/g, '-').replace(/\.tgz$/, '');
+            const installDir = path.join(runnerTemp, `dry-run-${safeName}`);
+            const tarballPath = path.join(tarballDir, tarball);
+
+            process.stdout.write(`::group::Verifying ${tarball}\n`);
+
+            fs.rmSync(installDir, { recursive: true, force: true });
+            fs.mkdirSync(installDir, { recursive: true });
+            const installPackageJson = {
+              name: `dry-run-${safeName}`.toLowerCase(),
+              private: true,
+              version: '0.0.0'
+            };
+            fs.writeFileSync(
+              path.join(installDir, 'package.json'),
+              JSON.stringify(installPackageJson, null, 2)
+            );
+            execSync(`pnpm add "${tarballPath}"`, { cwd: installDir, stdio: 'inherit' });
+
+            summary.push({
+              tarball,
+              installDir: path.relative(workspace, installDir)
+            });
+
+            process.stdout.write('::endgroup::\n');
+          }
+
+          fs.writeFileSync(
+            path.join(tarballDir, 'pack-summary.json'),
+            JSON.stringify(summary, null, 2)
+          );
+          NODE
+
+      - name: Upload dry-run artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dry-run-release-artifacts
+          path: |
+            changesets-summary.json
+            dist/tarballs/pack-summary.json
           if-no-files-found: ignore
 
       - name: Clean tarballs

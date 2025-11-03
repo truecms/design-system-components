@@ -58,8 +58,18 @@ jobs:
             exit 1
           fi
 
-      - name: Fetch main branch for Changesets
-        run: git fetch origin main
+      - name: Fetch base branch for Changesets
+        run: |
+          set -euo pipefail
+          event_name="${{ github.event_name }}"
+          base_ref="${{ github.event.repository.default_branch }}"
+
+          if [ "${event_name}" = "pull_request" ]; then
+            base_ref="${{ github.event.pull_request.base.ref }}"
+          fi
+
+          echo "Fetching base ref: ${base_ref}"
+          git fetch origin "${base_ref}"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

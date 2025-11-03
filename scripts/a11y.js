@@ -60,7 +60,14 @@ const DisplayResults = results => {
 // RUN TESTS
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const RunPa11y = async ( urls ) => {
-	const browser = await Puppeteer.launch({ headless: 'new' });
+	const sandboxOverrides = process.env.CI ? {
+		args: [ '--no-sandbox', '--disable-setuid-sandbox' ],
+	} : {};
+
+	const browser = await Puppeteer.launch({
+		headless: 'new',
+		...sandboxOverrides,
+	});
 
 	try {
 		await Promise.all( urls.map( async ( url ) => {

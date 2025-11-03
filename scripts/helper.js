@@ -13,10 +13,36 @@
 const Autoprefixer = require('autoprefixer');
 const Postcss = require('postcss');
 const Sass = require('sass');
-const Chalk = require(`chalk`).default;
 const Path = require(`path`);
 const Fs = require(`fs`);
 const Os = require(`os`);
+
+const createColourFallback = () => {
+	const passthrough = (value) => value;
+
+	return new Proxy(passthrough, {
+		get: () => passthrough,
+		apply: (_target, _thisArg, args) => args[0]
+	});
+};
+
+let Chalk;
+
+try {
+	// Prefer CommonJS consumption when the runtime supports it.
+	// eslint-disable-next-line global-require, import/no-dynamic-require
+	const loaded = require('chalk');
+	Chalk = loaded.default || loaded;
+}
+catch (error) {
+	if( error && error.code !== 'ERR_REQUIRE_ESM' ) {
+		throw error;
+	}
+
+	// Chalk@5 is ESM-only; instead of crashing under CommonJS, fall back to
+	// pass-through colouring so the build remains readable under Node 22+.
+	Chalk = createColourFallback();
+}
 
 const PKG = require( Path.normalize(`${ process.cwd() }/package.json`) );
 

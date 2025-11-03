@@ -27,6 +27,7 @@
     "scaffolding": "node ./scripts/helper.js scaffolding",
     "bootstrap": "pnpm install --frozen-lockfile",
     "build": "pnpm -r run build",
+    "pack:tarballs": "node scripts/pack-workspace-tarballs.js",
     "changeset": "changeset",
     "prepare:version": "changeset version",
     "release": "changeset publish",

@@ -107,24 +107,18 @@ jobs:
           const tarballDir = path.join(workspace, 'dist', 'tarballs');
           const runnerTemp = process.env.RUNNER_TEMP || os.tmpdir();
 
-          fs.rmSync(tarballDir, { recursive: true, force: true });
-          fs.mkdirSync(tarballDir, { recursive: true });
-
           process.stdout.write('::group::Packing workspace packages with pnpm\n');
-          execSync(`pnpm -r --workspace-concurrency 1 pack --pack-destination "${tarballDir}"`, {
-            cwd: workspace,
+          const { packWorkspaceTarballs } = require(path.join(
+            workspace,
+            'scripts',
+            'pack-workspace-tarballs.js'
+          ));
+          const { tarballs } = packWorkspaceTarballs({
+            workspaceDir: workspace,
+            destination: tarballDir,
             stdio: 'inherit'
           });
           process.stdout.write('::endgroup::\n');
-
-          const tarballs = fs
-            .readdirSync(tarballDir)
-            .filter((file) => file.endsWith('.tgz'))
-            .sort((a, b) => a.localeCompare(b));
-
-          if (tarballs.length === 0) {
-            throw new Error('No tarballs were produced by pnpm pack');
-          }
 
           const summary = [];
 
@@ -248,24 +242,18 @@ jobs:
           const tarballDir = path.join(workspace, 'dist', 'tarballs');
           const runnerTemp = process.env.RUNNER_TEMP || os.tmpdir();
 
-          fs.rmSync(tarballDir, { recursive: true, force: true });
-          fs.mkdirSync(tarballDir, { recursive: true });
-
           process.stdout.write('::group::Packing workspace packages with pnpm\n');
-          execSync(`pnpm -r --workspace-concurrency 1 pack --pack-destination "${tarballDir}"`, {
-            cwd: workspace,
+          const { packWorkspaceTarballs } = require(path.join(
+            workspace,
+            'scripts',
+            'pack-workspace-tarballs.js'
+          ));
+          const { tarballs } = packWorkspaceTarballs({
+            workspaceDir: workspace,
+            destination: tarballDir,
             stdio: 'inherit'
           });
           process.stdout.write('::endgroup::\n');
-
-          const tarballs = fs
-            .readdirSync(tarballDir)
-            .filter((file) => file.endsWith('.tgz'))
-            .sort((a, b) => a.localeCompare(b));
-
-          if (tarballs.length === 0) {
-            throw new Error('No tarballs were produced by pnpm pack');
-          }
 
           const summary = [];
 

@@ -19,7 +19,7 @@ This guide captures the minimum set of checks required to confirm the design sys
    ```
 2. Publish a local tarball for each package needed by the Drupal theme:
    ```bash
-   pnpm -r pack --pack-destination dist/tarballs
+   pnpm run pack:tarballs
    ```
 3. In the Drupal codebase, replace any `@gov.au/*` dependencies with their `@truecms/*` equivalents and reinstall packages.
 4. Clear Drupal caches (`drush cr`) and rebuild the theme assets.

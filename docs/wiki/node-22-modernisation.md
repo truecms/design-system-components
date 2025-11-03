@@ -36,7 +36,7 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-already-be
 
 - **Triggers**: `push`, `pull_request`, `workflow_dispatch`
 - **Node matrix**: `['22.x', 'lts/*']`
-- **Key steps**: `pnpm install --frozen-lockfile`, `pnpm run build`, `pnpm run test`, `pnpm -r pack --pack-destination dist/tarballs` followed by automated installation verification for every tarball.
+- **Key steps**: `pnpm install --frozen-lockfile`, `pnpm run build`, `pnpm run test`, `pnpm run pack:tarballs` followed by automated installation verification for every tarball.
 - **When to run manually**: After dependency upgrades or package manifest changes. Use the GitHub UI (Actions → Install Check → Run workflow) or `gh workflow run install-check.yml`.
 - **Artifacts**: Tarball summaries are stored under `dist/tarballs` during the job and cleaned up automatically.
 

@@ -93,7 +93,7 @@
 - [x] T304 [US2] Enable npm provenance: set `NPM_CONFIG_PROVENANCE=true` env on the publish step in `.github/workflows/npm-release.yml`.
 - [x] T305 [US2] Ensure `build:site-dist` runs in release workflow after tests to keep docs in sync.
 - [x] T306 [US2] Author a short maintainer guide `/Users/ivan/websites/sites/govau/design-system-components/docs/publishing.md` covering inputs (`npm_scope`, `dist_tag`, `dry_run`), required secrets, and recovery steps.
-- [ ] T307 [US2] Smoke tag test: push a signed test tag (e.g., `v0.0.0-dev`) to verify `dev` dist‑tag logic in the release workflow. *(Manual follow-up once maintainer GPG keys are available.)*
+- [ ] T307 [US2] Smoke tag test: push a signed test tag (e.g., `v0.0.0-dev`) to verify `dev` dist‑tag logic in the release workflow. *(Deferred: requires maintainer GPG keys and tag permissions.)*
 
 **Checkpoint**: US2 independently verifiable; publish path validated.
 
@@ -123,10 +123,10 @@
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
-- [ ] T501 [P] Consolidate CI logs and artifacts naming (audit, parity, pack summaries) and document in `docs/publishing.md`.
-- [ ] T502 Code cleanup and removal of dead legacy `@gov.au` codepaths or comments.
-- [ ] T503 [P] Expand Pa11y scenarios for 3–5 additional components; store reports under `specs/001-already-began-task/logs/a11y/`.
-- [ ] T504 [P] Performance smoke: record install/build/test durations; fail on >25% regression vs. baseline; publish as job summary in CI.
+- [ ] T501 [P] Consolidate CI logs and artifacts naming (audit, parity, pack summaries) and document in `docs/publishing.md`. *(Deferred: align with next ops tooling cycle.)*
+- [ ] T502 Code cleanup and removal of dead legacy `@gov.au` codepaths or comments. *(Deferred: requires coordinated component audit.)*
+- [ ] T503 [P] Expand Pa11y scenarios for 3–5 additional components; store reports under `specs/001-already-began-task/logs/a11y/`. *(Deferred: needs design QA sign-off.)*
+- [ ] T504 [P] Performance smoke: record install/build/test durations; fail on >25% regression vs. baseline; publish as job summary in CI. *(Deferred: waiting on baseline metrics instrumentation.)*
 
 ---
 

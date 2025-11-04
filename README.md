@@ -53,7 +53,7 @@ All scripts assume Node 22. Running them under earlier versions will emit `EBADE
 | Workflow | Location | Trigger | Purpose |
 |----------|----------|---------|---------|
 | Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Runs Node 22 and latest LTS matrices, performs clean `pnpm install --frozen-lockfile` installs, builds the workspace, runs tests, audits dependencies, builds the site bundle, and verifies that every package tarball installs cleanly. |
-| Cloudflare Pages Deploy | `.github/workflows/cloudflare-pages.yml` | `push` (main), `pull_request` | Builds the documentation site with Node 22 and deploys previews and production releases to Cloudflare Pages using the configured secrets. |
+| Cloudflare Pages Deploy | `.github/workflows/cloudflare-pages.yml` | `push` (master/main), `pull_request` | Builds the documentation site with Node 22 and deploys previews and production releases to Cloudflare Pages using the configured secrets. |
 | npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release`, `push` tags | Authenticates with npm, runs the pnpm build/test pipeline (including audits and site build), and publishes packages through Changesets to the configurable npm scope (default `@truecms`) and dist-tag, with provenance enabled. |
 
 Refer to [`CONTRIBUTING.md`](./CONTRIBUTING.md) for details on invoking these workflows manually during reviews.

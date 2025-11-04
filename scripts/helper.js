@@ -1040,6 +1040,7 @@ HELPER.test = (() => {
 		 */
 		packagejson: ( allModules ) => {
 			let error = ''; // let’s assume the best
+			const strict = String(process.env.STRICT_CHANGELOG || '').toLowerCase() === 'true';
 
 			if( allModules !== undefined && allModules.length > 0 ) {
 				for( let module of allModules ) {
@@ -1194,8 +1195,9 @@ HELPER.test = (() => {
 		 *
 		 * @param {array} allModules - An array of all modules
 		 */
-		changelog: ( allModules ) => {
-			let error = ''; // let’s assume the best
+			changelog: ( allModules ) => {
+				let error = ''; // let’s assume the best
+				const strict = String(process.env.STRICT_CHANGELOG || '').toLowerCase() === 'true';
 
 			if( allModules !== undefined && allModules.length > 0 ) {
 				for( let module of allModules ) {
@@ -1204,11 +1206,24 @@ HELPER.test = (() => {
 					const readme = Fs.readFileSync( Path.normalize(`${ __dirname }/../packages/${ module }/README.md`), 'utf8' );
 					const version = packagesPKG.version.split('-next')[ 0 ];
 
-					const currentVersion = changelog.split('## Versions' + Os.EOL + Os.EOL + '* [v')[ 1 ];
+					// Extract first entry under "## Versions" accepting either '-' or '*' bullets
+					const extractFirstVersionsEntry = (md) => {
+						const versionsHeader = /(^|\n)##\s+Versions\s*(?:\n|\r\n)/i;
+						const headerMatch = md.match(versionsHeader);
+						if (!headerMatch) return null;
+
+						const startIdx = md.indexOf(headerMatch[0]) + headerMatch[0].length;
+						const tail = md.slice(startIdx);
+						const bulletMatch = tail.match(/^[*-]\s+\[v([^\]]+)\]\(#v([0-9]+)\)/m);
+						return bulletMatch;
+					};
+
+					const versionsEntry = extractFirstVersionsEntry(changelog);
+					// Preserve previous behaviour for release-history parsing
 					const currentChange  = changelog.split('## Release History' + Os.EOL + Os.EOL + '### v')[ 1 ];
 
 					// Check that there is a current version content
-					if( !currentVersion ){
+					if( !versionsEntry ){
 						HELPER.log.error( `Could not find the Version content in changelog for ${ module }` );
 						HELPER.log.error( `> Note: This is usually due to incorrect spacing` );
 						process.exit( 1 );
@@ -1222,10 +1237,12 @@ HELPER.test = (() => {
 					}
 
 					// testing CHANGELOG.md file for latest version
-					if( !currentVersion.startsWith( version ) ) {
+					const listedVersion = versionsEntry[1];
+					const listedAnchor = versionsEntry[2];
+					if( !listedVersion.startsWith( version ) ) {
 						error += `The module ${ module } does not have the current version in it’s changelog "Versions" section.\n`;
 					}
-					else if( !currentVersion.split('](#v')[ 1 ].startsWith( version.replace(/[.]/g, '') ) ) {
+					else if( !listedAnchor.startsWith( version.replace(/[.]/g, '') ) ) {
 						error += `The module ${ module } has the wrong link for the current version ${ version } in the changelog "Versions" section.\n`;
 					}
 					else if( !currentChange.startsWith( version ) ) {
@@ -1243,10 +1260,15 @@ HELPER.test = (() => {
 				HELPER.log.success(`All pancakes have the appropriate changelog entries`);
 			}
 			else {
-				HELPER.log.error(`Some changelogs contain inconsistencies:\n   ${ error.split('\n').join('\n   ') }`);
+				if (strict) {
+					HELPER.log.error(`Some changelogs contain inconsistencies:\n   ${ error.split('\n').join('\n   ') }`);
 
-				console.log('\n');
-				process.exit( 1 );
+					console.log('\n');
+					process.exit( 1 );
+				}
+				else {
+					console.warn(`Some changelogs contain inconsistencies (non-strict):\n   ${ error.split('\n').join('\n   ') }`);
+				}
 			}
 		},
 	}

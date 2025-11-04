@@ -1,232 +1,89 @@
-Contributing to Australian Government Design System Components
-======================
-
-Hi there! Thank you for your interest in contributing to the design system components, we really appreciate it.
-
-There are many ways to contribute – reporting bugs, fixing bugs, new module suggestions, submitting pull requests for enhancements to modules or even writing
-documentation.
-
-Wherever you are, and whatever your discipline is, you are invited to contribute.
-
-
-## Contents
-
-* [Contributing a new component](#contributing-a-new-component)
-  * [Suggested components](#suggested-components)
-    * [Useful](#useful)
-    * [Unique](#unique)
-  * [Before publication](#before-publication)
-    * [Usable](#usable)
-    * [Consistent](#consistent)
-    * [Versatile](#versatile)
-    * [Coded](#coded)
-    * [Tested](#tested)
-    * [Considered](#considered)
-* [Reporting Bugs, Sending Suggestions](#reporting-bugs-asking-questions-sending-suggestions)
-* [Installing components locally](#installing-components-locally)
-
-
--------------------------------------------------------------------------------------------------
-
-
-## Contributing a new component
-
-The Australian Government’s Design System is not ours, it is yours.
-
-The Digital Transformation Agency are just caretakers of the design system. To help us with the caretaking we need a few things from newly proposed component contributions.
-One of our goals is to ensure a welcoming environment for all contributors to our projects. If you’re unsure about anything, just ask — or submit your issue or pull request anyway. The worst that can happen is we’ll politely ask you to change something.
-
-We appreciate all well intended contributions.
-
-
-### Suggested components
-
-To be considered for inclusion in the design system, components and patterns must be:
-
-| Criteria | Description |
-|---|---|
-| [Useful](#useful) | It addresses a user need that’s shared by multiple services or products |
-| [Unique](#unique) | It doesn’t duplicate something which already exists in the design system, unless it’s intended to replace it. |
-
-
-### Before publication
-
-Before new components and patterns are published into the design system, the team of core contributors will review them to make sure that they are:
-
-| Criteria |  Description |
-|---|---|
-| [Usable](#usable) | It’s been tested and shown to work with a representative sample of users, including those with disabilities. |
-| [Consistent](#consistent) | It uses existing styles and components in the design system where relevant. |
-| [Versatile](#versatile) | It can be easily applied in different contexts. |
-| [Coded](#coded) | Components are ready to merge in |
-| [Tested](#tested) | It’s been tested and shown to work with a range of browsers, assistive technologies and devices. |
-| [Considered](#considered) | Documentation and rationale have been provided. |
-
-### Supporting evidence
-When making a new component, we would be very grateful if you post the research, design decisions and use cases for the component. Accessibility considerations should be documented or sourced from the [community forum](https://community.digital.gov.au/c/designsystem) before submitting a pull request. 
-
-This may be in the form of a code snippet, screenshots, sketch files or written text on your research with references. This gives a chance for members of the community to respond and share any work they may have done in the past on a similar component.
-
--------------------------------------------------------------------------------------------------
-
-### Useful
-
-**This is for everyone.** We can’t accept components that are for just one project or one specific use-case. 
-
-If a component is going to be added into the system it must be designed with the intention of being reusable in a variety of circumstances by many teams or departments.
-
-We ask contributors to provide examples of the versatility of a proposed component or provide reference to community discussion about it’s wider intended use.
-
-_If you have a specific need for your project, consider customising an existing component to suit your needs. If you aren’t sure how to do this, we’re happy to help teach you._
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Unique
-
-Components shouldn’t duplicate the functionality of another component.
-
-We need to keep the system slim; the more components that are in the system, the harder it is to maintain and the possibility for code-bloat and technical debt is increased.
-
-If a component is similar in function consider extending it rather than duplicating it.
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Usable
-
-We need to know that any new components are working as intended for the end user.
-
-Task based testing for a specific component is prefered. But at a minimum components in the design system should be tested as part of a product or service and have been operating in a live or beta environment for a period of time before being integrated into the system.
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Consistent
-
-Components that follow the system are much more themeable and reusable by other teams.
-
-New components must follow the system as closely as possible, particularly the specifics of colour, spacing, and typescale in `core`.
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Versatile
-
-**Responsive.** All components should fill the width of their parent element. This is so that layouts aren’t dictated by components, but rather components fit the required layouts.
-
-**Robust.** Components should accommodate varied content and varied content lengths.
-For example, what happens with a navigation component that has more items than demonstrated?
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Coded
-
-**Code is for humans.** Please look at the coding style and work with it, not against it. We write comments, add spacing, and prefer readable code over clever code. Yes, code is actually for computers, but it is humans that need to maintain it.
-
-**Code comments.** Code should be commented so that it is as usable as possible. Try to provide reasoning or links to documentation about any peculiar decisions that had to be made. [For example.](https://github.com/govau/design-system-components/blob/master/packages/body/src/sass/_module.scss#L127)
-
-**Follow the folder structure.** New components should follow the same folder structure as the [existing components.](https://github.com/govau/design-system-components/tree/master/.templates/new-module)
-
-**CSS** can be dependent on other components, but must use core functions and mixins at a minimum.
-
-* For spacing, padding, or other metrics like border-width, use [AU-space()](https://github.com/govau/design-system-components/blob/master/packages/core/src/sass/_globals.scss#L475)
-* For font-sizes and line-height, use [AU-fontgrid()](https://github.com/govau/design-system-components/blob/master/packages/core/src/sass/_globals.scss#L629)
-* For colours, use the [core colour variables](https://github.com/govau/design-system-components/blob/master/packages/core/src/sass/_globals.scss#L741)
-
-**JavaScript.** The Design System supports **JavaScript, JQuery, and React.** To make integration easier any JavaScript supplied for a component should be written in at least one of these.
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Tested
-
-**Accessibility.** A component on its own must be accessible to [WCAG 2.1 level AA.](https://www.w3.org/TR/WCAG21/) Some documentation on how this has been checked, tested, or decisions made to support accessibility should be supplied.
-
-**Browser and device tested.** All components should meet our [browser support requirements.](https://github.com/govau/design-system-components#browser-support)
-
-**No JavaScript fallbacks.** All components must degrade _gracefully_ when JavaScript is disabled. We expect that a user can still complete their task without JavaScript enabled, it just might not be beautiful. For example, accordions default to ‘open’ when JavaScript is disabled so that users can still use the content.
-
-**[⬆ back to top](#contents)**
-
--------------------------------------------------------------------------------------------------
-
-### Considered
-
-Include a high-level description for what the pattern is, and what it’s for.
-
-Provide rationale; the more the better. We aim to explain design and code decisions as openly as possible. Explanations about why decisions have been made help others understand the work involved but also help them understand the consequences of overriding.
-
-**[⬆ back to top](#contents)**
-
-
--------------------------------------------------------------------------------------------------
-
-
-## Reporting Bugs, Asking Questions, Sending Suggestions
-
-Use the search in [issues](https://github.com/govau/design-system-components/issues) to see if the same bug, question or suggestion has already been raised.
-
-If you’re requesting a new module, prefix the title with `new module: `.
-
-If you’re filing a bug, specific steps to reproduce are helpful. Please reference the module that has the bug, along with what you expected to see and what
-happened instead. For more info look at our [issue template](./ISSUE_TEMPLATE.md).
-
-**[⬆ back to top](#contents)**
-
-
--------------------------------------------------------------------------------------------------
-
-
-## Installing components locally
-
-If you’d like to contribute code, first, you will need to run the components locally.
-
-💡 Building the components is only necessary if you want to contribute them. If you want to use the modules in your own project, install them via npm as described
-in [How to use](./README.md#how-to-use).
-
-To build this project you have to install [lerna](https://github.com/lerna/lerna) globally after cloning it via `npm install -g lerna` and run:
-
-```shell
-npm install
-npm run bootstrap
-npm run build
-```
-
-To make changes to an existing module, `cd` into the folder and run the watch:
-
-```shell
-cd packages/body
-npm run watch
-```
-
-To add a new module run the scaffolding helper:
-
-```shell
-npm run scaffolding
-```
-
-_❗ After you have filled out all the blanks and added your dependencies into your package.json make sure you run `lerna bootstrap` again._
-
-
-**[⬆ back to top](#contents)**
-
-
--------------------------------------------------------------------------------------------------
-
-
-## Attribution
-
-This Contribution Guide is adapted from:
-
-https://github.com/alphagov/govuk-design-system-backlog/blob/master/docs/CRITERIA.md
-
-
-**[⬆ back to top](#contents)**
+# Contributing to the Node 22 modernisation
+
+Thanks for helping keep the Australian Government Design System components alive. The codebase now lives in the TrueCMS organisation so that support can continue for agencies and vendors that still depend on the legacy GOV.AU packages. This fork modernises the tooling for Node.js 22, replaces the legacy Lerna/npm workflows with pnpm and Changesets, and republishes packages under the `@truecms` scope while mirroring the old names for downstream consumers. The guidelines below describe how to prepare your environment, verify changes, and collaborate through GitHub.
+
+## Before you start
+
+- Install Node.js 22.x. We recommend `nvm` for switching between runtimes:
+  ```sh
+  nvm install 22
+  nvm use 22
+  ```
+- Enable Corepack so pnpm 9 is available alongside npm 10:
+  ```sh
+  corepack enable
+  corepack prepare pnpm@9 --activate
+  ```
+- Ensure the following minimum tooling versions:
+  - Node.js `>=22.0.0`
+  - npm `>=10.0.0`
+  - pnpm `>=9.0.0`
+
+## Local verification checklist
+
+Complete the checklist below before opening a pull request or requesting review:
+
+1. Install dependencies and refresh the workspace lockfile:
+   ```sh
+   pnpm run bootstrap
+   ```
+2. Build all component packages:
+   ```sh
+   pnpm run build
+   ```
+3. Run the full test suite (Jest unit tests + Pa11y accessibility runner):
+   ```sh
+   pnpm run test
+   ```
+4. When focusing on a single package, scope commands with pnpm filters, for example:
+   ```sh
+   pnpm --filter @truecms/buttons run build
+   pnpm --filter @truecms/buttons run test
+   ```
+5. Generate or update a Changeset describing your changes:
+   ```sh
+   pnpm changeset
+   ```
+6. Update documentation and changelogs as needed to keep the Node 22 messaging consistent.
+
+## Automated workflows
+
+### Install Check
+
+- File: `.github/workflows/install-check.yml`
+- Triggers: `push`, `pull_request`, manual `workflow_dispatch`
+- What it does: Installs dependencies with `npm ci`, runs the bootstrap/build/test scripts under Node 22 and the latest LTS, and `npm pack`s every package to validate installability.
+- How to run manually:
+  - GitHub UI: Actions → "Install Check" → "Run workflow".
+  - GitHub CLI: `gh workflow run install-check.yml`.
+- Expected outcome: Green checks on your pull request before requesting review. Investigate any tarball installation failures immediately.
+
+### Cloudflare Pages deploy
+
+- File: `.github/workflows/cloudflare-pages.yml`
+- Purpose: Builds the documentation site using Node 22, publishing previews for pull requests and production updates on `main`.
+- Manual triggers are rarely required, but you can dispatch the workflow for validation via the Actions tab when touching site assets.
+
+### npm release
+
+- File: `.github/workflows/npm-release.yml`
+- Purpose: Runs the pnpm build/test pipeline and executes `pnpm run release` (Changesets publish) against the selected npm scope and dist-tag.
+- Triggering a dry run:
+  1. Navigate to Actions → "npm Release" → "Run workflow".
+  2. Leave `dry_run` set to `true` (default) to validate credentials and packaging.
+- Triggering a real publish:
+  1. Prepare release Changesets and merge them to `main`.
+  2. From the Actions tab, run the workflow with `dry_run` set to `false`. Override `npm_scope` or `dist_tag` if needed.
+  3. Confirm the job completes within ~15 minutes and that packages appear under the expected scope (`@truecms` by default).
+- Secrets: The workflow relies on `NPM_TOKEN_TRUECMS`; contact the maintainers via a private GitHub issue if you require access.
+
+## Pull request expectations
+
+- Link the relevant issue or spec task in your PR description.
+- Confirm the local verification checklist and Install Check workflow have passed.
+- Include new or updated documentation where the change affects user-facing behaviour (README, package docs, migration notes).
+- Await at least one approval before merging. Merges to `main` should occur via squash merges to keep commit history linear.
+
+## Getting help
+
+File a GitHub issue with the `node-22-support` label if you encounter environmental problems. For broader questions about the modernization roadmap or escalation cadence, refer to [`SUPPORT.md`](./SUPPORT.md).

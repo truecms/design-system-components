@@ -1,4 +1,4 @@
-@gov.au/main-nav
+@truecms/main-nav
 ============
 
 > Horizontal list of links to key areas on the website. Usually located in the header.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/main-nav
+pnpm add @truecms/main-nav
 ```
 
 ```shell
-npm install @gov.au/main-nav
+npm install @truecms/main-nav
 ```
 
 
@@ -158,7 +158,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/accordion/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/accordion/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -207,12 +207,12 @@ $('.js-au-main-nav').AUmainNav({
 
 ```shell
 main-nav
-├─ core
 ├─ animate
+├─ core
 └─ link-list
-   ├─ core
-   └─ body
-      └─ core
+   ├─ body
+   │  └─ core
+   └─ core
 ```
 
 
@@ -224,7 +224,7 @@ main-nav
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/main-nav/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/main-nav/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -234,6 +234,8 @@ The visual test: https://auds.service.gov.au/packages/main-nav/tests/site/
 
 
 ## Release History
+
+* v2.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v1.0.9 - main nav to be collapsible upto MD breakpoint (Fix based on the new grid breakpoints)
 * v1.0.8 - Add aria-expanded to main nav menu button
@@ -262,7 +264,7 @@ The visual test: https://auds.service.gov.au/packages/main-nav/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

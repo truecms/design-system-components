@@ -1,20 +1,28 @@
-@gov.au/skip-link CHANGELOG
-======================
+@truecms/skip-link CHANGELOG
 
-> Part of the [gov.au components](https://github.com/govau/design-system-components/) ecosystem.
+## 3.0.0
 
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - # @truecms/core@5.0.0
+
+> Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v300)
 * [v2.0.17 - Update core package dependency to use the latest version](#v2017)
 * [v2.0.16 - Remove --save-dev flag from readme instructions](#v2016)
 * [v2.0.15 - Removed unused `Fragment` React import](#v2015)
@@ -38,101 +46,87 @@
 * [v0.2.0 - Added react component](#v020)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v3.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- # @truecms/core@5.0.0
 
 ### v2.0.17
 
 - Update core package dependency to use the latest version
 
-
 ### v2.0.16
 
 - Remove --save-dev flag from readme instructions
-
 
 ### v2.0.15
 
 - Removed unused `Fragment` React import
 
-
 ### v2.0.14
 
 - Resolve autoprefixer warning
-
 
 ### v2.0.13
 
 - Corrected an issue where certain components were published referencing a `src/` folder rather than `lib/`
 
-
 ### v2.0.12
 
 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`
-
 
 ### v2.0.11
 
 - Removed uikit references
 
-
 ### v2.0.10
 
 - Added an aria-label attribute to the nav element
-
 
 ### v2.0.9
 
 - Update dependencies
 
-
 ### v2.0.8
 
 - Removing web pack dev server, updating dependencies
-
 
 ### v2.0.7
 
 - Fixed build scripts for Windows
 
-
 ### v2.0.6
 
 - Replace node-sass with sass
-
 
 ### v2.0.5
 
 - Change npm run watch browser-sync location
 
-
 ### v2.0.4
 
 - Update dependencies
-
 
 ### v2.0.3
 
 - Change homepage links
 
-
 ### v2.0.2
 
 - Skip link now has a hover style that doesn't break inside au-body
-
 
 ### v2.0.1
 
 - Fixed dependencies
 
-
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
-
 
 ### v1.0.0
 
@@ -140,25 +134,20 @@
 - Added new color themes with dark and alt variants
 - Added a new 4px based spacing system via line-height
 
-
 ### v0.3.0
 
 - Added pancake-react plugin
 - Added transpiled react ES5 file as main entry file for `package.json`
 - Added compiled css file that is automatically imported by ES5 react file
 
-
 ### v0.2.0
 
 - Added react component
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

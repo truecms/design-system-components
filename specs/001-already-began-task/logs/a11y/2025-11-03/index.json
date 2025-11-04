@@ -1,0 +1,58 @@
+[
+  {
+    "component": "site",
+    "url": "http://localhost:8080/tests/site",
+    "documentTitle": "Error",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:49.537Z"
+  },
+  {
+    "component": "accordion",
+    "url": "http://localhost:8080/packages/accordion/tests/site",
+    "documentTitle": "Test: accordion",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:49.549Z"
+  },
+  {
+    "component": "main-nav",
+    "url": "http://localhost:8080/packages/main-nav/tests/site",
+    "documentTitle": "Test: main-nav",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:49.539Z"
+  },
+  {
+    "component": "page-alerts",
+    "url": "http://localhost:8080/packages/page-alerts/tests/site",
+    "documentTitle": "Test: page-alerts",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:49.545Z"
+  },
+  {
+    "component": "responsive-media",
+    "url": "http://localhost:8080/packages/responsive-media/tests/site",
+    "documentTitle": "Test: responsive-media",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:50.606Z"
+  },
+  {
+    "component": "searchbox",
+    "url": "http://localhost:8080/packages/searchbox/tests/site",
+    "documentTitle": "Test: searchbox",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:49.525Z"
+  },
+  {
+    "component": "side-nav",
+    "url": "http://localhost:8080/packages/side-nav/tests/site",
+    "documentTitle": "Test: side-nav",
+    "issues": 0,
+    "status": "passed",
+    "timestamp": "2025-11-03T10:51:49.457Z"
+  }
+]

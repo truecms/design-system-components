@@ -1,0 +1,8 @@
+{
+  "component": "main-nav",
+  "url": "http://localhost:8080/packages/main-nav/tests/site",
+  "documentTitle": "Test: main-nav",
+  "issues": [],
+  "status": "passed",
+  "timestamp": "2025-11-03T10:51:49.539Z"
+}

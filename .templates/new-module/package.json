@@ -1,5 +1,5 @@
 {
-	"name": "@gov.au/[-replace-name-]",
+	"name": "@truecms/[-replace-name-]",
 	"version": "[-replace-version-]",
 	"description": "[-replace-description-]",
 	"keywords": [
@@ -64,10 +64,10 @@
 		"@gov.au/pancake-react": "~1",
 		"@gov.au/pancake-json": "~1",
 
-		"@gov.au/core": "^4.0.0"
+		"@truecms/core": "^4.0.0"
 	},
 	"peerDependencies": {
-		"@gov.au/core": "^4.0.0"
+		"@truecms/core": "^4.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.3.4",
@@ -91,11 +91,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/govau/design-system-components.git"
+		"url": "https://github.com/truecms/design-system-components.git"
 	},
 	"homepage": "https://designsystem.gov.au/components/[-replace-name-]",
 	"bugs": {
-		"url": "https://github.com/govau/design-system-components/issues",
+		"url": "https://github.com/truecms/design-system-components/issues",
 		"email": "designsystem@digital.gov.au"
 	},
 	"author": {

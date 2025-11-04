@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 
 import AUsideNav from './side-nav.js';
 
@@ -167,10 +167,10 @@ ReactDOM.render(
 								},
 							]}
 						/>
-						<Switch>
-							<Route path="/one" render={ () => ( <p>Route one</p> )} />
-							<Route path="/two" render={ () => ( <p>Route two</p> )} />
-						</Switch>
+						<Routes>
+							<Route path="/one" element={ <p>Route one</p> } />
+							<Route path="/two" element={ <p>Route two</p> } />
+						</Routes>
 					</Fragment>
 				</BrowserRouter>
 			</div>

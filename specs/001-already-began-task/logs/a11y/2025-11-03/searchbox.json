@@ -1,0 +1,8 @@
+{
+  "component": "searchbox",
+  "url": "http://localhost:8080/packages/searchbox/tests/site",
+  "documentTitle": "Test: searchbox",
+  "issues": [],
+  "status": "passed",
+  "timestamp": "2025-11-03T10:51:49.525Z"
+}

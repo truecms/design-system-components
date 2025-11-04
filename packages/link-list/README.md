@@ -1,4 +1,4 @@
-@gov.au/link-list
+@truecms/link-list
 ============
 
 > A simple list of inline links..
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/link-list
+pnpm add @truecms/link-list
 ```
 
 ```shell
-npm install @gov.au/link-list
+npm install @truecms/link-list
 ```
 
 
@@ -99,7 +99,7 @@ All props:
 _(💡 additional props are spread onto the component)_
 
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/link-list/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/link-list/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -112,9 +112,9 @@ For more details have a look at the [usage example](https://github.com/govau/des
 
 ```shell
 link-list
-├─ core
-└─ body
-   └─ core
+├─ body
+│  └─ core
+└─ core
 ```
 
 
@@ -126,7 +126,7 @@ link-list
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/link-list/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/link-list/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -136,6 +136,8 @@ The visual test: https://auds.service.gov.au/packages/link-list/tests/site/
 
 
 ## Release History
+
+* v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v3.0.9 - Update core package dependency to use the latest version
 * v3.0.8 - Update incorrect proptype for onClick prop
@@ -168,7 +170,7 @@ The visual test: https://auds.service.gov.au/packages/link-list/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

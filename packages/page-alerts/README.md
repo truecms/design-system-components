@@ -1,4 +1,4 @@
-@gov.au/page-alerts
+@truecms/page-alerts
 ============
 
 > Use page alerts to notify users of important information and state changes to the page.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/page-alerts
+pnpm add @truecms/page-alerts
 ```
 
 ```shell
-npm install @gov.au/page-alerts
+npm install @truecms/page-alerts
 ```
 
 
@@ -71,7 +71,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/page-alerts/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/page-alerts/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -84,9 +84,9 @@ For more details have a look at the [usage example](https://github.com/govau/des
 
 ```shell
 page-alerts
-├─ core
-└─ body
-   └─ core
+├─ body
+│  └─ core
+└─ core
 ```
 
 
@@ -106,6 +106,8 @@ page-alerts
 
 
 ## Release History
+
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v2.1.4 - Update core package dependency to use the latest version
 * v2.1.3 - Remove --save-dev flag from readme instructions
@@ -137,7 +139,7 @@ page-alerts
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

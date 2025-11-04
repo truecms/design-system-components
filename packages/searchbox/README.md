@@ -1,4 +1,4 @@
-@gov.au/searchbox
+@truecms/searchbox
 ============
 
 > 
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/searchbox
+pnpm add @truecms/searchbox
 ```
 
 ```shell
-npm install @gov.au/searchbox
+npm install @truecms/searchbox
 ```
 
 
@@ -38,10 +38,10 @@ npm install @gov.au/searchbox
 
 ```shell
 searchbox
-├─ core
-├─ text-inputs
+├─ buttons
 │  └─ core
-└─ buttons
+├─ core
+└─ text-inputs
    └─ core
 ```
 
@@ -54,7 +54,7 @@ searchbox
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/searchbox/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/searchbox/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -64,6 +64,8 @@ The visual test: https://auds.service.gov.au/packages/searchbox/tests/site/
 
 
 ## Release History
+
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v0.2.3 - Display search icon for XS breakpoint when responsive (Fix based on the new grid breakpoints)
 * v0.2.2 - Increase size for icon
@@ -81,7 +83,7 @@ The visual test: https://auds.service.gov.au/packages/searchbox/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**
@@ -107,7 +109,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import AUsearchbox from '@gov.au/searchbox';
+import AUsearchbox from '@truecms/searchbox';
 
 <AUsearchbox 
 	label="Search" 

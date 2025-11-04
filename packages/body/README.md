@@ -1,4 +1,4 @@
-@gov.au/body
+@truecms/body
 ============
 
 > Basic body styles for body HTML elements.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/body
+pnpm add @truecms/body
 ```
 
 ```shell
-npm install @gov.au/body
+npm install @truecms/body
 ```
 
 
@@ -50,7 +50,7 @@ body
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/body/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/body/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -60,6 +60,8 @@ The visual test: https://auds.service.gov.au/packages/body/tests/site/
 
 
 ## Release History
+
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v2.2.1 - Update core package dependency to use the latest version
 * v2.2.0 - Switched `background-color` CSS property when printing from `#fff` to `transparent` and removed --save-dev flag
@@ -95,7 +97,7 @@ The visual test: https://auds.service.gov.au/packages/body/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

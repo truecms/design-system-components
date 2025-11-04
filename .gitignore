@@ -18,6 +18,7 @@ lerna-debug.log
 /index.html
 dist/
 build/
+site-dist/
 coverage/
 .env
 .env.local

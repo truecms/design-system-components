@@ -10,10 +10,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// ES5 dependency: import AUtextInput from '@gov.au/text-inputs';
+// ES5 dependency: import AUtextInput from '@truecms/text-inputs';
 // ES6 dependency: import AUtextInput from './text-inputs';
 
-// ES5 dependency: import AUbutton from '@gov.au/buttons';
+// ES5 dependency: import AUbutton from '@truecms/buttons';
 // ES6 dependency: import AUbutton from './buttons';
 
 

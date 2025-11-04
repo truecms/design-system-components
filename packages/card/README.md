@@ -1,4 +1,4 @@
-@gov.au/card
+@truecms/card
 ============
 
 > Cards are used to organise information related to a single topic. Cards can contain multiple elements, such as images, links, buttons or text.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/card
+pnpm add @truecms/card
 ```
 
 ```shell
-npm install @gov.au/card
+npm install @truecms/card
 ```
 
 
@@ -50,7 +50,7 @@ card
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/card/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/card/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -60,6 +60,8 @@ The visual test: https://auds.service.gov.au/packages/card/tests/site/
 
 
 ## Release History
+
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v0.3.3 - Update core package dependency to use the latest version
 * v0.3.2 - Move `overflow:hidden` property from the shadow class to the `.au-card` class
@@ -82,7 +84,7 @@ The visual test: https://auds.service.gov.au/packages/card/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**
@@ -105,7 +107,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import AUcard, { AUcardInner, AUcardHeader, AUcardDivider, AUcardLink, AUcardFooter } from '@gov.au/card';
+import AUcard, { AUcardInner, AUcardHeader, AUcardDivider, AUcardLink, AUcardFooter } from '@truecms/card';
 
 	<AUcard className="au-body">
 		<img className="au-responsive-media-img" src="http://placehold.it/1200x500" />

@@ -42,7 +42,7 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-already-be
 
 ### Cloudflare Pages deploy (`.github/workflows/cloudflare-pages.yml`)
 
-- **Triggers**: `pull_request` (preview), `push` to `main` (production), optional `workflow_dispatch`.
+- **Triggers**: `pull_request` (preview), `push` to `master` (production) and also `main` if present, optional `workflow_dispatch`.
 - **Purpose**: Build the documentation site with Node 22 and deploy to Cloudflare Pages. Requires secrets: `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_PROJECT_NAME`, `CLOUDFLARE_API_TOKEN`.
 - **Checklist**: Ensure site build scripts read from the pnpm workspace and that preview URLs are posted as pull request comments.
 

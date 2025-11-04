@@ -1,6 +1,6 @@
 {
   "name": "@truecms/page-alerts",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Use page alerts to notify users of important information and state changes to the page.",
   "keywords": [
     "auds",
@@ -64,8 +64,8 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/body": "^3.0.0",
-    "@truecms/core": "^5.0.0"
+    "@truecms/body": "^3.0.1",
+    "@truecms/core": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

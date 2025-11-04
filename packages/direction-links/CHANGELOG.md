@@ -1,5 +1,13 @@
 @truecms/direction-links CHANGELOG
 
+## 4.0.1
+
+### Patch Changes
+
+- ba15a33: Migrates the Design System from @govau to @truecms and standardises on Node.js 22+ with pnpm/Corepack across the workspace. All packages are re-scoped and released as new majors, dependencies refreshed to resolve known vulnerabilities (npm audit: 0), Pancake tooling ported to @truecms, and CI/CD moved from CircleCI to GitHub Actions with pnpm-enabled Cloudflare Pages. We added/validated tests (Jest, Pa11y), bundle-parity and performance checks, and documented Drupal 11 compatibility. This is an intentional major for scope/engines changes; no intentional breaking API or CSS changes beyond the package scope. Consumers must update imports from @govau/_ to @truecms/_ and run on Node 22+.
+- Updated dependencies [ba15a33]
+  - @truecms/core@5.0.1
+
 ## 4.0.0
 
 ### Major Changes
@@ -22,28 +30,28 @@
 
 ## Versions
 
-* [v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v400)
-* [v3.0.1 - Update core package dependency to use the latest version](#v301)
-* [v3.0.0 - Changed direction links arrow icon to be inside a `span`, making use of `aria-hidden` so the arrow is not read by screen readers](#v300)
-* [v2.2.0 - Remove --save-dev flag from readme instructions](#v220)
-* [v2.1.9 - Removed unused `Fragment` React import](#v219)
-* [v2.1.8 - Resolve autoprefixer warning](#v218)
-* [v2.1.7 - Fix pancake build path](#v217)
-* [v2.1.6 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`](#v216)
-* [v2.1.5 - Removed uikit references](#v215)
-* [v2.1.4 - Update dependencies](#v214)
-* [v2.1.3 - Removing web pack dev server, updating dependencies](#v213)
-* [v2.1.2 - Fixed build scripts for Windows](#v212)
-* [v2.1.1 - Replace node-sass with sass](#v211)
-* [v2.1.0 - React router support](#v210)
-* [v2.0.3 - Update dependencies](#v203)
-* [v2.0.2 - Change homepage link](#v202)
-* [v2.0.1 - Fix dependencies](#v201)
-* [v2.0.0 - Change to focus colour and border/muted color mix](#v200)
-* [v1.0.0 - Moved to AU namespace, added new color themes and spacing](#v100)
-* [v0.3.0 - Added pancake-react plugin, ES5 main file](#v030)
-* [v0.2.0 - Added react component](#v020)
-* [v0.1.0 - 💥 Initial version](#v010)
+- [v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v400)
+- [v3.0.1 - Update core package dependency to use the latest version](#v301)
+- [v3.0.0 - Changed direction links arrow icon to be inside a `span`, making use of `aria-hidden` so the arrow is not read by screen readers](#v300)
+- [v2.2.0 - Remove --save-dev flag from readme instructions](#v220)
+- [v2.1.9 - Removed unused `Fragment` React import](#v219)
+- [v2.1.8 - Resolve autoprefixer warning](#v218)
+- [v2.1.7 - Fix pancake build path](#v217)
+- [v2.1.6 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`](#v216)
+- [v2.1.5 - Removed uikit references](#v215)
+- [v2.1.4 - Update dependencies](#v214)
+- [v2.1.3 - Removing web pack dev server, updating dependencies](#v213)
+- [v2.1.2 - Fixed build scripts for Windows](#v212)
+- [v2.1.1 - Replace node-sass with sass](#v211)
+- [v2.1.0 - React router support](#v210)
+- [v2.0.3 - Update dependencies](#v203)
+- [v2.0.2 - Change homepage link](#v202)
+- [v2.0.1 - Fix dependencies](#v201)
+- [v2.0.0 - Change to focus colour and border/muted color mix](#v200)
+- [v1.0.0 - Moved to AU namespace, added new color themes and spacing](#v100)
+- [v0.3.0 - Added pancake-react plugin, ES5 main file](#v030)
+- [v0.2.0 - Added react component](#v020)
+- [v0.1.0 - 💥 Initial version](#v010)
 
 ---
 

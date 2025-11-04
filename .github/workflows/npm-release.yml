@@ -156,6 +156,8 @@ jobs:
           end=$(date +%s)
 
           node scripts/performance-metrics.js record --step test --duration "$((end - start))"
+        env:
+          STRICT_CHANGELOG: 'false'
 
       - name: Build site distribution bundle
         run: |

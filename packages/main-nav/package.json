@@ -1,6 +1,6 @@
 {
   "name": "@truecms/main-nav",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Horizontal list of links to key areas on the website. Usually located in the header.",
   "keywords": [
     "auds",
@@ -63,9 +63,9 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/animate": "^2.0.0",
-    "@truecms/core": "^5.0.0",
-    "@truecms/link-list": "^4.0.0"
+    "@truecms/animate": "^2.0.1",
+    "@truecms/core": "^5.0.1",
+    "@truecms/link-list": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

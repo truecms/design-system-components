@@ -1,5 +1,14 @@
 @truecms/accordion CHANGELOG
 
+## 8.0.1
+
+### Patch Changes
+
+- ba15a33: Migrates the Design System from @govau to @truecms and standardises on Node.js 22+ with pnpm/Corepack across the workspace. All packages are re-scoped and released as new majors, dependencies refreshed to resolve known vulnerabilities (npm audit: 0), Pancake tooling ported to @truecms, and CI/CD moved from CircleCI to GitHub Actions with pnpm-enabled Cloudflare Pages. We added/validated tests (Jest, Pa11y), bundle-parity and performance checks, and documented Drupal 11 compatibility. This is an intentional major for scope/engines changes; no intentional breaking API or CSS changes beyond the package scope. Consumers must update imports from @govau/_ to @truecms/_ and run on Node 22+.
+- Updated dependencies [ba15a33]
+  - @truecms/animate@2.0.1
+  - @truecms/core@5.0.1
+
 ## 8.0.0
 
 ### Major Changes
@@ -23,38 +32,38 @@
 
 ## Versions
 
-* [v8.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v800)
-* [v7.0.9 - Update core package dependency to use the latest version](#v709)
-* [v7.0.8 - Remove --save-dev flag from readme instructions](#v708)
-* [v7.0.7 - Removed unused `Fragment` React import](#v707)
-* [v7.0.6 - Resolve autoprefixer warning](#v706)
-* [v7.0.5 - Fix pancake build path](#v705)
-* [v7.0.4 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`](#v704)
-* [v7.0.3 - Remove aria-selected from accordion button](#v703)
-* [v7.0.2 - Removed uikit references](#v702)
-* [v7.0.1 - Fix issue with parent component re-rendering causing accordion to open and close](#v701)
-* [v7.0.0 - Changed accordion title element to use `<button>` instead of `<a>`](#v700)
-* [v6.0.1 - Fix issues with state not firing](#v601)
-* [v6.0.0 - Add accordion group in a unordered list, remove `role="tab"`](#v600)
-* [v5.0.2 - Update dependencies](#v502)
-* [v5.0.1 - Removing web pack dev server, updating dependencies](#v501)
-* [v5.0.0 - Removing unecessary aria-hidden as css display toggles screen reader ability](#v500)
-* [v4.0.0 - State change more specific, remove style set on html, componentDidUpdate, build scripts for Windows](#v400)
-* [v3.0.5 - Replace node-sass with sass](#v305)
-* [v3.0.4 - Change npm run watch browser-sync location](#v304)
-* [v3.0.3 - au-body--dark now changes accordion title colour](#v303)
-* [v3.0.2 - Update dependencies](#v302)
-* [v3.0.1 - React accordion open by default](#v301)
-* [v3.0.0 - React accordion open by default](#v300)
-* [v2.0.3 - Update homepage link](#v203)
-* [v2.0.2 - Fix issue with scope inside AU.animate.Run](#v202)
-* [v2.0.1 - Fix dependencies](#v201)
-* [v2.0.0 - Change to focus colour and border/muted color mix](#v200)
-* [v1.0.1 - IE8 spacing above triangle fixed](#v101)
-* [v1.0.0 - Moved to AU namespace, added new color themes and spacing](#v100)
-* [v0.3.0 - Added pancake-react plugin, ES5 main file](#v030)
-* [v0.2.0 - Added react and jQuery component](#v020)
-* [v0.1.0 - 💥 Initial version](#v010)
+- [v8.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v800)
+- [v7.0.9 - Update core package dependency to use the latest version](#v709)
+- [v7.0.8 - Remove --save-dev flag from readme instructions](#v708)
+- [v7.0.7 - Removed unused `Fragment` React import](#v707)
+- [v7.0.6 - Resolve autoprefixer warning](#v706)
+- [v7.0.5 - Fix pancake build path](#v705)
+- [v7.0.4 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`](#v704)
+- [v7.0.3 - Remove aria-selected from accordion button](#v703)
+- [v7.0.2 - Removed uikit references](#v702)
+- [v7.0.1 - Fix issue with parent component re-rendering causing accordion to open and close](#v701)
+- [v7.0.0 - Changed accordion title element to use `<button>` instead of `<a>`](#v700)
+- [v6.0.1 - Fix issues with state not firing](#v601)
+- [v6.0.0 - Add accordion group in a unordered list, remove `role="tab"`](#v600)
+- [v5.0.2 - Update dependencies](#v502)
+- [v5.0.1 - Removing web pack dev server, updating dependencies](#v501)
+- [v5.0.0 - Removing unecessary aria-hidden as css display toggles screen reader ability](#v500)
+- [v4.0.0 - State change more specific, remove style set on html, componentDidUpdate, build scripts for Windows](#v400)
+- [v3.0.5 - Replace node-sass with sass](#v305)
+- [v3.0.4 - Change npm run watch browser-sync location](#v304)
+- [v3.0.3 - au-body--dark now changes accordion title colour](#v303)
+- [v3.0.2 - Update dependencies](#v302)
+- [v3.0.1 - React accordion open by default](#v301)
+- [v3.0.0 - React accordion open by default](#v300)
+- [v2.0.3 - Update homepage link](#v203)
+- [v2.0.2 - Fix issue with scope inside AU.animate.Run](#v202)
+- [v2.0.1 - Fix dependencies](#v201)
+- [v2.0.0 - Change to focus colour and border/muted color mix](#v200)
+- [v1.0.1 - IE8 spacing above triangle fixed](#v101)
+- [v1.0.0 - Moved to AU namespace, added new color themes and spacing](#v100)
+- [v0.3.0 - Added pancake-react plugin, ES5 main file](#v030)
+- [v0.2.0 - Added react and jQuery component](#v020)
+- [v0.1.0 - 💥 Initial version](#v010)
 
 ---
 

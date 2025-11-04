@@ -1,6 +1,6 @@
 {
   "name": "@truecms/side-nav",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "A vertical list of links for site navigation typically placed next to the body content.",
   "keywords": [
     "auds",
@@ -64,10 +64,10 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/accordion": "^8.0.0",
-    "@truecms/animate": "^2.0.0",
-    "@truecms/core": "^5.0.0",
-    "@truecms/link-list": "^4.0.0"
+    "@truecms/accordion": "^8.0.1",
+    "@truecms/animate": "^2.0.1",
+    "@truecms/core": "^5.0.1",
+    "@truecms/link-list": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

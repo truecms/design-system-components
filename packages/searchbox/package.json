@@ -1,6 +1,6 @@
 {
   "name": "@truecms/searchbox",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "keywords": [
     "auds",
@@ -58,9 +58,9 @@
     "@truecms/text-inputs": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/buttons": "^4.0.0",
-    "@truecms/core": "^5.0.0",
-    "@truecms/text-inputs": "^3.0.0"
+    "@truecms/buttons": "^4.0.1",
+    "@truecms/core": "^5.0.1",
+    "@truecms/text-inputs": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

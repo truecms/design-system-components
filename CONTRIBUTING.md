@@ -48,6 +48,53 @@ Complete the checklist below before opening a pull request or requesting review:
 
 ## Automated workflows
 
+### Workflow reporting (required)
+
+- Every GitHub Actions workflow must write a concise job summary to the run’s Summary tab using the `$GITHUB_STEP_SUMMARY` file. This applies to both successful and failed runs.
+- Include at minimum:
+  - A single‑line status indicator (e.g., `✅ Success` or `❌ Failure`).
+  - A short, human‑readable description of what the workflow validated or deployed.
+  - When you have structured results (matrices, counts, timings), prefer a small Markdown table; otherwise use a brief bullet list. Keep summaries skimmable.
+- Always add the summary step with `if: always()` so it executes on failure paths.
+- For long logs, link to the specific job step rather than pasting large blocks.
+
+Example summary step you can drop into any job:
+
+```yaml
+  - name: Write job summary
+    if: always()
+    run: |
+      {
+        echo "## ${GITHUB_WORKFLOW} — ${GITHUB_JOB}"
+        echo
+        echo "- Status: ${{ job.status }}"
+        echo "- Ref: ${GITHUB_REF_NAME}"
+        echo "- Actor: ${GITHUB_ACTOR}"
+      } >> "$GITHUB_STEP_SUMMARY"
+```
+
+Example with a compact table (use when reporting multiple metrics or a matrix):
+
+```yaml
+  - name: Summarise results
+    if: always()
+    run: |
+      {
+        echo "## Install Check Summary"
+        echo
+        echo "| Metric | Value |"
+        echo "|---|---|"
+        echo "| Status | ${{ job.status }} |"
+        echo "| Node | ${{ matrix.node-version }} |"
+        echo "| Branch | ${GITHUB_REF_NAME} |"
+      } >> "$GITHUB_STEP_SUMMARY"
+```
+
+Acceptance criteria for new/updated workflows:
+
+- A Summary tab is present on every job with an explicit status line and a brief text/table recap.
+- Failure paths still produce a summary explaining what failed and where to look next.
+
 ### Install Check
 
 - File: `.github/workflows/install-check.yml`

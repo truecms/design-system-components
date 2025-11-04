@@ -90,5 +90,5 @@ jobs:
             fi
             echo
             echo "- Built site-dist for Pages deployment."
-            echo "- If this run is on main, a production deploy was attempted."
+          echo "- If this run is on master, a production deploy was attempted."
           } >> "$GITHUB_STEP_SUMMARY"

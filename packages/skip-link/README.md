@@ -1,4 +1,4 @@
-@gov.au/skip-link
+@truecms/skip-link
 ============
 
 > Provide skip links to navigation and content.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/skip-link
+pnpm add @truecms/skip-link
 ```
 
 ```shell
-npm install @gov.au/skip-link
+npm install @truecms/skip-link
 ```
 
 
@@ -82,7 +82,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/skip-link/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/skip-link/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -107,7 +107,7 @@ skip-link
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/skip-link/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/skip-link/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -117,6 +117,8 @@ The visual test: https://auds.service.gov.au/packages/skip-link/tests/site/
 
 
 ## Release History
+
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v2.0.17 - Update core package dependency to use the latest version
 * v2.0.16 - Remove --save-dev flag from readme instructions
@@ -151,7 +153,7 @@ The visual test: https://auds.service.gov.au/packages/skip-link/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

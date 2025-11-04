@@ -1,4 +1,4 @@
-@gov.au/form
+@truecms/form
 ============
 
 > The form component contains layout, labelling and inline validations for form fields
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/form
+pnpm add @truecms/form
 ```
 
 ```shell
-npm install @gov.au/form
+npm install @truecms/form
 ```
 
 
@@ -50,7 +50,7 @@ form
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/form/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/form/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -61,8 +61,10 @@ The visual test: https://auds.service.gov.au/packages/form/tests/site/
 
 ## Release History
 
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
+
 * v0.1.6 - Update core package dependency to use the latest version
-* v0.1.5 - Update version for the dependency: @gov.au/core
+* v0.1.5 - Update version for the dependency: @truecms/core
 * v0.1.4 - Add margin between text area and form labels, hint text and error messages.
 * v0.1.3 - Remove --save-dev flag from readme instructions.
 * v0.1.2 - Remove hint text colours as they are now in core.
@@ -79,7 +81,7 @@ The visual test: https://auds.service.gov.au/packages/form/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**
@@ -107,7 +109,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import { AUlabel, AUhintText, AUerrorText, AUformGroup, AUfieldset, AUlegend } from '@gov.au/form';
+import { AUlabel, AUhintText, AUerrorText, AUformGroup, AUfieldset, AUlegend } from '@truecms/form';
 
 <AUlabel text="Email" />
 

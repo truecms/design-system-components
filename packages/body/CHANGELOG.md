@@ -1,20 +1,28 @@
-@gov.au/body CHANGELOG
-======================
+@truecms/body CHANGELOG
 
-> Part of the [gov.au components](https://github.com/govau/design-system-components/) ecosystem.
+## 3.0.0
 
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - # @truecms/core@5.0.0
+
+> Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v300)
 * [v2.2.1 - Update core package dependency to use the latest version](#v221)
 * [v2.2.0 - Changed `background-color` CSS property when printing from `#fff` to `transparent` and removed --save-dev flag](#v220)
 * [v2.1.1 - Resolve autoprefixer warning](#v211)
@@ -39,107 +47,93 @@
 * [v0.1.1 - Fixed a11y contrast issue](#v011)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v3.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- # @truecms/core@5.0.0
 
 ### v2.2.1
 
 - Update core package dependency to use the latest version
-
 
 ### v2.2.0
 
 - Switched `background-color` CSS property when printing from `#fff` to `transparent`
 - Remove --save-dev flag from readme instructions
 
-
 ### v2.1.1
 
 - Resolve autoprefixer warning
-
 
 ### v2.1.0
 
 - Remove external link icon
 - Corrected an issue where certain components were published referencing a `src/` folder rather than `lib/`.
 
-
 ### v2.0.14
-- Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`
 
+- Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`
 
 ### v2.0.13
 
 - Removed uikit references
 
-
 ### v2.0.12
 
 - Change code background colours
-
 
 ### v2.0.11
 
 - Update dependencies
 
-
 ### v2.0.10
 
 - Removing web pack dev server, updating dependencies
-
 
 ### v2.0.9
 
 - Made URL for external links visible in print preview
 
-
 ### v2.0.8
 
 - Fixed build scripts for Windows
-
 
 ### v2.0.7
 
 - Replace node-sass with sass
 
-
 ### v2.0.6
 
 - Change npm run watch browser-sync location
-
 
 ### v2.0.5
 
 - Update dependencies
 
-
 ### v2.0.4
 
 - Fix typo in homepage link
-
 
 ### v2.0.3
 
 - Changing homepage link
 
-
 ### v2.0.2
 
 - Tweaked selection opacity for images, video and iframes so that they are slightly visisble when selected
-
 
 ### v2.0.1
 
 - Fixed dependencies
 
-
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
-
 
 ### v1.0.0
 
@@ -147,23 +141,18 @@
 - Added new color themes with dark and alt variants
 - Added a new 4px based spacing system via line-height
 
-
 ### v0.1.2
 
 - Moved to System fonts
-
 
 ### v0.1.1
 
 - The color contrast of the `kbd` element was not sufficient enough.
 
-
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

@@ -1,4 +1,4 @@
-@gov.au/animate
+@truecms/animate
 ============
 
 > A JavaScript function to open, close and toggle the display of page elements.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/animate
+pnpm add @truecms/animate
 ```
 
 ```shell
-npm install @gov.au/animate
+npm install @truecms/animate
 ```
 
 
@@ -140,7 +140,7 @@ animate
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/animate/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/animate/tests/site/
 
 Run `jest` for the unit tests
 
@@ -152,6 +152,8 @@ Run `jest` for the unit tests
 
 
 ## Release History
+
+* v2.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v1.0.14 - Fix unsafe-eval CSP issue
 * v1.0.13 - Remove --save-dev flag from readme instructions
@@ -184,7 +186,7 @@ Run `jest` for the unit tests
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

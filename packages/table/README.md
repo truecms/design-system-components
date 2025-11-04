@@ -1,4 +1,4 @@
-@gov.au/table
+@truecms/table
 ============
 
 > Used to display tabular data
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/table
+pnpm add @truecms/table
 ```
 
 ```shell
-npm install @gov.au/table
+npm install @truecms/table
 ```
 
 
@@ -50,7 +50,7 @@ table
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/table/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/table/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -60,6 +60,8 @@ The visual test: https://auds.service.gov.au/packages/table/tests/site/
 
 
 ## Release History
+
+* v1.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v0.2.1 - Update core package dependency to use the latest version
 * v0.2.0 - Refactor sass, first cell header option
@@ -78,7 +80,7 @@ The visual test: https://auds.service.gov.au/packages/table/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**
@@ -101,7 +103,7 @@ Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-compo
 Usage:
 
 ```jsx
-import AUtable, {AUtableResponsiveWrapper, AUtableCaption, AUtableCell, AUtableHead, AUtableHeader, AUtableBody, AUtableRow} from '@gov.au/table';
+import AUtable, {AUtableResponsiveWrapper, AUtableCaption, AUtableCell, AUtableHead, AUtableHeader, AUtableBody, AUtableRow} from '@truecms/table';
 
 //simple example
 <AUtable 

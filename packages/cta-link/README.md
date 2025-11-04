@@ -1,4 +1,4 @@
-@gov.au/cta-link
+@truecms/cta-link
 ============
 
 > Use cta links to draw attention to a primary call to action.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/cta-link
+pnpm add @truecms/cta-link
 ```
 
 ```shell
-npm install @gov.au/cta-link
+npm install @truecms/cta-link
 ```
 
 
@@ -69,7 +69,7 @@ All props:
 />
 ```
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/cta-link/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/cta-link/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -94,7 +94,7 @@ cta-link
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/cta-link/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/cta-link/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -104,6 +104,8 @@ The visual test: https://auds.service.gov.au/packages/cta-link/tests/site/
 
 
 ## Release History
+
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v2.2.1 - Update core package dependency to use the latest version
 * v2.2.0 - Remove --save-dev flag from readme instructions
@@ -136,7 +138,7 @@ The visual test: https://auds.service.gov.au/packages/cta-link/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

@@ -1,7 +1,7 @@
-@gov.au/core
+@truecms/core
 ============
 
-> The core module all [gov.au components modules](https://github.com/govau/design-system-components/) depend on.
+> The core module all [gov.au components modules](https://github.com/truecms/design-system-components/) depend on.
 
 
 ## Contents
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/core
+pnpm add @truecms/core
 ```
 
 ```shell
-npm install @gov.au/core
+npm install @truecms/core
 ```
 
 
@@ -244,7 +244,7 @@ core
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/core/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/core/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -254,6 +254,8 @@ The visual test: https://auds.service.gov.au/packages/core/tests/site/
 
 
 ## Release History
+
+* v5.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v4.0.0 - Added new breakpoints for xl (extra large) and also xs (extra small)
 * v3.4.2 - Remove --save-dev flag from readme instructions
@@ -290,7 +292,7 @@ The visual test: https://auds.service.gov.au/packages/core/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

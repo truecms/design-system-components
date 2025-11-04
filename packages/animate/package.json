@@ -1,110 +1,113 @@
 {
-	"name": "@gov.au/animate",
-	"version": "1.0.14",
-	"description": "A JavaScript function to animate CSS properties of page elements.",
-	"keywords": [
-		"auds",
-		"pancake",
-		"pancake-module",
-		"sass",
-		"scss",
-		"css",
-		"gov.au",
-		"Commonwealth of Australia",
-		"design guide",
-		"design system",
-		"animation",
-		"JavaScript"
-	],
-	"scripts": {
-		"postinstall": "pancake",
-		"test:a11y": "node ../../scripts/a11y.js",
-		"test:helper": "node ../../scripts/helper.js test",
-		"test": "npm-run-all --parallel test:*",
-		"prepublish": "npm run test:helper && npm run build:pre",
-		"build:pre": "node ../../scripts/helper.js precompile publish",
-		"build:js": "npm run build:pre && node ../../scripts/helper.js compile",
-		"build": "npm run build:js",
-		"serve": "browser-sync tests --files \"tests/**/*.html, tests/**/*.css, tests/**/*.js\"",
-		"watch:js": "onchange \"src/js/*.js\" -- npm run build:js",
-		"watch:sass": "onchange \"src/sass/*.scss\" \"tests/site/test.scss\" -- npm run build",
-		"watch": "npm run build && npm-run-all --parallel serve watch:*"
-	},
-	"pancake": {
-		"pancake-module": {
-			"version": "1.0.0",
-			"plugins": [
-				"@gov.au/pancake-js",
-				"@gov.au/pancake-json"
-			],
-			"js": {
-				"path": "lib/js/module.js"
-			},
-			"sass": {
-				"path": false,
-				"sass-versioning": true
-			}
-		}
-	},
-	"main": "lib/js/module.js",
-	"dependencies": {
-		"@gov.au/pancake": "~1",
-		"@gov.au/pancake-js": "~1",
-		"@gov.au/pancake-json": "~1"
-	},
-	"peerDependencies": {},
-	"devDependencies": {
-		"browser-sync": "^2.26.7",
-		"jest-cli": "^24.7.1",
-		"npm-run-all": "^4.1.5",
-		"onchange": "^5.2.0"
-	},
-	"files": [
-		"lib/*"
-	],
-	"jest": {
-		"testRegex": "\\.spec.js$",
-		"collectCoverageFrom": [
-			"lib/js/*.js"
-		],
-		"coverageThreshold": {
-			"global": {
-				"branches": 0,
-				"functions": 0,
-				"lines": 0,
-				"statements": 0
-			}
-		}
-	},
-	"engines": {
-		"node": ">=0.12.0",
-		"npm": "^3.0.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/govau/design-system-components.git"
-	},
-	"homepage": "https://designsystem.gov.au/components/animate",
-	"bugs": {
-		"url": "https://github.com/govau/design-system-components/issues",
-		"email": "designsystem@digital.gov.au"
-	},
-	"author": {
-		"name": "Commonwealth of Australia, DTA",
-		"email": "designsystem@digital.gov.au",
-		"url": "https://www.dta.gov.au/"
-	},
-	"contributors": [
-		{
-			"name": "Dominik Wilkowski",
-			"email": "hi@dominik-wilkowski.com",
-			"url": "https://github.com/dominikwilkowski"
-		},
-		{
-			"name": "Simon Schwartz",
-			"email": "simon.schwartz0@gmail.com",
-			"url": "https://github.com/simonschwartz"
-		}
-	],
-	"license": "MIT"
+  "name": "@truecms/animate",
+  "version": "2.0.0",
+  "description": "A JavaScript function to animate CSS properties of page elements.",
+  "keywords": [
+    "auds",
+    "pancake",
+    "pancake-module",
+    "sass",
+    "scss",
+    "css",
+    "gov.au",
+    "Commonwealth of Australia",
+    "design guide",
+    "design system",
+    "animation",
+    "JavaScript"
+  ],
+  "scripts": {
+    "postinstall": "pancake",
+    "test:a11y": "node ../../scripts/a11y.js",
+    "test:helper": "node ../../scripts/helper.js test",
+    "test": "npm-run-all --parallel test:*",
+    "prepublish": "npm run test:helper && npm run build:pre",
+    "build:pre": "node ../../scripts/helper.js precompile publish",
+    "build:js": "npm run build:pre && node ../../scripts/helper.js compile",
+    "build": "npm run build:js",
+    "serve": "browser-sync tests --files \"tests/**/*.html, tests/**/*.css, tests/**/*.js\"",
+    "watch:js": "onchange \"src/js/*.js\" -- npm run build:js",
+    "watch:sass": "onchange \"src/sass/*.scss\" \"tests/site/test.scss\" -- npm run build",
+    "watch": "npm run build && npm-run-all --parallel serve watch:*"
+  },
+  "pancake": {
+    "pancake-module": {
+      "version": "1.0.0",
+      "plugins": [
+        "@truecms/pancake-js",
+        "@truecms/pancake-json"
+      ],
+      "js": {
+        "path": "lib/js/module.js"
+      },
+      "sass": {
+        "path": false,
+        "sass-versioning": true
+      }
+    }
+  },
+  "main": "lib/js/module.js",
+  "dependencies": {
+    "@truecms/pancake": "^2.0.0",
+    "@truecms/pancake-js": "^2.0.0",
+    "@truecms/pancake-json": "^2.0.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "jest-cli": "^30.2.0",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "jest": {
+    "testRegex": "\\.spec.js$",
+    "collectCoverageFrom": [
+      "lib/js/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    }
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/truecms/design-system-components.git"
+  },
+  "homepage": "https://design-system-components.truecms.com.au/components/animate",
+  "bugs": {
+    "url": "https://github.com/truecms/design-system-components/issues",
+    "email": "engineering@truecms.com.au"
+  },
+  "author": {
+    "name": "TrueCMS Engineering",
+    "email": "engineering@truecms.com.au",
+    "url": "https://www.truecms.com.au/"
+  },
+  "contributors": [
+    {
+      "name": "Dominik Wilkowski",
+      "email": "hi@dominik-wilkowski.com",
+      "url": "https://github.com/dominikwilkowski"
+    },
+    {
+      "name": "Simon Schwartz",
+      "email": "simon.schwartz0@gmail.com",
+      "url": "https://github.com/simonschwartz"
+    }
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }

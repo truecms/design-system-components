@@ -1,4 +1,4 @@
-@gov.au/direction-links
+@truecms/direction-links
 ============
 
 > Use direction links to link up and down within the DOM or back to a parent page.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/direction-links
+pnpm add @truecms/direction-links
 ```
 
 ```shell
-npm install @gov.au/direction-links
+npm install @truecms/direction-links
 ```
 
 
@@ -71,7 +71,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/direction-links/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/direction-links/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -96,7 +96,7 @@ direction-links
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/direction-links/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/direction-links/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -106,6 +106,8 @@ The visual test: https://auds.service.gov.au/packages/direction-links/tests/site
 
 
 ## Release History
+
+* v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v3.0.1 - Update core package dependency to use the latest version
 * v3.0.0 - Changed direction links arrow icon to be inside a `span`, making use of `aria-hidden` so the arrow is not read by screen readers
@@ -139,7 +141,7 @@ The visual test: https://auds.service.gov.au/packages/direction-links/tests/site
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

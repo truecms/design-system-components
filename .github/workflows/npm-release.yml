@@ -3,20 +3,23 @@ name: npm Release
 on:
   workflow_dispatch:
     inputs:
-      semver_bump:
-        description: 'Lerna publish argument (from-package, patch, minor, major, prerelease)'
-        default: from-package
-        required: true
+      npm_scope:
+        description: 'npm scope to publish packages under (include leading @)'
+        default: '@truecms'
+        required: false
       dist_tag:
         description: 'npm dist-tag to apply to published packages'
         default: latest
-        required: true
+        required: false
       dry_run:
-        description: 'Run lerna publish with --dry-run for verification'
+        description: 'Run Changesets publish with --dry-run to validate pipeline'
         type: boolean
         default: true
   release:
     types: [published]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   release:
@@ -24,74 +27,205 @@ jobs:
     timeout-minutes: 45
     env:
       CI: true
-      NPM_PUBLISH_SCOPE: '@truecms'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Ensure master branch fetched
+        run: |
+          set -euo pipefail
+          token="${{ secrets.GITHUB_TOKEN }}"
+          repo="${{ github.repository }}"
+          if [ -n "${token}" ]; then
+            git remote set-url origin "https://x-access-token:${token}@github.com/${repo}.git"
+          else
+            git remote set-url origin "https://github.com/${repo}.git"
+          fi
+          git fetch --no-tags --prune origin master || true
+          if git show-ref --verify --quiet refs/remotes/origin/master; then
+            git branch --force master origin/master 2>/dev/null || git branch master origin/master
+          fi
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-          cache: npm
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Configure npm authentication
+      - name: Resolve release parameters
+        id: release-params
+        run: node scripts/determine-release-params.js
+        env:
+          INPUT_SCOPE: ${{ inputs.npm_scope }}
+          INPUT_DIST_TAG: ${{ inputs.dist_tag }}
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+          FORCE_PUBLISH_FROM_TAG: ${{ vars.FORCE_PUBLISH_FROM_TAG }}
+          FORCE_PUBLISH: ${{ vars.FORCE_PUBLISH }}
+          ALLOW_PUBLISH_FROM_TAG: ${{ vars.ALLOW_PUBLISH_FROM_TAG }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+      - name: Enforce Node 22 baseline
+        shell: bash
         run: |
-          npm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
-          npm whoami || npm whoami
+          set -euo pipefail
+          node_version="$(node -v)"
+          echo "Active Node version: ${node_version}"
+          major="${node_version#v}"
+          major="${major%%.*}"
+          if [ "${major}" -lt 22 ]; then
+            echo '::error::Node 22 or newer is required for publishing. Update the workflow configuration or run `nvm use 22` locally before retrying.'
+            exit 1
+          fi
+
+      - name: Verify npm token secret configured
+        if: steps.release-params.outputs.dry_run != 'true'
+        run: |
+          if [ -z "${NPM_TOKEN:-}" ]; then
+            echo '::error::NPM_TOKEN_TRUECMS secret is not configured.'
+            exit 1
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
+
+      - name: Configure npm authentication
+        if: steps.release-params.outputs.dry_run != 'true'
+        run: |
+          pnpm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
+          pnpm whoami || pnpm whoami
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
 
-      - name: Bootstrap workspaces
-        run: npm run bootstrap
+          start=$(date +%s)
+          pnpm install --frozen-lockfile
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
       - name: Build packages
-        run: npm run build
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
 
-      - name: Publish packages with Lerna
+          start=$(date +%s)
+          pnpm run build
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step build --duration "$((end - start))"
+
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          export BUNDLE_PARITY_REPORT_PATH="dist/reports/release/bundle-parity.json"
+          export BUNDLE_PARITY_LOG_PATH="dist/reports/release/bundle-parity.log"
+          export PA11Y_REPORT_DIR="dist/reports/release/a11y"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+
+          start=$(date +%s)
+          pnpm run test
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step test --duration "$((end - start))"
+
+      - name: Build site distribution bundle
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+
+          start=$(date +%s)
+          pnpm run build:site-dist
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step 'build:site-dist' --duration "$((end - start))"
+
+      - name: Audit production dependencies
+        run: |
+          set -euo pipefail
+          pnpm audit --prod --json > npm-release-audit-report.json
+          if [ "$(jq '.vulnerabilities | length' npm-release-audit-report.json)" -gt 0 ]; then
+            echo '::error::Vulnerabilities detected in production dependency graph'
+            cat npm-release-audit-report.json
+            exit 1
+          fi
+        shell: bash
+
+      - name: Summarise performance metrics
+        if: always()
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="release"
+          export PERFORMANCE_SUMMARY_PATH="dist/reports/release/performance-summary.json"
+          node scripts/performance-metrics.js finalize
+
+      - name: Upload release artefacts
+        if: ${{ always() && env.ACT != 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-release-artifacts
+          path: |
+            npm-release-audit-report.json
+            dist/reports/release/bundle-parity.json
+            dist/reports/release/bundle-parity.log
+            dist/reports/release/a11y/index.json
+            dist/reports/release/a11y/*.json
+            dist/reports/release/performance.json
+            dist/reports/release/performance-summary.json
+          if-no-files-found: ignore
+
+      - name: Publish packages with Changesets
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
-          INPUT_BUMP: ${{ inputs.semver_bump }}
-          INPUT_DIST_TAG: ${{ inputs.dist_tag }}
-          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+          NPM_CONFIG_PROVENANCE: true
+          RESOLVED_SCOPE: ${{ steps.release-params.outputs.scope }}
+          RESOLVED_DIST_TAG: ${{ steps.release-params.outputs.dist_tag }}
+          RESOLVED_DRY_RUN: ${{ steps.release-params.outputs.dry_run }}
         run: |
           set -euo pipefail
-          bump="$INPUT_BUMP"
-          dist_tag="$INPUT_DIST_TAG"
-          dry_run_flag="$INPUT_DRY_RUN"
 
-          if [ -z "$bump" ]; then
-            bump="from-package"
-          fi
+          scope="${RESOLVED_SCOPE:-@truecms}"
+          dist_tag="${RESOLVED_DIST_TAG:-latest}"
+          dry_run_flag="${RESOLVED_DRY_RUN:-true}"
 
-          if [ -z "$dist_tag" ]; then
-            dist_tag="latest"
-          fi
+          export NPM_PUBLISH_SCOPE="$scope"
+          pnpm config set scope "${scope#@}"
 
-          if [ -z "$dry_run_flag" ]; then
-            dry_run_flag="true"
-          fi
+          echo "Publishing with scope ${scope}, dist-tag ${dist_tag}, dry-run ${dry_run_flag}"
 
-          if [ "$GITHUB_EVENT_NAME" = "release" ]; then
-            bump="from-package"
-            dist_tag="latest"
-            dry_run_flag="false"
-          fi
-
-          extra_flags=""
+          args=(--tag "$dist_tag")
           if [ "$dry_run_flag" = "true" ]; then
-            extra_flags="--dry-run"
+            args+=(--dry-run)
           fi
 
-          npx lerna publish "$bump" --yes --dist-tag "$dist_tag" --no-private $extra_flags
+          pnpm run release -- "${args[@]}"
 
       - name: Post-release cleanup
         if: always()
-        run: npm cache verify
+        run: |
+          rm -rf dist/reports
+          pnpm store prune

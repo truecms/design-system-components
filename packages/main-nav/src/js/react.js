@@ -10,10 +10,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AU from '@gov.au/animate'; // interdependency with our animate lib
+import AU from '@truecms/animate'; // interdependency with our animate lib
 
 
-// ES5 dependency: import AUlinkList from '@gov.au/link-list';
+// ES5 dependency: import AUlinkList from '@truecms/link-list';
 // ES6 dependency: import AUlinkList from './link-list';
 
 

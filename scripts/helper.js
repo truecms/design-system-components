@@ -13,10 +13,36 @@
 const Autoprefixer = require('autoprefixer');
 const Postcss = require('postcss');
 const Sass = require('sass');
-const Chalk = require(`chalk`).default;
 const Path = require(`path`);
 const Fs = require(`fs`);
 const Os = require(`os`);
+
+const createColourFallback = () => {
+	const passthrough = (value) => value;
+
+	return new Proxy(passthrough, {
+		get: () => passthrough,
+		apply: (_target, _thisArg, args) => args[0]
+	});
+};
+
+let Chalk;
+
+try {
+	// Prefer CommonJS consumption when the runtime supports it.
+	// eslint-disable-next-line global-require, import/no-dynamic-require
+	const loaded = require('chalk');
+	Chalk = loaded.default || loaded;
+}
+catch (error) {
+	if( error && error.code !== 'ERR_REQUIRE_ESM' ) {
+		throw error;
+	}
+
+	// Chalk@5 is ESM-only; instead of crashing under CommonJS, fall back to
+	// pass-through colouring so the build remains readable under Node 22+.
+	Chalk = createColourFallback();
+}
 
 const PKG = require( Path.normalize(`${ process.cwd() }/package.json`) );
 
@@ -166,6 +192,19 @@ const ReplaceFileContent = ( searches, fileName ) => {
 	HELPER.log.success(`Replaced file strings inside ${ Chalk.yellow( fileName ) }`);
 };
 
+const INTERNAL_SCOPE = '@truecms/';
+const trimScope = ( name ) => {
+	if( typeof name !== 'string' ) {
+		return '';
+	}
+
+	if( name.startsWith('@') && name.includes('/') ) {
+		return name.slice( name.indexOf('/') + 1 );
+	}
+
+	return name;
+};
+
 
 /**
  * Generate a dependency representation of a module inside an object by calling this function repeatedly
@@ -175,15 +214,16 @@ const ReplaceFileContent = ( searches, fileName ) => {
  * @return {object}      - An object of the dependency tree
  */
 const GetDepTree = ( name ) => {
-	let tree = {};
-	const pkgPath = Path.normalize(`${ process.cwd() }/../${ name.substring( 8 ) }/package.json`);
-	const pkg = require( pkgPath, 'utf-8'); // we use require because we like the caching here
+    let tree = {};
+    const pkgPath = Path.normalize(`${ __dirname }/../packages/${ trimScope( name ) }/package.json`);
+    const pkg = require( pkgPath, 'utf-8'); // we use require because we like the caching here
+    const peerDeps = pkg.peerDependencies || {};
 
-	if( Object.keys( pkg.peerDependencies ).length > 0 ) {
-		for( const module of Object.keys( pkg.peerDependencies ) ) {
-			tree[ module.substring( 8 ) ] = GetDepTree( module );
-		}
-	}
+    if( Object.keys( peerDeps ).length > 0 ) {
+        for( const module of Object.keys( peerDeps ) ) {
+            tree[ trimScope( module ) ] = GetDepTree( module );
+        }
+    }
 
 	return tree;
 };
@@ -276,10 +316,10 @@ const HELPER = (() => { // constructor factory
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 		NAME: PKG.name,
 		VERSION: PKG.version,
-		DEPENDENCIES: PKG.peerDependencies,
+        DEPENDENCIES: PKG.peerDependencies || {},
 		TEMPLATES: Path.normalize(`${ __dirname }/../.templates`),
-		URL: `https://auds.service.gov.au`,
-		GITHUB: `https://github.com/govau/design-system-components/`,
+		URL: `https://design-system-components.truecms.com.au`,
+		GITHUB: `https://github.com/truecms/design-system-components/`,
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -377,7 +417,7 @@ HELPER.precompile = (() => {
 		 */
 		readme: () => {
 			const depTree = GetDepTree( HELPER.NAME );
-			const prettyTree = `${ HELPER.NAME.substring( 8 ) }\n${ Treeify.asTree( depTree ) }`;
+			const prettyTree = `${ trimScope( HELPER.NAME ) }\n${ Treeify.asTree( depTree ) }`;
 
 			let readme = Fs.readFileSync( `./README.md`, `utf-8`);
 			readme = readme.replace(/## Dependency graph\n\n```shell[\s\S]*?```/, `## Dependency graph\n\n\`\`\`shell\n${ prettyTree }\`\`\``);
@@ -407,7 +447,7 @@ HELPER.precompile = (() => {
 
 			if( _hasReact ) {
 				CopyFile(`./src/js/react.js`, `./lib/js/react.js`);
-				CopyFile(`./src/js/react.js`, `./tests/react/${ HELPER.NAME.substring( 8 ) }.js`);
+				CopyFile(`./src/js/react.js`, `./tests/react/${ trimScope( HELPER.NAME ) }.js`);
 			}
 
 			// 3.replace strings inside new files in lib
@@ -427,7 +467,7 @@ HELPER.precompile = (() => {
 
 			if( _hasReact ) {
 				ReplaceFileContent( searches, `./lib/js/react.js` );
-				ReplaceFileContent( searches, `./tests/react/${ HELPER.NAME.substring( 8 ) }.js` );
+				ReplaceFileContent( searches, `./tests/react/${ trimScope( HELPER.NAME ) }.js` );
 			}
 		},
 
@@ -724,10 +764,14 @@ HELPER.generate = (() => {
 			const packagesPath = Path.normalize( `${ __dirname }/../packages/` );
 
 			// For each dependency received go through each of the keys
-			for( const dependency of Object.keys( dependencies ) ) {
+		for( const dependency of Object.keys( dependencies ) ) {
 
-				const trimmedDepedency = dependency.replace( '@gov.au/', '' );
-				const dependencyPackagePath = Path.normalize( `${ packagesPath }/${ trimmedDepedency }/package.json` );
+			if( !dependency.startsWith( INTERNAL_SCOPE ) ) {
+				continue;
+			}
+
+			const trimmedDepedency = trimScope( dependency );
+			const dependencyPackagePath = Path.normalize( `${ packagesPath }/${ trimmedDepedency }/package.json` );
 
 				// If there is a package.json file
 				if( Fs.existsSync( dependencyPackagePath ) ) {
@@ -771,10 +815,10 @@ HELPER.generate = (() => {
 
 					replacement += `<li>` +
 						`	<a class="module-list__headline" href="packages/${ module }/tests/">${ module }</a>` +
-						`<img class="badge badge--version" src="https://img.shields.io/npm/v/@gov.au/${ module }.svg?label=NPM%20&colorA=ffffff&colorB=00698f&style=flat-square" alt="${ module } version">` +
+						`<img class="badge badge--version" src="https://img.shields.io/npm/v/@truecms/${ module }.svg?label=NPM%20&colorA=ffffff&colorB=00698f&style=flat-square" alt="${ module } version">` +
 						`	<br>` +
 						`	<a class="link" href="packages/${ module }/tests/site/">site</a> ${ jquery } ${ react }` +
-						`	<a class="link" href="https://github.com/govau/design-system-components/blob/master/packages/${ module }/README.md">readme</a>` +
+						`	<a class="link" href="${ HELPER.GITHUB }blob/master/packages/${ module }/README.md">readme</a>` +
 						`</li>\n`;
 				}
 			}
@@ -800,12 +844,12 @@ HELPER.generate = (() => {
 			let list = ``;
 
 			if( allModules !== undefined && allModules.length > 0 ) {
-				for( let module of allModules ) {
-					let tree = Treeify.asTree( GetDepTree(`@gov.au/${ module }`) );
-
-					list += `<details>\n`;
-					list += `	<summary>@gov.au/${ module }</summary>\n`;
-					list += `	<br><code>npm install @gov.au/${ module }</code><br>\n`;
+		for( let module of allModules ) {
+			const scopedModule = `${ INTERNAL_SCOPE }${ module }`;
+			let tree = Treeify.asTree( GetDepTree( scopedModule ) );
+			list += `<details>\n`;
+			list += `	<summary>${ scopedModule }</summary>\n`;
+			list += `	<br><code>npm install ${ scopedModule }</code><br>\n`;
 					list += `	<br>See the <a href="${ HELPER.URL }/packages/${ module }/tests/site/">visual test file for ${ module }</a>\n`;
 					list += `	<br>See the <a href="${ HELPER.GITHUB }blob/master/packages/${ module }/README.md">readme file for ${ module }</a><br><br>\n`;
 
@@ -963,8 +1007,10 @@ HELPER.test = (() => {
 
 					pancakes[ packagesPKG.name ] = packagesPKG.version; // adding to our library of pancakes
 
-					for( const module of Object.keys( packagesPKG.peerDependencies ) ) {
-						let version = packagesPKG.peerDependencies[ module ];
+                    const peerDependencies = packagesPKG.peerDependencies || {};
+
+                    for( const module of Object.keys( peerDependencies ) ) {
+                        let version = peerDependencies[ module ];
 
 						dependencies.push({
 							name: module,
@@ -1027,20 +1073,20 @@ HELPER.test = (() => {
 					}
 
 					// testing pancake plugins
-					if( !packagesPKG.pancake['pancake-module'].plugins.includes('@gov.au/pancake-json') ) {
-						error += `The module ${ module } is missing the "pancake-json" plugin inside the pancake object.\n`;
+					if( !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-json') ) {
+							error += `The module ${ module } is missing the "pancake-json" plugin inside the pancake object.\n`;
 					}
 
-					if( hasSass && !packagesPKG.pancake['pancake-module'].plugins.includes('@gov.au/pancake-sass') ) {
-						error += `The module ${ module } is missing the "pancake-sass" plugin inside the pancake object.\n`;
+					if( hasSass && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-sass') ) {
+							error += `The module ${ module } is missing the "pancake-sass" plugin inside the pancake object.\n`;
 					}
 
-					if( hasJS && !packagesPKG.pancake['pancake-module'].plugins.includes('@gov.au/pancake-js') ) {
-						error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
+					if( hasJS && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-js') ) {
+							error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
 					}
 
-					if( hasReact && !packagesPKG.pancake['pancake-module'].plugins.includes('@gov.au/pancake-react') ) {
-						error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
+					if( hasReact && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-react') ) {
+							error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
 					}
 
 					// testing pancake plugin settings
@@ -1062,58 +1108,67 @@ HELPER.test = (() => {
 					}
 
 					// testing all pancake plugins are also a dependency
-					if( packagesPKG.dependencies['@gov.au/pancake'] === undefined ) {
-						error += `The module ${ module } is missing "pancake" as a dependency.\n`;
-					}
-					else {
-						delete packagesPKG.dependencies['@gov.au/pancake'];
-					}
+                    if( packagesPKG.dependencies['@truecms/pancake'] === undefined ) {
+                        error += `The module ${ module } is missing "pancake" as a dependency.\n`;
+                    }
+                    else {
+                        delete packagesPKG.dependencies['@truecms/pancake'];
+                    }
 
-					if( packagesPKG.dependencies['@gov.au/pancake-json'] === undefined ) {
-						error += `The module ${ module } is missing "pancake-json" as a dependency.\n`;
-					}
-					else {
-						delete packagesPKG.dependencies['@gov.au/pancake-json'];
-					}
+                    if( packagesPKG.dependencies['@truecms/pancake-json'] === undefined ) {
+                        error += `The module ${ module } is missing "pancake-json" as a dependency.\n`;
+                    }
+                    else {
+                        delete packagesPKG.dependencies['@truecms/pancake-json'];
+                    }
 
-					if( hasSass && packagesPKG.dependencies['@gov.au/pancake-sass'] === undefined ) {
-						error += `The module ${ module } is missing "pancake-sass" as a dependency.\n`;
-					}
-					else {
-						delete packagesPKG.dependencies['@gov.au/pancake-sass'];
-					}
+                    if( hasSass && packagesPKG.dependencies['@truecms/pancake-sass'] === undefined ) {
+                        error += `The module ${ module } is missing "pancake-sass" as a dependency.\n`;
+                    }
+                    else {
+                        delete packagesPKG.dependencies['@truecms/pancake-sass'];
+                    }
 
-					if( hasJS && packagesPKG.dependencies['@gov.au/pancake-js'] === undefined ) {
-						error += `The module ${ module } is missing "pancake-js" as a dependency.\n`;
-					}
-					else {
-						delete packagesPKG.dependencies['@gov.au/pancake-js'];
-					}
+                    if( hasJS && packagesPKG.dependencies['@truecms/pancake-js'] === undefined ) {
+                        error += `The module ${ module } is missing "pancake-js" as a dependency.\n`;
+                    }
+                    else {
+                        delete packagesPKG.dependencies['@truecms/pancake-js'];
+                    }
 
-					if( hasReact && packagesPKG.dependencies['@gov.au/pancake-react'] === undefined ) {
-						error += `The module ${ module } is missing "pancake-react" as a dependency.\n`;
-					}
-					else {
-						delete packagesPKG.dependencies['@gov.au/pancake-react'];
-					}
+                    if( hasReact && packagesPKG.dependencies['@truecms/pancake-react'] === undefined ) {
+                        error += `The module ${ module } is missing "pancake-react" as a dependency.\n`;
+                    }
+                    else {
+                        delete packagesPKG.dependencies['@truecms/pancake-react'];
+                    }
 
 					// testing all remaining dependencies are also in peerdependencies
 					if( module === 'core' ) { // the exception to the rule is sass-versioning inside core
 						delete packagesPKG.dependencies['sass-versioning'];
 					}
 
-					if( JSON.stringify( packagesPKG.dependencies ) !== JSON.stringify( packagesPKG.peerDependencies ) ) {
-						error += `The module ${ module } has inconsistent dependencies/peerDependencies.\n`;
-					}
+                    const remainingDependencies = packagesPKG.dependencies || {};
+                    const peerDependencies = packagesPKG.peerDependencies || {};
 
-					// testing devDependencies
-					if( hasReact && packagesPKG.devDependencies['react'] === undefined ) {
-						error += `The module ${ module } is missing "react" as devDependency.\n`;
-					}
+                    const remainingDependencyKeys = Object.keys( remainingDependencies ).sort();
+                    const peerDependencyKeys = Object.keys( peerDependencies ).sort();
 
-					if( hasReact && Object.keys( packagesPKG.devDependencies ).length < 10 ) {
-						error += `The module ${ module } doesn’t have the right amount of devDependencies.\n`;
-					}
+                    const hasMatchingDependencySets = remainingDependencyKeys.length === peerDependencyKeys.length
+                        && remainingDependencyKeys.every( ( dependency, index ) => dependency === peerDependencyKeys[ index ] );
+
+                    if( !hasMatchingDependencySets ) {
+                        error += `The module ${ module } has inconsistent dependencies/peerDependencies.\n`;
+                    }
+
+                    // testing devDependencies
+                    if( hasReact && (!packagesPKG.devDependencies || packagesPKG.devDependencies['react'] === undefined) ) {
+                        error += `The module ${ module } is missing "react" as devDependency.\n`;
+                    }
+
+                    if( hasReact && Object.keys( packagesPKG.devDependencies || {} ).length < 10 ) {
+                        error += `The module ${ module } doesn’t have the right amount of devDependencies.\n`;
+                    }
 
 					// testing for pancake config
 					if( packagesPKG.pancake['auto-save'] !== undefined ) {
@@ -1236,7 +1291,7 @@ HELPER.init = () => {
 
 
 	if( process.argv.indexOf( 'precompile' ) !== -1 ) {
-		CFonts.say( `Precompile ${ PKG.name.substring( 8 ) }`, {
+		CFonts.say( `Precompile ${ trimScope( PKG.name ) }`, {
 			font: 'chrome',
 			space: false,
 			colors: ['red', 'magenta', 'blue'],
@@ -1253,7 +1308,7 @@ HELPER.init = () => {
 
 
 	if( process.argv.indexOf( 'compile' ) !== -1 ) {
-		CFonts.say( `Compiling ${ PKG.name.substring( 8 ) }`, {
+		CFonts.say( `Compiling ${ trimScope( PKG.name ) }`, {
 			font: 'chrome',
 			space: false,
 			colors: ['red', 'magenta', 'blue'],

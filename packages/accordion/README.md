@@ -1,4 +1,4 @@
-@gov.au/accordion
+@truecms/accordion
 ============
 
 > Allow the user to toggle the visibility of an element
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/accordion
+pnpm add @truecms/accordion
 ```
 
 ```shell
-npm install @gov.au/accordion
+npm install @truecms/accordion
 ```
 
 
@@ -179,7 +179,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/accordion/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/accordion/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -241,7 +241,7 @@ accordion
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/accordion/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/accordion/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -251,6 +251,8 @@ The visual test: https://auds.service.gov.au/packages/accordion/tests/site/
 
 
 ## Release History
+
+* v8.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v7.0.9 - Update core package dependency to use the latest version
 * v7.0.8 - Remove --save-dev flag from readme instructions
@@ -278,7 +280,7 @@ The visual test: https://auds.service.gov.au/packages/accordion/tests/site/
 * v2.0.2 - Fix issue with scope inside AU.animate.Run
 * v2.0.1 - Fix dependencies
 * v2.0.0 - Change to focus colour and border/muted color mix
-* v1.0.1 - IE8 spacing above triangle fixed [309](https://github.com/govau/design-system-components/issues/309)
+* v1.0.1 - IE8 spacing above triangle fixed [309](https://github.com/truecms/design-system-components/issues/309)
 * v1.0.0 - Moved to AU namespace, added new color themes and spacing
 * v0.3.0 - Added pancake-react plugin, ES5 main file
 * v0.2.0 - Added react and jQuery component
@@ -294,7 +296,7 @@ The visual test: https://auds.service.gov.au/packages/accordion/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

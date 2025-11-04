@@ -1,4 +1,4 @@
-@gov.au/select
+@truecms/select
 ============
 
 > The form select element for multiple options
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/select
+pnpm add @truecms/select
 ```
 
 ```shell
-npm install @gov.au/select
+npm install @truecms/select
 ```
 
 
@@ -86,7 +86,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/select/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/select/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -111,7 +111,7 @@ select
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/select/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/select/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -121,6 +121,8 @@ The visual test: https://auds.service.gov.au/packages/select/tests/site/
 
 
 ## Release History
+
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v2.0.12 - Update core package dependency to use the latest version
 * v2.0.11 - Remove --save-dev flag from readme instructions
@@ -150,7 +152,7 @@ The visual test: https://auds.service.gov.au/packages/select/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

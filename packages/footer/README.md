@@ -1,4 +1,4 @@
-@gov.au/footer
+@truecms/footer
 ============
 
 > Footers help users who reach the bottom of a page without finding what they want.
@@ -21,11 +21,11 @@
 
 
 ```shell
-yarn add @gov.au/footer
+pnpm add @truecms/footer
 ```
 
 ```shell
-npm install @gov.au/footer
+npm install @truecms/footer
 ```
 
 
@@ -79,7 +79,7 @@ All props:
 ```
 _(💡 additional props are spread onto the component)_
 
-For more details have a look at the [usage example](https://github.com/govau/design-system-components/tree/master/packages/footer/tests/react/index.js).
+For more details have a look at the [usage example](https://github.com/truecms/design-system-components/tree/master/packages/footer/tests/react/index.js).
 
 
 **[⬆ back to top](#contents)**
@@ -104,7 +104,7 @@ footer
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/footer/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/footer/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -114,6 +114,8 @@ The visual test: https://auds.service.gov.au/packages/footer/tests/site/
 
 
 ## Release History
+
+* v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v3.0.6 - Update core package dependency to use the latest version
 * v3.0.5 - Remove --save-dev flag from readme instructions
@@ -150,7 +152,7 @@ The visual test: https://auds.service.gov.au/packages/footer/tests/site/
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

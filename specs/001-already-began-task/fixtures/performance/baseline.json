@@ -1,0 +1,23 @@
+{
+  "threshold": 0.25,
+  "matrices": {
+    "default": {
+      "install": 900,
+      "build": 420,
+      "test": 600,
+      "build:site-dist": 360
+    },
+    "dry-run": {
+      "install": 900,
+      "build": 420,
+      "test": 600,
+      "build:site-dist": 360
+    },
+    "release": {
+      "install": 900,
+      "build": 420,
+      "test": 600,
+      "build:site-dist": 360
+    }
+  }
+}

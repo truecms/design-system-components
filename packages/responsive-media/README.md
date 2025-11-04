@@ -1,4 +1,4 @@
-@gov.au/responsive-media
+@truecms/responsive-media
 ============
 
 > Caters for video/slideshow dimensions and aspect ratios across various viewports/widths.
@@ -20,11 +20,11 @@
 
 
 ```shell
-yarn add @gov.au/responsive-media
+pnpm add @truecms/responsive-media
 ```
 
 ```shell
-npm install @gov.au/responsive-media
+npm install @truecms/responsive-media
 ```
 
 
@@ -50,7 +50,7 @@ responsive-media
 
 ## Tests
 
-The visual test: https://auds.service.gov.au/packages/responsive-media/tests/site/
+The visual test: https://design-system-components.truecms.com.au/packages/responsive-media/tests/site/
 
 
 **[⬆ back to top](#contents)**
@@ -60,6 +60,8 @@ The visual test: https://auds.service.gov.au/packages/responsive-media/tests/sit
 
 
 ## Release History
+
+* v3.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v2.0.15 - Update core package dependency to use the latest version
 * v2.0.14 - Remove --save-dev flag from readme instructions
@@ -91,7 +93,7 @@ The visual test: https://auds.service.gov.au/packages/responsive-media/tests/sit
 ## License
 
 Copyright (c) Commonwealth of Australia.
-Licensed under [MIT](https://raw.githubusercontent.com/govau/design-system-components/packages/core/master/LICENSE).
+Licensed under [MIT](https://raw.githubusercontent.com/truecms/design-system-components/master/LICENSE).
 
 
 **[⬆ back to top](#contents)**

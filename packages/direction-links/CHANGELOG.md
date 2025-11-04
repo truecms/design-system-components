@@ -1,20 +1,28 @@
-@gov.au/direction-links CHANGELOG
-======================
+@truecms/direction-links CHANGELOG
 
-> Part of the [gov.au components](https://github.com/govau/design-system-components/) ecosystem.
+## 4.0.0
 
+### Major Changes
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+
+### Patch Changes
+
+- Updated dependencies [7f941cd]
+  - # @truecms/core@5.0.0
+
+> Part of the [TrueCMS design system components](https://github.com/truecms/design-system-components/) ecosystem.
 
 ## Contents
 
-* [Versions](#install)
-* [Release History](#release-history)
+- [Versions](#install)
+- [Release History](#release-history)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Versions
 
+* [v4.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v400)
 * [v3.0.1 - Update core package dependency to use the latest version](#v301)
 * [v3.0.0 - Changed direction links arrow icon to be inside a `span`, making use of `aria-hidden` so the arrow is not read by screen readers](#v300)
 * [v2.2.0 - Remove --save-dev flag from readme instructions](#v220)
@@ -37,18 +45,21 @@
 * [v0.2.0 - Added react component](#v020)
 * [v0.1.0 - 💥 Initial version](#v010)
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 
 ## Release History
+
+### v4.0.0
+
+- 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.
+- Updated dependencies [7f941cd]
+- # @truecms/core@5.0.0
 
 ### v3.0.1
 
 - Update core package dependency to use the latest version
 
-
-### v3.0.0 
+### v3.0.0
 
 - Changed direction links arrow icon to be inside a `span`, making use of `aria-hidden` so the arrow is not read by screen readers
 
@@ -56,77 +67,62 @@
 
 - Remove --save-dev flag from readme instructions
 
-
 ### v2.1.9
 
 - Removed unused `Fragment` React import
-
 
 ### v2.1.8
 
 - Resolve autoprefixer warning
 
-
 ### v2.1.7
 
 - Corrected an issue where certain components were published referencing a `src/` folder rather than `lib/`.
-
 
 ### v2.1.6
 
 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`
 
-
 ### v2.1.5
 
 - Removed uikit references
-
 
 ### v2.1.4
 
 - Update dependencies
 
-
 ### v2.1.3
 
 - Removing web pack dev server, updating dependencies
-
 
 ### v2.1.2
 
 - Fixed build scripts for Windows
 
-
 ### v2.1.1
 
 - Replace node-sass with sass
-
 
 ### v2.1.0
 
 - Add support for react router
 - Change npm run watch browser-sync location
 
-
 ### v2.0.3
 
 - Update dependencies
-
 
 ### v2.0.2
 
 - Change homepage link
 
-
 ### v2.0.1
 
 - Fixed dependencies
 
-
 ### v2.0.0
 
 - Bumped core version which changed to focus color and border/muted color mix
-
 
 ### v1.0.0
 
@@ -134,25 +130,20 @@
 - Added new color themes with dark and alt variants
 - Added a new 4px based spacing system via line-height
 
-
 ### v0.3.0
 
 - Added pancake-react plugin
 - Added transpiled react ES5 file as main entry file for `package.json`
 - Added compiled css file that is automatically imported by ES5 react file
 
-
 ### v0.2.0
 
 - Added react component
-
 
 ### v0.1.0
 
 - 💥 Initial version
 
-
 **[⬆ back to top](#contents)**
-
 
 # };

@@ -63,7 +63,7 @@ jobs:
           directory: site-dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
-          productionBranch: main
+          productionBranch: master
 
       - name: Upload Pages artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false

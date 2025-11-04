@@ -23,8 +23,6 @@ jobs:
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
@@ -35,8 +33,8 @@ jobs:
 
       - name: Enable Corepack (pnpm)
         run: |
+          # Use the pnpm version pinned in package.json's "packageManager"
           corepack enable
-          corepack prepare pnpm@9 --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

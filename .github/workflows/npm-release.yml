@@ -45,7 +45,11 @@ jobs:
           fi
           git fetch --no-tags --prune origin master || true
           if git show-ref --verify --quiet refs/remotes/origin/master; then
-            git branch --force master origin/master 2>/dev/null || git branch master origin/master
+            if git rev-parse --verify master >/dev/null 2>&1; then
+              git branch -f master origin/master || true
+            else
+              git branch master origin/master || true
+            fi
           fi
 
       - name: Set up pnpm
@@ -238,3 +242,22 @@ jobs:
           else
             echo "pnpm not available; skipping store prune"
           fi
+
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## npm Release — release"
+            echo
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Status | ${{ job.status }} |"
+            echo "| Scope | ${{ steps.release-params.outputs.scope }} |"
+            echo "| Dist Tag | ${{ steps.release-params.outputs.dist_tag }} |"
+            echo "| Dry Run | ${{ steps.release-params.outputs.dry_run }} |"
+            echo "| Branch/Tag | ${GITHUB_REF_NAME} |"
+            echo
+            echo "- Built packages, ran tests, audited deps, and prepared site bundle."
+            echo "- See uploaded artifacts for performance, a11y, and bundle parity reports."
+          } >> "$GITHUB_STEP_SUMMARY"

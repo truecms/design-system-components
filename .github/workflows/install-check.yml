@@ -83,8 +83,14 @@ jobs:
           else
             git remote set-url origin "https://github.com/${repo}.git"
           fi
-          git fetch --no-tags --prune origin "${base_ref}"
-          git branch --force "${base_ref}" "origin/${base_ref}" 2>/dev/null || git branch "${base_ref}" "origin/${base_ref}"
+          git fetch --no-tags --prune origin "${base_ref}" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/${base_ref}"; then
+            if git rev-parse --verify "${base_ref}" >/dev/null 2>&1; then
+              git branch -f "${base_ref}" "origin/${base_ref}" || true
+            else
+              git branch "${base_ref}" "origin/${base_ref}" || true
+            fi
+          fi
 
           if [ "${base_ref}" != "master" ]; then
             echo "Fetching master for Changesets baseline"
@@ -92,7 +98,11 @@ jobs:
           fi
 
           if git show-ref --verify --quiet refs/remotes/origin/master; then
-            git branch --force master origin/master 2>/dev/null || git branch master origin/master
+            if git rev-parse --verify master >/dev/null 2>&1; then
+              git branch -f master origin/master || true
+            else
+              git branch master origin/master || true
+            fi
           fi
 
       - name: Install dependencies
@@ -303,6 +313,25 @@ jobs:
         run: |
           rm -rf dist/tarballs dist/reports
           pnpm store prune
+
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          suffix='${{ matrix.node-version }}'
+          safe="${suffix//\//-}"; safe="${safe//\*/star}"
+          {
+            echo "## Install Check — ${{ matrix.node-version }}"
+            echo
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Status | ${{ job.status }} |"
+            echo "| Node | ${{ matrix.node-version }} |"
+            echo "| Branch | ${GITHUB_REF_NAME} |"
+            echo
+            echo "- Verified install, build, tests, audit, and bundle parity."
+            echo "- Artifacts: dist/reports/install-check-${safe}/ and changesets/dry-run summaries (if present)."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   dry-run-release:
     name: Dry run release validation

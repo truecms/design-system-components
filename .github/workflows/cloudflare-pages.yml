@@ -25,16 +25,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-          cache: npm
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Enable Corepack (pnpm)
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Bootstrap workspaces
-        run: npm run bootstrap
+        run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: npm run build
+        run: pnpm run build
 
       - name: Prepare Pages artifact
         shell: bash
@@ -69,3 +72,23 @@ jobs:
           name: site-dist
           path: site-dist
           if-no-files-found: error
+
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Cloudflare Pages — build-and-deploy"
+            echo
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Status | ${{ job.status }} |"
+            echo "| Event | ${GITHUB_EVENT_NAME} |"
+            echo "| Branch | ${GITHUB_REF_NAME} |"
+            if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+              echo "| PR | #${{ github.event.pull_request.number }} |"
+            fi
+            echo
+            echo "- Built site-dist for Pages deployment."
+            echo "- If this run is on main, a production deploy was attempted."
+          } >> "$GITHUB_STEP_SUMMARY"

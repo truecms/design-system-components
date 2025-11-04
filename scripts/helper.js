@@ -1073,21 +1073,21 @@ HELPER.test = (() => {
 					}
 
 					// testing pancake plugins
-                    if( !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-json') ) {
-                        error += `The module ${ module } is missing the "pancake-json" plugin inside the pancake object.\n`;
-                    }
+					if( !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-json') ) {
+							error += `The module ${ module } is missing the "pancake-json" plugin inside the pancake object.\n`;
+					}
 
-                    if( hasSass && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-sass') ) {
-                        error += `The module ${ module } is missing the "pancake-sass" plugin inside the pancake object.\n`;
-                    }
+					if( hasSass && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-sass') ) {
+							error += `The module ${ module } is missing the "pancake-sass" plugin inside the pancake object.\n`;
+					}
 
-                    if( hasJS && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-js') ) {
-                        error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
-                    }
+					if( hasJS && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-js') ) {
+							error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
+					}
 
-                    if( hasReact && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-react') ) {
-                        error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
-                    }
+					if( hasReact && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-react') ) {
+							error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
+					}
 
 					// testing pancake plugin settings
 					if( hasSass && packagesPKG.pancake['pancake-module'].sass === undefined ) {

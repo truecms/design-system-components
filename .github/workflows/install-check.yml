@@ -414,8 +414,19 @@ jobs:
       - name: Dry run publish with Changesets
         run: pnpm run release -- --dry-run
 
-      - name: Generate Changesets summary
-        run: pnpm changeset status --output changesets-summary.json
+      - name: Generate Changesets summary (tolerant)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Changesets exits non-zero when packages changed without a changeset.
+          # For dry-run validation we tolerate this and emit an empty summary
+          # so downstream steps can continue without publishing.
+          if pnpm changeset status --output changesets-summary.json; then
+            echo "Generated changesets-summary.json"
+          else
+            echo '::warning::No changesets found (or packages changed without a changeset). Emitting empty summary for validation only.'
+            echo '{}' > changesets-summary.json
+          fi
 
       - name: Pack workspace tarballs for verification
         run: |

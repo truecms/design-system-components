@@ -11,7 +11,7 @@ This document outlines how releases are produced for the design system component
 
 ## Release Workflow Overview
 
-1. Merge approved pull requests into `main`.
+1. Merge approved pull requests into `master` (or `main` if your fork still uses it).
 2. Run `pnpm changeset` to create or update release notes.
 3. Commit and push the changeset file, then open a pull request.
 4. Once merged, trigger the **npm Release** workflow from the Actions tab or tag a version (`git tag vX.Y.Z && git push --tags`). When dispatching manually, confirm the inputs:

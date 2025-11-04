@@ -50,8 +50,15 @@ function listFilesRecursive(baseDir) {
 }
 
 function hashFile(filePath) {
-  const contents = fs.readFileSync(filePath);
-  return crypto.createHash('sha256').update(contents).digest('hex');
+  const raw = fs.readFileSync(filePath, 'utf8');
+
+  // Normalise version banner comments so intentional patch bumps
+  // (e.g. "/*! @truecms/<pkg> vX.Y.Z */") don’t cause false positives.
+  // We only collapse the version number; all other content must match.
+  const bannerVersionRegex = /(\/\*!\s*@truecms\/[a-z0-9-]+\s+v)\d+\.\d+\.\d+(\s*\*\/)/gi;
+  const normalised = raw.replace(bannerVersionRegex, '$10.0.0$2');
+
+  return crypto.createHash('sha256').update(normalised).digest('hex');
 }
 
 function comparePackage(pkgName) {

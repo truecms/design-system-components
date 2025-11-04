@@ -61,6 +61,11 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Enable Corepack (pnpm shim)
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
+
       - name: Resolve release parameters
         id: release-params
         run: node scripts/determine-release-params.js
@@ -228,4 +233,8 @@ jobs:
         if: always()
         run: |
           rm -rf dist/reports
-          pnpm store prune
+          if command -v pnpm >/dev/null 2>&1; then
+            pnpm store prune || true
+          else
+            echo "pnpm not available; skipping store prune"
+          fi

@@ -34,7 +34,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2
+          sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2 jq
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
@@ -155,6 +155,8 @@ jobs:
           end=$(date +%s)
 
           node scripts/performance-metrics.js record --step test --duration "$((end - start))"
+        env:
+          STRICT_CHANGELOG: 'false'
 
       - name: Build site distribution bundle
         run: |

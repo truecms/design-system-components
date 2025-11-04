@@ -1,5 +1,13 @@
 @truecms/header CHANGELOG
 
+## 5.0.1
+
+### Patch Changes
+
+- ba15a33: Migrates the Design System from @govau to @truecms and standardises on Node.js 22+ with pnpm/Corepack across the workspace. All packages are re-scoped and released as new majors, dependencies refreshed to resolve known vulnerabilities (npm audit: 0), Pancake tooling ported to @truecms, and CI/CD moved from CircleCI to GitHub Actions with pnpm-enabled Cloudflare Pages. We added/validated tests (Jest, Pa11y), bundle-parity and performance checks, and documented Drupal 11 compatibility. This is an intentional major for scope/engines changes; no intentional breaking API or CSS changes beyond the package scope. Consumers must update imports from @govau/_ to @truecms/_ and run on Node 22+.
+- Updated dependencies [ba15a33]
+  - @truecms/core@5.0.1
+
 ## 5.0.0
 
 ### Major Changes
@@ -22,32 +30,32 @@
 
 ## Versions
 
-* [v5.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v500)
-* [v4.1.13 - Header image should be a block element on XS and SM breakpoints (Fix based on the new grid breakpoints)](#v4113)
-* [v4.1.12 - Remove --save-dev flag from readme instructions](#v4112)
-* [v4.1.11 - Removed unused `Fragment` React import](#v4111)
-* [v4.1.10 - Resolve autoprefixer warning](#v4110)
-* [v4.1.9 - Fix pancake build path](#v419)
-* [v4.1.8 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`](#v418)
-* [v4.1.7 - Removed uikit references](#v417)
-* [v4.1.6 - Update dependencies](#v416)
-* [v4.1.5 - Removing web pack dev server, updating dependencies](#v415)
-* [v4.1.4 - Removed border from header brand image on ie8, ie9 and ie10](#v414)
-* [v4.1.3 - AUheaderBrand without a link now defaults to div](#v413)
-* [v4.1.2 - Fixed build scripts for Windows](#v412)
-* [v4.1.1 - Replace node-sass with sass](#v411)
-* [v4.1.0 - React router support](#v410)
-* [v4.0.2 - Update dependencies](#v402)
-* [v4.0.1 - Added missing documentation](#v401)
-* [v4.0.0 - Added placeholder for Australian Government logo and optional grid layout](#v400)
-* [v3.0.2 - Change homepage link](#v302)
-* [v3.0.1 - Fix dependencies](#v301)
-* [v3.0.0 - Change to focus colour and border/muted color mix](#v300)
-* [v2.0.0 - Moved to AU namespace, added new color themes and spacing](#v200)
-* [v1.2.0 - Added pancake-react plugin, ES5 main file, added children](#v120)
-* [v1.1.0 - Added react component](#v110)
-* [v1.0.0 - Removed the side spacing #147](#v100)
-* [v0.1.0 - 💥 Initial version](#v010)
+- [v5.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v500)
+- [v4.1.13 - Header image should be a block element on XS and SM breakpoints (Fix based on the new grid breakpoints)](#v4113)
+- [v4.1.12 - Remove --save-dev flag from readme instructions](#v4112)
+- [v4.1.11 - Removed unused `Fragment` React import](#v4111)
+- [v4.1.10 - Resolve autoprefixer warning](#v4110)
+- [v4.1.9 - Fix pancake build path](#v419)
+- [v4.1.8 - Updated deprecated `text-decoration-skip` property to `text-decoration-skip-ink`](#v418)
+- [v4.1.7 - Removed uikit references](#v417)
+- [v4.1.6 - Update dependencies](#v416)
+- [v4.1.5 - Removing web pack dev server, updating dependencies](#v415)
+- [v4.1.4 - Removed border from header brand image on ie8, ie9 and ie10](#v414)
+- [v4.1.3 - AUheaderBrand without a link now defaults to div](#v413)
+- [v4.1.2 - Fixed build scripts for Windows](#v412)
+- [v4.1.1 - Replace node-sass with sass](#v411)
+- [v4.1.0 - React router support](#v410)
+- [v4.0.2 - Update dependencies](#v402)
+- [v4.0.1 - Added missing documentation](#v401)
+- [v4.0.0 - Added placeholder for Australian Government logo and optional grid layout](#v400)
+- [v3.0.2 - Change homepage link](#v302)
+- [v3.0.1 - Fix dependencies](#v301)
+- [v3.0.0 - Change to focus colour and border/muted color mix](#v300)
+- [v2.0.0 - Moved to AU namespace, added new color themes and spacing](#v200)
+- [v1.2.0 - Added pancake-react plugin, ES5 main file, added children](#v120)
+- [v1.1.0 - Added react component](#v110)
+- [v1.0.0 - Removed the side spacing #147](#v100)
+- [v0.1.0 - 💥 Initial version](#v010)
 
 ---
 

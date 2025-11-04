@@ -1,6 +1,6 @@
 {
   "name": "@truecms/core",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "The core module all components modules depend on",
   "keywords": [
     "auds",

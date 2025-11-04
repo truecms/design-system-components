@@ -1,6 +1,6 @@
 {
   "name": "@truecms/select",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "The form select element for multiple options",
   "keywords": [
     "auds",
@@ -58,7 +58,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^5.0.0"
+    "@truecms/core": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

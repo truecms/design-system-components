@@ -231,7 +231,22 @@ jobs:
             args+=(--dry-run)
           fi
 
-          pnpm run release -- "${args[@]}"
+          # Try standard publish via Changesets
+          echo "Running: pnpm run release -- ${args[*]}"
+          set +e
+          pnpm run release -- "${args[@]}" | tee changesets-publish.log
+          status=$?
+          set -e
+
+          # Fallback: if there was no release plan (first publish or no changesets),
+          # retry using --from-package to publish existing versions.
+          if grep -qiE "No packages are being published|No unpublished packages found" changesets-publish.log; then
+            echo "::notice::No release plan detected. Retrying with --from-package."
+            echo "Running: pnpm changeset publish --from-package -- ${args[*]}"
+            pnpm changeset publish --from-package -- "${args[@]}"
+          else
+            exit "$status"
+          fi
 
       - name: Post-release cleanup
         if: always()

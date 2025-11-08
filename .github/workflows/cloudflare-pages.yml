@@ -45,7 +45,12 @@ jobs:
       - name: Prepare Pages artifact
         run: pnpm run build:site-dist
 
-      - name: Publish to Cloudflare Pages
+      - name: Verify Pages artifact
+        run: |
+          echo "Listing site-dist:" && ls -la site-dist || true
+          test -f site-dist/index.html || (echo "index.html missing in site-dist" && exit 1)
+
+      - name: Publish to Cloudflare Pages (production/preview)
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
         uses: cloudflare/pages-action@v1
         with:
@@ -54,9 +59,9 @@ jobs:
           projectName: ${{ secrets.CLOUDFLARE_PAGES_PROJECT }}
           directory: site-dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
-          # Ensure production deploy targets the repo's default branch (main or master)
-          productionBranch: ${{ github.event.repository.default_branch }}
+          # For direct uploads (no Git-connected Pages), 'production' forces a production deploy.
+          # For PRs we publish a preview labeled by PR number.
+          branch: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
 
       - name: Upload Pages artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false

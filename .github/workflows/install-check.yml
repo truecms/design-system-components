@@ -36,6 +36,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2 jq
 
+      - name: Install Chrome for Testing (Puppeteer)
+        run: |
+          # Ensure the Chrome binary expected by puppeteer is present in the cache
+          pnpm exec puppeteer browsers install chrome
+
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
         with:

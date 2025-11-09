@@ -15,7 +15,7 @@ ReactDOM.render(
 					<div className="col-md-9">
 						<AUheaderBrand
 							link="#"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 						/>
 					</div>
@@ -31,7 +31,7 @@ ReactDOM.render(
 					<div className="col-md-9">
 						<AUheaderBrand
 							link="#"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 						/>
 					</div>
@@ -47,7 +47,7 @@ ReactDOM.render(
 					<div className="col-md-9">
 						<AUheaderBrand
 							link="#"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 						/>
 					</div>
@@ -63,7 +63,7 @@ ReactDOM.render(
 					<div className="col-md-9">
 						<AUheaderBrand
 							link="#"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 						/>
 					</div>
@@ -99,7 +99,7 @@ ReactDOM.render(
 					<div className="col-md-9">
 						<AUheaderBrand
 							link="#"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 							title="Page title"
 							subline="Service sub-title"
@@ -121,7 +121,7 @@ ReactDOM.render(
 							title="Page title"
 							subline="Service sub-title"
 							link="#"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 						/>
 					</div>
@@ -198,7 +198,7 @@ ReactDOM.render(
 						<AUheaderBrand
 							title="Page title"
 							subline="Service sub-title"
-							brandImage="http://placehold.it/256x80"
+							brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 							brandImageAlt="Digital Transformation Agency"
 						/>
 					</div>

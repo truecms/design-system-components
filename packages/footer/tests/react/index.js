@@ -151,7 +151,7 @@ ReactDOM.render(
 							<div className="col-sm-12">
 								<p>Footer text</p>
 
-								<img className="au-responsive-media-img" src="http://placehold.it/157x80" alt="Commonwealth Coat of Arms crest logo" />
+								<img className="au-responsive-media-img" src="https://placehold.co/157x80?text=Commonwealth%20Crest" alt="Commonwealth Coat of Arms crest logo" />
 
 								<p><small>&copy; Commonwealth of Australia, <a href="https://github.com/truecms/design-system-components/blob/master/LICENSE.md" rel="external license">MIT licensed</a></small></p>
 							</div>
@@ -212,7 +212,7 @@ ReactDOM.render(
 							<AUfooterEnd>
 								<p>Footer text</p>
 
-								<img className="au-responsive-media-img" src="http://placehold.it/157x80" alt="Commonwealth Coat of Arms crest logo" />
+								<img className="au-responsive-media-img" src="https://placehold.co/157x80?text=Commonwealth%20Crest" alt="Commonwealth Coat of Arms crest logo" />
 
 								<p><small>&copy; Commonwealth of Australia, <a href="https://github.com/truecms/design-system-components/blob/master/LICENSE.md" rel="external license">MIT licensed</a></small></p>
 							</AUfooterEnd>

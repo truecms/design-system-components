@@ -110,7 +110,7 @@ Usage:
 import AUcard, { AUcardInner, AUcardHeader, AUcardDivider, AUcardLink, AUcardFooter } from '@truecms/card';
 
 	<AUcard className="au-body">
-		<img className="au-responsive-media-img" src="http://placehold.it/1200x500" />
+		<img className="au-responsive-media-img" src="https://placehold.co/1200x500?text=Placeholder%201200x500" />
 			<AUcardInner>
 				<span>Image caption or description</span>
 			<AUcardFooter>
@@ -121,7 +121,7 @@ import AUcard, { AUcardInner, AUcardHeader, AUcardDivider, AUcardLink, AUcardFoo
 
 	//Entire card clickable and single anchor:
 		<AUcard class="au-body">
-			<img className="au-responsive-media-img" src="http://placehold.it/1200x500" />
+			<img className="au-responsive-media-img" src="https://placehold.co/1200x500?text=Placeholder%201200x500" />
 				<AUcardTitle level="2">
        	 <AUcardLink link="#" text="Some link" />
     		</AUcardTitle>

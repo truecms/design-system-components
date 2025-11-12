@@ -1,5 +1,13 @@
 @truecms/select CHANGELOG
 
+## 3.0.2
+
+### Patch Changes
+
+- 66289be: Initial @truecms publish: enable GHA fallback and stage a minimal patch bump across all public packages to produce a release plan for a `latest` publication.
+- Updated dependencies [66289be]
+  - @truecms/core@5.0.2
+
 ## 3.0.1
 
 ### Patch Changes

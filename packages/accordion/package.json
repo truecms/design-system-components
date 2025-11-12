@@ -1,6 +1,6 @@
 {
   "name": "@truecms/accordion",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Allow the user to toggle the visibility of an element",
   "keywords": [
     "auds",
@@ -62,8 +62,8 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/animate": "^2.0.1",
-    "@truecms/core": "^5.0.1"
+    "@truecms/animate": "^2.0.2",
+    "@truecms/core": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

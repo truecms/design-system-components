@@ -128,6 +128,11 @@ jobs:
 
           node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
+      - name: Install Chrome for Testing (Puppeteer)
+        run: |
+          # Ensure the Chrome binary expected by puppeteer is present in the cache
+          pnpm exec puppeteer browsers install chrome
+
       - name: Build packages
         run: |
           set -euo pipefail

@@ -1,6 +1,6 @@
 {
   "name": "@truecms/header",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Headers provide a consistent start to pages.",
   "keywords": [
     "auds",
@@ -58,7 +58,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^5.0.1"
+    "@truecms/core": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -39,7 +39,7 @@
     "test": "pnpm run test:unit-test && node scripts/helper.js test && node ./scripts/a11y.js && node ./scripts/verify-bundles.js",
     "build:site-dist": "node scripts/build-site-dist.js",
     "test:design-system": "jest --runInBand --config jest.config.cjs || pnpm run test:unit-test",
-    "test:bundle-size": "node scripts/verify-bundles.js",
+    "test:bundle-size": "node scripts/metrics/compare-bundle-size.mjs --baseline reports/bundles-baseline.json --unified reports/bundles-unified.json --cap 0.3",
     "test:migrations": "jest --runInBand tests/integration"
   },
   "jest": {

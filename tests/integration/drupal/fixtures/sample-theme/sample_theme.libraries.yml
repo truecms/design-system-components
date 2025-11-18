@@ -1,0 +1,8 @@
+sample_theme.global:
+  css:
+    theme:
+      css/govau-theme.css: {}
+      css/govau-components.css: {}
+  js:
+    js/govau-components.js: {}
+

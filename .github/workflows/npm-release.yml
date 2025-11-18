@@ -137,6 +137,7 @@ jobs:
 
           start=$(date +%s)
           pnpm run build
+          pnpm run build:unified
           end=$(date +%s)
 
           node scripts/performance-metrics.js record --step build --duration "$((end - start))"
@@ -153,6 +154,7 @@ jobs:
 
           start=$(date +%s)
           pnpm run test
+          pnpm run test:unified
           end=$(date +%s)
 
           node scripts/performance-metrics.js record --step test --duration "$((end - start))"

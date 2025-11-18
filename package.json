@@ -21,7 +21,8 @@
     "rimraf": "^6.1.0",
     "sass": "^1.93.3",
     "semver": "^7.7.3",
-    "treeify": "^1.1.0"
+    "treeify": "^1.1.0",
+    "vite": "^5.4.0"
   },
   "scripts": {
     "scaffolding": "node ./scripts/helper.js scaffolding",
@@ -40,7 +41,10 @@
     "build:site-dist": "node scripts/build-site-dist.js",
     "test:design-system": "jest --runInBand --config jest.config.cjs || pnpm run test:unit-test",
     "test:bundle-size": "node scripts/metrics/compare-bundle-size.mjs --baseline reports/bundles-baseline.json --unified reports/bundles-unified.json --cap 0.3",
-    "test:migrations": "jest --runInBand tests/integration"
+    "test:migrations": "jest --runInBand tests/integration",
+    "build:unified": "vite build --config vite.config.ts",
+    "test:unified": "pnpm run test:migrations && pnpm run test:bundle-size",
+    "publish:unified": "echo \"Publishing unified package via Changesets is handled by the standard release workflow\""
   },
   "jest": {
     "testRegex": "\\.spec.js$",

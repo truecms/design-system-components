@@ -1,5 +1,11 @@
 @truecms/core CHANGELOG
 
+## 5.0.2
+
+### Patch Changes
+
+- 66289be: Initial @truecms publish: enable GHA fallback and stage a minimal patch bump across all public packages to produce a release plan for a `latest` publication.
+
 ## 5.0.1
 
 ### Patch Changes
@@ -23,31 +29,31 @@
 
 ## Versions
 
-* [v5.0.1 - ba15a33: Initial @truecms publish and Node 22+ baseline; migrate from @govau, update CI/CD, and refresh dependencies (provenance enabled).](#v501)
-* [v5.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v500)
-* [v4.0.0 - Added new breakpoints for xl (extra large) and also xs (extra small)](#v400)
-* [v3.4.2 - Remove --save-dev flag from readme instructions](#v342)
-* [v3.4.1 - Add two new colours: `hint-text` and `hint-text-alt`](#v341)
-* [v3.4.0 - Update error and success alert colours to meet contrast requirements on `--alt` backgrounds](#v340)
-* [v3.3.0 - Change error and success alert colours to make them accessible](#v330)
-* [v3.2.0 - Add additional colour checks for incaccesble color combinations](#v320)
-* [v3.1.2 - Removed uikit references](#v312)
-* [v3.1.1 - Fix issue with A11yColor when white and black both pass](#v311)
-* [v3.1.0 - Update font stack to accomodate linux users](#v310)
-* [v3.0.3 - Update dependencies](#v303)
-* [v3.0.2 - Removing web pack dev server, updating dependencies](#v302)
-* [v3.0.1 - Focus outline offset to only apply on the default focus state, build scripts for Windows](#v301)
-* [v3.0.0 - Binary search a11y color, replace node-sass with sass](#v300)
-* [v2.0.3 - Change npm run watch browser-sync location](#v203)
-* [v2.0.2 - Update dependencies](#v202)
-* [v2.0.1 - Change homepage link](#v201)
-* [v2.0.0 - Changing mix values for border and muted, focus colour, adding offset to focus](#v200)
-* [v1.0.1 - Adjusting how colors are generated from other colors](#v101)
-* [v1.0.0 - Moved to AU namespace, added new color themes and spacing](#v100)
-* [v0.1.3 - Moved to System fonts](#v013)
-* [v0.1.2 - Fixed newly introduced auds-svguri bug; ups](#v012)
-* [v0.1.1 - Fixed auds-svguri bug](#v011)
-* [v0.1.0 - 💥 Initial version](#v010)
+- [v5.0.1 - ba15a33: Initial @truecms publish and Node 22+ baseline; migrate from @govau, update CI/CD, and refresh dependencies (provenance enabled).](#v501)
+- [v5.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v500)
+- [v4.0.0 - Added new breakpoints for xl (extra large) and also xs (extra small)](#v400)
+- [v3.4.2 - Remove --save-dev flag from readme instructions](#v342)
+- [v3.4.1 - Add two new colours: `hint-text` and `hint-text-alt`](#v341)
+- [v3.4.0 - Update error and success alert colours to meet contrast requirements on `--alt` backgrounds](#v340)
+- [v3.3.0 - Change error and success alert colours to make them accessible](#v330)
+- [v3.2.0 - Add additional colour checks for incaccesble color combinations](#v320)
+- [v3.1.2 - Removed uikit references](#v312)
+- [v3.1.1 - Fix issue with A11yColor when white and black both pass](#v311)
+- [v3.1.0 - Update font stack to accomodate linux users](#v310)
+- [v3.0.3 - Update dependencies](#v303)
+- [v3.0.2 - Removing web pack dev server, updating dependencies](#v302)
+- [v3.0.1 - Focus outline offset to only apply on the default focus state, build scripts for Windows](#v301)
+- [v3.0.0 - Binary search a11y color, replace node-sass with sass](#v300)
+- [v2.0.3 - Change npm run watch browser-sync location](#v203)
+- [v2.0.2 - Update dependencies](#v202)
+- [v2.0.1 - Change homepage link](#v201)
+- [v2.0.0 - Changing mix values for border and muted, focus colour, adding offset to focus](#v200)
+- [v1.0.1 - Adjusting how colors are generated from other colors](#v101)
+- [v1.0.0 - Moved to AU namespace, added new color themes and spacing](#v100)
+- [v0.1.3 - Moved to System fonts](#v013)
+- [v0.1.2 - Fixed newly introduced auds-svguri bug; ups](#v012)
+- [v0.1.1 - Fixed auds-svguri bug](#v011)
+- [v0.1.0 - 💥 Initial version](#v010)
 
 ---
 

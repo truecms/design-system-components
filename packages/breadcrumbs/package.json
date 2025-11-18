@@ -1,6 +1,6 @@
 {
   "name": "@truecms/breadcrumbs",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Breadcrumbs help users understand where they are in the service and how they got there.",
   "keywords": [
     "auds",
@@ -59,8 +59,8 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^5.0.1",
-    "@truecms/link-list": "^4.0.1"
+    "@truecms/core": "^5.0.2",
+    "@truecms/link-list": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

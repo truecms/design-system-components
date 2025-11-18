@@ -11,6 +11,15 @@ importers:
 
   .:
     devDependencies:
+      '@babel/core':
+        specifier: ^7.28.5
+        version: 7.28.5
+      '@babel/preset-env':
+        specifier: ^7.28.5
+        version: 7.28.5(@babel/core@7.28.5)
+      '@babel/preset-react':
+        specifier: ^7.28.5
+        version: 7.28.5(@babel/core@7.28.5)
       '@changesets/changelog-git':
         specifier: ^0.2.1
         version: 0.2.1

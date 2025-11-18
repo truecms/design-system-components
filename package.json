@@ -6,6 +6,9 @@
     "url": "https://github.com/truecms/design-system-components"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
     "@changesets/changelog-git": "^0.2.1",
     "@changesets/cli": "^2.29.7",
     "autoprefixer": "^10.4.21",

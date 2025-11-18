@@ -1,0 +1,194 @@
+Specification: GovAU design system migration target state
+
+1. Overview
+
+This document describes the target state for migrating the existing GovAU component ecosystem from Pancake to a modern toolchain based on Vite, Tailwind and React, while preserving current behaviour and markup.
+
+The focus is on what the new system must provide, not on how it will be implemented internally.
+
+2. Scope
+
+In scope
+
+- All existing GovAU frontend components that are currently distributed and built via Pancake.
+- The packaging and distribution of those components as a unified design system library.
+- The way Drupal themes and React applications consume the design system.
+- The build and release pipeline responsible for producing distributable assets and publishing them to npm.
+
+Out of scope
+
+- Any change to component level HTML markup or CSS class names.
+- Any change to component level behaviour or public React APIs.
+- Any redesign of the visual look and feel.
+- Any deep refactor of legacy Sass or JavaScript beyond what is strictly required to integrate with the new toolchain.
+
+3. Target outcomes
+
+The migration is considered successful when all of the following conditions are met.
+
+3.1 Functional outcomes
+
+- All existing components continue to render exactly the same HTML structure and CSS classes in both Drupal and React usage.
+- All existing interactive behaviour remains unchanged from a user point of view.
+- Drupal themes can consume the design system without knowing about Pancake.
+- React applications can consume the design system from a single npm package.
+- No currently supported use case depends on Pancake specific commands or configuration.
+
+3.2 Technical outcomes
+
+- Pancake is fully removed from the toolchain for the design system.
+- A single design system npm package exists, publishing the components and required assets.
+- Vite is used as the build tool for local development and for producing distributable bundles.
+- Tailwind is adopted as the central place for defining design tokens and, where appropriate, for expressing component styles, without breaking existing selectors.
+
+3.3 Organisational outcomes
+
+- Consumers have a clear migration path documented from the old Pancake based packages to the unified package.
+- The design system has a clear versioning and release strategy using standard npm workflows.
+- New components and changes are developed only against the new design system package.
+
+4. Target design system package
+
+4.1 Single npm package
+
+- The design system is published as a single npm package, for example @org/gov-design-system.
+- The package provides a stable public API for:
+  - React components.
+  - Prebuilt CSS assets.
+  - Any required JavaScript initialisation helpers for non React consumers.
+
+4.2 Backwards compatible API surface
+
+- For each existing component package, there is a clear mapping to an export in the unified package.
+- Where practical, compatibility entry points exist to minimise changes to import paths.
+- React component APIs are preserved so that upgrading imports to the new package does not require application logic changes.
+
+4.3 Assets
+
+The package must include:
+
+- Prebuilt CSS assets that expose the same selectors and behaviour as current builds.
+- JavaScript bundles that expose the same global or module level functions required for non React usage.
+- TypeScript type definitions for React components.
+
+5. Component model
+
+5.1 Canonical HTML patterns
+
+- For every component, there is a documented canonical HTML pattern that matches the existing production markup.
+- This pattern serves as the reference for:
+  - Drupal Twig templates.
+  - React component rendering.
+  - Testing and visual regression.
+
+5.2 Dual consumption
+
+Each component must support both:
+
+- Use in server rendered environments such as Drupal via HTML and CSS.
+- Use in React applications via React components exposed from the unified package.
+
+5.3 No behavioural change
+
+- Component behaviour must remain identical in terms of:
+  - Interaction model.
+  - Accessibility attributes and roles.
+  - Keyboard navigation.
+  - Focus management.
+
+6. Drupal consumption model
+
+6.1 General expectations
+
+- Drupal themes consume the design system by:
+  - Including prebuilt CSS from the unified package.
+  - Using the canonical HTML patterns in Twig templates.
+- No changes are required to the logical structure of existing Twig templates beyond import path updates or library references.
+
+6.2 Optional React usage
+
+- If desired, Drupal themes can embed React components from the unified package for specific regions or widgets.
+- React usage is strictly optional and does not become a hard requirement for the theme to function.
+
+7. React consumption model
+
+7.1 Application usage
+
+- React applications import components directly from the unified design system package.
+- Applications use prebuilt CSS from the package or integrate the design system styles through their own build pipeline.
+
+7.2 Consistency with Drupal
+
+- React rendered components must produce the same canonical HTML and classes as Drupal templates.
+- This ensures consistent appearance, behaviour and accessibility regardless of the rendering environment.
+
+8. Build and release model
+
+8.1 Build tool
+
+- Vite is used as the primary build tool for:
+  - Local development of the design system.
+  - Building production ready library bundles.
+
+8.2 Publishing
+
+- Publishing to npm is carried out via standard npm commands, using scripts defined in package.json.
+- The build step is automatically executed before any publish operation.
+- Semantic versioning is used for the design system package.
+
+8.3 Outputs
+
+At a minimum, the build must produce:
+
+- ES module build suitable for modern bundlers.
+- UMD or equivalent build for environments that require it.
+- Compiled CSS files ready for direct inclusion by Drupal and other consumers.
+- TypeScript declaration files for the public React API.
+
+9. Tailwind usage
+
+9.1 Role of Tailwind
+
+- Tailwind is introduced as the primary mechanism for:
+  - Central management of design tokens such as colours, spacing and typography.
+  - Defining reusable style building blocks where appropriate.
+
+9.2 Constraints
+
+- Tailwind integration must not require changes to the public HTML markup or class names.
+- Any use of Tailwind utilities or @apply stays behind existing selectors, so consuming projects continue to use the same classes as before.
+
+10. Non functional requirements
+
+10.1 Performance
+
+- The new bundles must not significantly increase CSS or JavaScript payload size compared to the current Pancake based outputs.
+- The design system must remain suitable for use in performance sensitive government websites.
+
+10.2 Accessibility
+
+- All current accessibility guarantees must be preserved.
+- Migrated components must continue to meet WCAG requirements to at least the same level as before the migration.
+
+10.3 Stability
+
+- The unified package must provide a stable interface that avoids breaking changes outside of planned major versions.
+- Internal changes, such as further Tailwind adoption, must be made in a way that does not alter the public API or markup unintentionally.
+
+11. Risks and assumptions
+
+11.1 Assumptions
+
+- Existing components are already in a stable state and are not undergoing large concurrent redesigns.
+- Consumers are able to upgrade build and deployment pipelines to reference the unified package.
+- Access to current component source code and build configuration is available.
+
+11.2 Risks
+
+- Unintended changes to compiled CSS or JS could cause regressions even if markup is unchanged.
+- Hidden reliance on Pancake behaviour in downstream projects may need discovery and mitigation.
+- Incomplete mapping of all existing component entry points may break some consumers.
+
+Mitigation for these risks is expected to rely on comprehensive inventory, testing and careful rollout planning, which are outside the scope of this target state specification.
+
+End of specification.

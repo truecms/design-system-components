@@ -1,6 +1,7 @@
 import pa11y from 'pa11y';
 import path from 'node:path';
 import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
 describe('React migration accessibility (fixture)', () => {
   it('reports no serious accessibility issues for the sample app page', async () => {
@@ -11,10 +12,10 @@ describe('React migration accessibility (fixture)', () => {
     const htmlPath = path.join(fixtureRoot, 'index.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
 
-    // Pa11y requires a URL; use a data URL so we can exercise the
+    // Pa11y requires a URL; use a file: URL so we can exercise
     // representative markup without needing a running React app.
-    const encoded = Buffer.from(html, 'utf8').toString('base64');
-    const url = `data:text/html;base64,${encoded}`;
+    expect(html).toContain('au-header');
+    const url = pathToFileURL(htmlPath).toString();
 
     const results = await pa11y(url, {
       includeNotices: false,
@@ -29,4 +30,3 @@ describe('React migration accessibility (fixture)', () => {
     expect(seriousIssues).toHaveLength(0);
   });
 });
-

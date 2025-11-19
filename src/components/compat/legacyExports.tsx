@@ -1,5 +1,5 @@
 /**
- * Compatibility exports for legacy GovAU/Pancake React components.
+ * Compatibility exports for legacy GovAU React components.
  *
  * This module re-exports components under the same names and prop
  * signatures expected by existing consumers. Initially it forwards
@@ -17,4 +17,3 @@ export {
   AUheader,
   AUheaderBrand,
 };
-

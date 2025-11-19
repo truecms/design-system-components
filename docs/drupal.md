@@ -2,6 +2,8 @@
 
 This guide captures the minimum set of checks required to confirm the design system packages remain compatible with Drupal 11 sites.
 
+For the unified Vite/Tailwind/React design system work tracked in `specs/001-proceed-task-context/`, this repository also includes a representative Drupal theme fixture and automated migration tests that exercise the “update dependency + rebuild assets only” path (no `libraries.yml` or Twig changes).
+
 ## Prerequisites
 
 - Node.js 22 active locally (`nvm use 22`)
@@ -28,6 +30,23 @@ This guide captures the minimum set of checks required to confirm the design sys
    - JavaScript behaviours initialise once without duplicate bindings
    - No 404 requests for `@truecms/pancake-*` assets
 6. Capture screenshots or notes of any regressions and attach them to the release checklist for traceability.
+
+### Unified package migration fixture
+
+The unified design system migration includes an in-repo Drupal theme fixture and Jest/Pa11y tests:
+
+- Fixture theme: `tests/integration/drupal/fixtures/sample-theme/`
+- Planning quickstart: `specs/001-proceed-task-context/quickstart.md` (section “Verifying Drupal migration”)
+- Target-state spec: `docs/todo/gov-design-system-target-spec.txt`
+
+Once the Jest configuration for TypeScript tests is wired, you can exercise the migration suite from this repository with:
+
+```bash
+pnpm test:migrations
+pnpm test:design-system
+```
+
+These tests assert that migrating to the unified `@truecms/design-system` package by updating the theme’s `package.json` and re-running the existing asset build preserves HTML structure, CSS filenames/public paths, and behaviour without requiring any changes to `libraries.yml` or Twig templates.
 
 ## Expected Results
 

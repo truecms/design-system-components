@@ -152,6 +152,7 @@ jobs:
 
           start=$(date +%s)
           pnpm run test
+          pnpm run test:design-system
           end=$(date +%s)
 
           node scripts/performance-metrics.js record --step test --duration "$((end - start))"
@@ -427,6 +428,7 @@ jobs:
 
           start=$(date +%s)
           pnpm run test
+          pnpm run test:design-system
           end=$(date +%s)
 
           node scripts/performance-metrics.js record --step test --duration "$((end - start))"

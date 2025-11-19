@@ -3,8 +3,7 @@
  *
  * This manifest captures the CSS bundle filenames and public paths
  * that Drupal themes expect so that the Vite build can be wired to
- * emit assets under the same names used by the existing Pancake
- * tooling.
+ * emit assets under the same names used by the legacy GovAU bundles.
  */
 
 export interface DrupalCssBundle {
@@ -35,4 +34,3 @@ export function getDrupalCssFileNames(): string[] {
 export function getDrupalCssPublicPaths(): string[] {
   return drupalCssBundles.map((bundle) => bundle.publicPath);
 }
-

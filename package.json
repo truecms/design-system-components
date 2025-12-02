@@ -11,7 +11,7 @@
     "autoprefixer": "^10.4.21",
     "cfonts": "^3.3.1",
     "chalk": "^5.6.2",
-    "express": "^5.1.0",
+    "express": "^5.2.0",
     "inquirer": "^12.10.0",
     "jest": "^30.2.0",
     "pa11y": "^9.0.1",

@@ -42,8 +42,8 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [ ] Notify downstream repos (`design-system-site`, `govcms8_uikit_starter`) via their roadmap files.
 
 ### M5. Migration handoff assets
-- [x] Publish/update legacy-to-unified mapping document.
-- [x] Publish/update migration quickstart references used by downstream repos.
+- [ ] Publish/update legacy-to-unified mapping document.
+- [ ] Publish/update migration quickstart references used by downstream repos.
 - [ ] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
 
 ## Verification Gates

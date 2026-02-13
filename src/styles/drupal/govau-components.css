@@ -1,0 +1,27 @@
+/* Baseline GovAU components CSS bundle entrypoint.
+ *
+ * The Vite build should emit this file under the same filename and
+ * public path used by existing Pancake-based Drupal themes so that
+ * libraries.yml configuration does not need to change.
+ */
+
+@import "../../../packages/accordion/lib/css/styles.css";
+@import "../../../packages/breadcrumbs/lib/css/styles.css";
+@import "../../../packages/buttons/lib/css/styles.css";
+@import "../../../packages/callout/lib/css/styles.css";
+@import "../../../packages/card/lib/css/styles.css";
+@import "../../../packages/control-input/lib/css/styles.css";
+@import "../../../packages/cta-link/lib/css/styles.css";
+@import "../../../packages/direction-links/lib/css/styles.css";
+@import "../../../packages/form/lib/css/styles.css";
+@import "../../../packages/headings/lib/css/styles.css";
+@import "../../../packages/inpage-nav/lib/css/styles.css";
+@import "../../../packages/keyword-list/lib/css/styles.css";
+@import "../../../packages/link-list/lib/css/styles.css";
+@import "../../../packages/page-alerts/lib/css/styles.css";
+@import "../../../packages/progress-indicator/lib/css/styles.css";
+@import "../../../packages/searchbox/lib/css/styles.css";
+@import "../../../packages/select/lib/css/styles.css";
+@import "../../../packages/table/lib/css/styles.css";
+@import "../../../packages/tags/lib/css/styles.css";
+@import "../../../packages/text-inputs/lib/css/styles.css";

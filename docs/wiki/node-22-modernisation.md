@@ -8,7 +8,7 @@ This page mirrors the guidance that will be published to the GitHub Wiki. It exp
 - **Tooling updates**: Dart Sass (`sass`) replaces `node-sass`; Jest 29, Puppeteer, Pa11y, and other devDependencies are aligned with Node 22.
 - **Workspace orchestration**: pnpm 9 manages dependencies and scripts; Changesets handles versioning and release notes.
 - **Publishing scope**: Packages are released under `@truecms` while preserving the legacy `@gov.au/*` naming via dist-tags.
-- **Automation**: Install Check, Cloudflare Pages, and npm Release workflows enforce the new baseline across CI and deployments.
+- **Automation**: Install Check orchestration, reusable quality gates, and npm Release workflows enforce the new baseline across CI and releases.
 - **Documentation site**: Production previews publish to <https://design-system-components.truecms.com.au/> with Cloudflare preview links for pull requests.
 
 ## Runtime and tooling requirements
@@ -36,20 +36,20 @@ Logs from these runs feed the Compatibility Test Matrix in `specs/001-already-be
 
 - **Triggers**: `push`, `pull_request`, `workflow_dispatch`
 - **Node matrix**: `['22.x', 'lts/*']`
-- **Key steps**: `pnpm install --frozen-lockfile`, `pnpm run build`, `pnpm run test`, `pnpm run pack:tarballs` followed by automated installation verification for every tarball.
+- **Key steps**: Orchestrates reusable quality gates for install/build/test/site-dist/audit/tarball-install verification, then runs dry-run release validation.
 - **When to run manually**: After dependency upgrades or package manifest changes. Use the GitHub UI (Actions → Install Check → Run workflow) or `gh workflow run install-check.yml`.
 - **Artifacts**: Tarball summaries are stored under `dist/tarballs` during the job and cleaned up automatically.
 
-### Cloudflare Pages deploy (`.github/workflows/cloudflare-pages.yml`)
+### Reusable Quality Gates (`.github/workflows/reusable-quality-gates.yml`)
 
-- **Triggers**: `pull_request` (preview), `push` to `master` (production) and also `main` if present, optional `workflow_dispatch`.
-- **Purpose**: Build the documentation site with Node 22 and deploy to Cloudflare Pages. Requires secrets: `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_PROJECT_NAME`, `CLOUDFLARE_API_TOKEN`.
-- **Checklist**: Ensure site build scripts read from the pnpm workspace and that preview URLs are posted as pull request comments.
+- **Triggers**: `workflow_call`
+- **Purpose**: Shared CI unit used by Install Check and npm Release validation. Keeps install/build/test/audit/tarball checks consistent between pull request and release paths.
+- **Checklist**: Keep this workflow as the single source of truth for quality-gate steps and artifact conventions.
 
 ### npm Release (`.github/workflows/npm-release.yml`)
 
 - **Triggers**: `workflow_dispatch`, `release` (published)
-- **Purpose**: Run pnpm install/build/test and execute `pnpm run release` (Changesets publish) with configurable `npm_scope`, `dist_tag`, and `dry_run` inputs.
+- **Purpose**: Run release validation through reusable quality gates, then execute `pnpm run release` (Changesets publish) with configurable `npm_scope`, `dist_tag`, and `dry_run` inputs.
 - **Secrets**: `NPM_TOKEN_TRUECMS` supplying publish rights.
 - **Usage**: Run a dry run by leaving `dry_run` true; set it to false for real publishes once maintainers approve the release plan.
 

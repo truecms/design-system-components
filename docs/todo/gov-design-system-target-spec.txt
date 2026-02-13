@@ -6,6 +6,13 @@ This document describes the target state for migrating the existing GovAU compon
 
 The focus is on what the new system must provide, not on how it will be implemented internally.
 
+## Clarifications
+
+### Session 2025-11-18
+
+- Q: What performance tolerance is allowed for new bundle sizes versus current Pancake bundles? → A: Combined CSS and JS payload may be up to 30% larger than the current Pancake-based bundles.
+- Q: What browser baseline should the migrated design system target? → A: Evergreen browsers only (latest stable desktop and mobile).
+
 2. Scope
 
 In scope
@@ -67,7 +74,7 @@ The migration is considered successful when all of the following conditions are 
 
 The package must include:
 
-- Prebuilt CSS assets that expose the same selectors and behaviour as current builds.
+- Prebuilt CSS assets that expose the same selectors and behaviour as current builds and, for existing Drupal consumers, are available under the same filenames and public paths used today so that theme configuration does not need to change for the initial migration.
 - JavaScript bundles that expose the same global or module level functions required for non React usage.
 - TypeScript type definitions for React components.
 
@@ -103,7 +110,7 @@ Each component must support both:
 - Drupal themes consume the design system by:
   - Including prebuilt CSS from the unified package.
   - Using the canonical HTML patterns in Twig templates.
-- No changes are required to the logical structure of existing Twig templates beyond import path updates or library references.
+- For the initial migration path, no changes are required to existing Drupal theme libraries or Twig templates; updating the design system dependency and rebuilding assets is sufficient because the compiled CSS assets retain the same filenames and public paths.
 
 6.2 Optional React usage
 
@@ -162,7 +169,7 @@ At a minimum, the build must produce:
 
 10.1 Performance
 
-- The new bundles must not significantly increase CSS or JavaScript payload size compared to the current Pancake based outputs.
+- The new bundles must not increase the combined CSS and JavaScript payload size by more than 30% compared to the current Pancake based outputs.
 - The design system must remain suitable for use in performance sensitive government websites.
 
 10.2 Accessibility
@@ -174,6 +181,17 @@ At a minimum, the build must produce:
 
 - The unified package must provide a stable interface that avoids breaking changes outside of planned major versions.
 - Internal changes, such as further Tailwind adoption, must be made in a way that does not alter the public API or markup unintentionally.
+
+10.4 Browser support
+
+- The migrated design system targets evergreen browsers only, defined as the latest stable versions of Chrome, Firefox, Safari and Edge on desktop, and their current stable equivalents on supported mobile platforms.
+
+10.5 Baseline bundles
+
+- Maintain a documented list of current Pancake-based bundle filenames and public paths for representative Drupal themes and React applications.
+- For Drupal, this includes the CSS files referenced in theme `libraries.yml` entries (for example, core layout and component bundles) and any associated JavaScript files loaded on key content and landing pages.
+- For React applications, this includes the main application CSS and JavaScript bundles that currently include GovAU component styles and behaviour.
+- These baseline bundles are used as the reference point for verifying that the unified package preserves Drupal-facing filenames and public paths and for measuring the 30% payload growth cap.
 
 11. Risks and assumptions
 

@@ -57,7 +57,7 @@ import AUheader, { AUheaderBrand } from './header.js';
 <AUheader>
 	<AUheaderBrand
 		link="#"
-		brandImage="http://placehold.it/256x80"
+		brandImage="https://placehold.co/256x80?text=Australian%20Government%20Crest"
 		brandImageAlt="Digital Transformation Agency"
 	/>
 </AUheader>

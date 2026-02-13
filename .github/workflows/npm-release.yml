@@ -22,11 +22,28 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  release-validation:
+    name: Release quality gates
+    uses: ./.github/workflows/reusable-quality-gates.yml
+    with:
+      node_version: '22.x'
+      node_label: '22.x'
+      report_suffix: release
+      artifact_name: npm-release-artifacts
+      run_test_unified: true
+      run_build_unified: true
+      tarball_summary_file: release-pack-summary.json
+      tarball_install_prefix: release-all-tarballs
+    secrets: inherit
+
+  publish:
+    name: Publish packages
+    needs: release-validation
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
       CI: true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -116,102 +133,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
 
       - name: Install dependencies
-        run: |
-          set -euo pipefail
-          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
-          export PERFORMANCE_MATRIX_LABEL="release"
-
-          start=$(date +%s)
-          pnpm install --frozen-lockfile
-          end=$(date +%s)
-
-          node scripts/performance-metrics.js record --step install --duration "$((end - start))"
-
-      - name: Install Chrome for Testing (Puppeteer)
-        run: |
-          # Ensure the Chrome binary expected by puppeteer is present in the cache
-          pnpm exec puppeteer browsers install chrome
-
-      - name: Build packages
-        run: |
-          set -euo pipefail
-          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
-          export PERFORMANCE_MATRIX_LABEL="release"
-
-          start=$(date +%s)
-          pnpm run build
-          end=$(date +%s)
-
-          node scripts/performance-metrics.js record --step build --duration "$((end - start))"
-
-      - name: Run tests
-        run: |
-          set -euo pipefail
-          export BUNDLE_PARITY_REPORT_PATH="dist/reports/release/bundle-parity.json"
-          export BUNDLE_PARITY_LOG_PATH="dist/reports/release/bundle-parity.log"
-          export PA11Y_REPORT_DIR="dist/reports/release/a11y"
-          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
-          export PERFORMANCE_MATRIX_LABEL="release"
-
-          start=$(date +%s)
-          pnpm run test
-          end=$(date +%s)
-
-          node scripts/performance-metrics.js record --step test --duration "$((end - start))"
-        env:
-          STRICT_CHANGELOG: 'false'
-
-      - name: Build site distribution bundle
-        run: |
-          set -euo pipefail
-          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
-          export PERFORMANCE_MATRIX_LABEL="release"
-
-          start=$(date +%s)
-          pnpm run build:site-dist
-          end=$(date +%s)
-
-          node scripts/performance-metrics.js record --step 'build:site-dist' --duration "$((end - start))"
-
-      - name: Audit production dependencies
-        run: |
-          set -euo pipefail
-          pnpm audit --prod --json > npm-release-audit-report.json
-          if [ "$(jq '.vulnerabilities | length' npm-release-audit-report.json)" -gt 0 ]; then
-            echo '::error::Vulnerabilities detected in production dependency graph'
-            cat npm-release-audit-report.json
-            exit 1
-          fi
-        shell: bash
-
-      - name: Summarise performance metrics
-        if: always()
-        run: |
-          set -euo pipefail
-          export PERFORMANCE_OUTPUT_PATH="dist/reports/release/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
-          export PERFORMANCE_MATRIX_LABEL="release"
-          export PERFORMANCE_SUMMARY_PATH="dist/reports/release/performance-summary.json"
-          node scripts/performance-metrics.js finalize
-
-      - name: Upload release artefacts
-        if: ${{ always() && env.ACT != 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: npm-release-artifacts
-          path: |
-            npm-release-audit-report.json
-            dist/reports/release/bundle-parity.json
-            dist/reports/release/bundle-parity.log
-            dist/reports/release/a11y/index.json
-            dist/reports/release/a11y/*.json
-            dist/reports/release/performance.json
-            dist/reports/release/performance-summary.json
-          if-no-files-found: ignore
+        run: pnpm install --frozen-lockfile
 
       - name: Publish packages with Changesets
         env:
@@ -238,15 +160,12 @@ jobs:
             args+=(--dry-run)
           fi
 
-          # Try standard publish via Changesets
           echo "Running: pnpm run release -- ${args[*]}"
           set +e
           pnpm run release -- "${args[@]}" | tee changesets-publish.log
           status=$?
           set -e
 
-          # Fallback: if there was no release plan (first publish or no changesets),
-          # retry using --from-package to publish existing versions.
           if grep -qiE "No packages are being published|No unpublished packages found" changesets-publish.log; then
             echo "::notice::No release plan detected. Retrying with --from-package."
             echo "Running: pnpm changeset publish --from-package -- ${args[*]}"
@@ -258,28 +177,7 @@ jobs:
       - name: Post-release cleanup
         if: always()
         run: |
-          rm -rf dist/reports
+          rm -rf dist/reports dist/tarballs
           if command -v pnpm >/dev/null 2>&1; then
             pnpm store prune || true
-          else
-            echo "pnpm not available; skipping store prune"
           fi
-
-      - name: Write job summary
-        if: always()
-        shell: bash
-        run: |
-          {
-            echo "## npm Release — release"
-            echo
-            echo "| Metric | Value |"
-            echo "|---|---|"
-            echo "| Status | ${{ job.status }} |"
-            echo "| Scope | ${{ steps.release-params.outputs.scope }} |"
-            echo "| Dist Tag | ${{ steps.release-params.outputs.dist_tag }} |"
-            echo "| Dry Run | ${{ steps.release-params.outputs.dry_run }} |"
-            echo "| Branch/Tag | ${GITHUB_REF_NAME} |"
-            echo
-            echo "- Built packages, ran tests, audited deps, and prepared site bundle."
-            echo "- See uploaded artifacts for performance, a11y, and bundle parity reports."
-          } >> "$GITHUB_STEP_SUMMARY"

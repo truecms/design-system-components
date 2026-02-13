@@ -268,6 +268,7 @@ Run this command in `THEME_DIR` to enforce the rule:
 node -e '
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
 const declared = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
 const expectedMajors = {
@@ -311,6 +312,27 @@ const readVersion = (name) => {
     return null;
   }
 };
+const getNpmTree = () => {
+  try {
+    return JSON.parse(execSync("npm ls --all --json", { stdio: ["ignore", "pipe", "pipe"] }).toString());
+  } catch (err) {
+    const fallback = err && err.stdout ? String(err.stdout) : "";
+    if (fallback) {
+      return JSON.parse(fallback);
+    }
+    return { dependencies: {} };
+  }
+};
+const collectDependencyVersions = (treeNode, packageName, acc) => {
+  if (!treeNode || !treeNode.dependencies) return;
+  for (const [depName, dep] of Object.entries(treeNode.dependencies)) {
+    if (!dep) continue;
+    if (depName === packageName && dep.version) {
+      acc.push(dep.version);
+    }
+    collectDependencyVersions(dep, packageName, acc);
+  }
+};
 const semverCmp = (a, b) => {
   const pa = a.split(".").map((x) => parseInt(x, 10) || 0);
   const pb = b.split(".").map((x) => parseInt(x, 10) || 0);
@@ -336,11 +358,24 @@ const pancake = declared["@truecms/pancake"] ? readVersion("@truecms/pancake") :
 if (pancake && semverCmp(pancake, "2.0.1") < 0) {
   failures.push(`@truecms/pancake@${pancake} must be >=2.0.1`);
 }
-const pancakeJs = readVersion("@truecms/pancake-js");
-if (!pancakeJs) {
+const pancakeJsVersions = [];
+const pancakeJsTopLevel = readVersion("@truecms/pancake-js");
+if (pancakeJsTopLevel) {
+  pancakeJsVersions.push(pancakeJsTopLevel);
+}
+collectDependencyVersions(getNpmTree(), "@truecms/pancake-js", pancakeJsVersions);
+const pancakeJsUniqueVersions = [...new Set(pancakeJsVersions)];
+if (!pancakeJsUniqueVersions.length) {
   failures.push("@truecms/pancake-js is not installed");
-} else if (semverCmp(pancakeJs, "2.0.2") < 0) {
-  failures.push(`@truecms/pancake-js@${pancakeJs} must be >=2.0.2`);
+} else {
+  const pancakeJsHighest = pancakeJsUniqueVersions
+    .sort((a, b) => semverCmp(a, b))
+    .slice(-1)[0];
+  if (semverCmp(pancakeJsHighest, "2.0.2") < 0) {
+    failures.push(
+      `@truecms/pancake-js versions [${pancakeJsUniqueVersions.join(", ")}] must include >=2.0.2`
+    );
+  }
 }
 if (declared["@truecms/pancake-react"]) {
   const pancakeReact = readVersion("@truecms/pancake-react");
@@ -388,7 +423,7 @@ console.log("Version validation passed");
 
 5. Update scripts and JS restore flow (if needed)
    - Prefer a safe setup script:
-     - `"setup": "npm install --ignore-scripts && (./node_modules/.bin/pancake || true) && npm run restore-uikit"`
+     - `"setup": "npm install --ignore-scripts && (./node_modules/.bin/pancake || true) && npm run restore-uikit --if-present"`
    - If the theme expects component files in `assets/uikit/js`, add:
      - `"restore-uikit": "node restore-uikit-js.js"`
      - `restore-uikit-js.js` that copies `@truecms/*/lib/js/module.js` (or `main.js`) to `assets/uikit/js/<component>.js`.

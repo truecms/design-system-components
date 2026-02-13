@@ -99,22 +99,21 @@ Acceptance criteria for new/updated workflows:
 
 - File: `.github/workflows/install-check.yml`
 - Triggers: `push`, `pull_request`, manual `workflow_dispatch`
-- What it does: Installs dependencies with `npm ci`, runs the bootstrap/build/test scripts under Node 22 and the latest LTS, and `npm pack`s every package to validate installability.
+- What it does: Orchestrates Node 22 and latest LTS sweeps using the reusable quality-gate workflow (`.github/workflows/reusable-quality-gates.yml`) to run install/build/test/site-dist/audit/tarball-install verification.
 - How to run manually:
   - GitHub UI: Actions → "Install Check" → "Run workflow".
   - GitHub CLI: `gh workflow run install-check.yml`.
 - Expected outcome: Green checks on your pull request before requesting review. Investigate any tarball installation failures immediately.
 
-### Cloudflare Pages deploy
+### Reusable Quality Gates
 
-- File: `.github/workflows/cloudflare-pages.yml`
-- Purpose: Builds the documentation site using Node 22, publishing previews for pull requests and production updates on `main`.
-- Manual triggers are rarely required, but you can dispatch the workflow for validation via the Actions tab when touching site assets.
+- File: `.github/workflows/reusable-quality-gates.yml`
+- Purpose: Shared CI building block consumed by Install Check and npm Release validation to keep quality gates consistent.
 
 ### npm release
 
 - File: `.github/workflows/npm-release.yml`
-- Purpose: Runs the pnpm build/test pipeline and executes `pnpm run release` (Changesets publish) against the selected npm scope and dist-tag.
+- Purpose: Runs release validation via reusable quality gates, then executes publish (`pnpm run release`) against the selected npm scope and dist-tag.
 - Triggering a dry run:
   1. Navigate to Actions → "npm Release" → "Run workflow".
   2. Leave `dry_run` set to `true` (default) to validate credentials and packaging.

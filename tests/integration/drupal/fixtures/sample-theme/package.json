@@ -1,0 +1,13 @@
+{
+  "name": "sample-drupal-theme",
+  "private": true,
+  "description": "Representative Drupal theme fixture used to validate unified design system migration with no library/Twig changes.",
+  "version": "0.0.0",
+  "scripts": {
+    "build:assets": "echo \"Sample Drupal theme asset build placeholder\""
+  },
+  "dependencies": {
+    "@truecms/design-system": "0.0.0-unified-local"
+  }
+}
+

@@ -9,6 +9,7 @@ node_modules
 validation-report.json
 validation-status.json
 *.css
+!src/styles/drupal/*.css
 packages/*/tests/*/*.js
 !packages/*/tests/react/index.js
 !packages/*/tests/react/webpack.config.js
@@ -18,6 +19,8 @@ lerna-debug.log
 /index.html
 dist/
 build/
+!tests/integration/build/
+!tests/integration/build/*.test.ts
 site-dist/
 coverage/
 .env

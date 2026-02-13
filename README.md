@@ -11,6 +11,29 @@ This migration allows the maintainers to provide funded support for agencies and
 - Contributor guides live under [`docs/`](./docs/) with focused walkthroughs for publishing, Drupal integration, and migration steps.
 - The unified GovAU design system migration (Vite/Tailwind/React) is tracked under [`specs/001-proceed-task-context/`](./specs/001-proceed-task-context/) with a planning quickstart in [`specs/001-proceed-task-context/quickstart.md`](./specs/001-proceed-task-context/quickstart.md) and a target-state spec in [`docs/todo/gov-design-system-target-spec.txt`](./docs/todo/gov-design-system-target-spec.txt).
 
+## Quick AI-assisted GovCMS migration
+
+Use these prompts in your coding assistant to run the legacy `@gov.au/*` to `@truecms/*` upgrade workflow.
+
+- `Codex`
+  ```text
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/codex/INSTALL.md
+  ```
+- `Claude Code`
+  ```text
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/claude/INSTALL.md
+  ```
+- `OpenCode`
+  ```text
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/opencode/INSTALL.md
+  ```
+- `Cursor`
+  ```text
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/cursor/INSTALL.md
+  ```
+
+If you are testing before merge (for example from `feature/d11`), replace `main` in each URL with your branch name.
+
 ## Runtime requirements
 
 | Tool    | Minimum | Recommended |

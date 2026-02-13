@@ -1,1 +1,5 @@
-// Drupal integration shims and asset entrypoints
+export {
+  drupalCssBundles,
+  getDrupalCssFileNames,
+  getDrupalCssPublicPaths,
+} from './asset-manifest';

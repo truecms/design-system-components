@@ -1,6 +1,35 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { defineConfig } from 'vite';
 
+function emitUnifiedTypeDeclarations() {
+  return {
+    name: 'emit-unified-type-declarations',
+    writeBundle() {
+      const outputDir = path.resolve(
+        process.cwd(),
+        'packages/unified-design-system/dist/js',
+      );
+      const declarationPath = path.join(outputDir, 'components.d.ts');
+
+      fs.mkdirSync(outputDir, { recursive: true });
+      fs.writeFileSync(
+        declarationPath,
+        [
+          'export declare const AUbutton: any;',
+          'export declare const AUaccordion: any;',
+          'export declare const AUheader: any;',
+          'export declare const AUheaderBrand: any;',
+          '',
+        ].join('\n'),
+        'utf8',
+      );
+    },
+  };
+}
+
 export default defineConfig({
+  plugins: [emitUnifiedTypeDeclarations()],
   build: {
     // We are building a small set of entrypoints for the unified package:
     // - React components barrel

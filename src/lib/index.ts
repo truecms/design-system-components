@@ -1,1 +1,5 @@
-// Shared utilities and migration helpers
+export {
+  validateDrupalMigration,
+  validateReactMigration,
+  type MigrationValidationResult,
+} from './migration/api';

@@ -12,11 +12,13 @@
   ],
   "main": "dist/js/components.js",
   "module": "dist/js/components.js",
+  "types": "dist/js/components.d.ts",
   "files": [
     "dist/**"
   ],
   "exports": {
     ".": {
+      "types": "./dist/js/components.d.ts",
       "import": "./dist/js/components.js"
     },
     "./css/govau-theme.css": "./dist/css/govau-theme.css",
@@ -31,4 +33,3 @@
     "access": "public"
   }
 }
-

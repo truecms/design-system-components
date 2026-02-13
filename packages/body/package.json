@@ -1,6 +1,6 @@
 {
   "name": "@truecms/body",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Basic body styles for body HTML elements",
   "keywords": [
     "auds",
@@ -52,7 +52,7 @@
     "@truecms/pancake-sass": "^3.0.0"
   },
   "peerDependencies": {
-    "@truecms/core": "^5.0.1"
+    "@truecms/core": "^5.0.2"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",

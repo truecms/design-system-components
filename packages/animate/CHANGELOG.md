@@ -1,5 +1,11 @@
 @truecms/animate CHANGELOG
 
+## 2.0.2
+
+### Patch Changes
+
+- 66289be: Initial @truecms publish: enable GHA fallback and stage a minimal patch bump across all public packages to produce a release plan for a `latest` publication.
+
 ## 2.0.1
 
 ### Patch Changes

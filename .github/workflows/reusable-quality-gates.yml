@@ -1,0 +1,287 @@
+name: Reusable Quality Gates
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        required: true
+        type: string
+      node_label:
+        required: true
+        type: string
+      report_suffix:
+        required: true
+        type: string
+      artifact_name:
+        required: true
+        type: string
+      run_test_design_system:
+        required: false
+        type: boolean
+        default: false
+      run_test_unified:
+        required: false
+        type: boolean
+        default: false
+      run_build_unified:
+        required: false
+        type: boolean
+        default: false
+      run_release_dry_run:
+        required: false
+        type: boolean
+        default: false
+      write_changesets_summary:
+        required: false
+        type: boolean
+        default: false
+      tarball_summary_file:
+        required: false
+        type: string
+        default: pack-summary.json
+      tarball_install_prefix:
+        required: false
+        type: string
+        default: verify-all-tarballs
+      strict_changelog:
+        required: false
+        type: string
+        default: 'false'
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2 jq
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Enforce Node 22 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_version="$(node -v)"
+          echo "Active Node version: ${node_version}"
+          major="${node_version#v}"
+          major="${major%%.*}"
+          if [ "${major}" -lt 22 ]; then
+            echo '::error::Node 22 or newer is required for this workflow. Update the matrix entry or run `nvm use 22` locally before re-running.'
+            exit 1
+          fi
+
+      - name: Fetch base branch for Changesets
+        run: |
+          set -euo pipefail
+          event_name="${{ github.event_name }}"
+          base_ref="${{ github.event.repository.default_branch }}"
+
+          if [ "${event_name}" = "pull_request" ]; then
+            base_ref="${{ github.event.pull_request.base.ref }}"
+          fi
+
+          if [ -z "${base_ref}" ]; then
+            base_ref="master"
+          fi
+
+          echo "Fetching base ref: ${base_ref}"
+          token="${{ secrets.GITHUB_TOKEN }}"
+          repo="${{ github.repository }}"
+          if [ -n "${token}" ]; then
+            git remote set-url origin "https://x-access-token:${token}@github.com/${repo}.git"
+          else
+            git remote set-url origin "https://github.com/${repo}.git"
+          fi
+          git fetch --no-tags --prune origin "${base_ref}" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/${base_ref}"; then
+            if git rev-parse --verify "${base_ref}" >/dev/null 2>&1; then
+              git branch -f "${base_ref}" "origin/${base_ref}" || true
+            else
+              git branch "${base_ref}" "origin/${base_ref}" || true
+            fi
+          fi
+
+          if [ "${base_ref}" != "master" ]; then
+            echo "Fetching master for Changesets baseline"
+            git fetch --no-tags --prune origin master || true
+          fi
+
+          if git show-ref --verify --quiet refs/remotes/origin/master; then
+            if git rev-parse --verify master >/dev/null 2>&1; then
+              git branch -f master origin/master || true
+            else
+              git branch master origin/master || true
+            fi
+          fi
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
+
+          start=$(date +%s)
+          pnpm install --frozen-lockfile
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step install --duration "$((end - start))"
+
+      - name: Build packages
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
+
+          start=$(date +%s)
+          pnpm run build
+          if [ "${{ inputs.run_build_unified }}" = "true" ]; then
+            pnpm run build:unified
+          fi
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step build --duration "$((end - start))"
+
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          export BUNDLE_PARITY_REPORT_PATH="dist/reports/${{ inputs.report_suffix }}/bundle-parity.json"
+          export BUNDLE_PARITY_LOG_PATH="dist/reports/${{ inputs.report_suffix }}/bundle-parity.log"
+          export PA11Y_REPORT_DIR="dist/reports/${{ inputs.report_suffix }}/a11y"
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
+
+          start=$(date +%s)
+          pnpm run test
+          if [ "${{ inputs.run_test_design_system }}" = "true" ]; then
+            pnpm run test:design-system
+          fi
+          if [ "${{ inputs.run_test_unified }}" = "true" ]; then
+            pnpm run test:unified
+          fi
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step test --duration "$((end - start))"
+        env:
+          STRICT_CHANGELOG: ${{ inputs.strict_changelog }}
+
+      - name: Build site distribution bundle
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
+
+          start=$(date +%s)
+          pnpm run build:site-dist
+          end=$(date +%s)
+
+          node scripts/performance-metrics.js record --step 'build:site-dist' --duration "$((end - start))"
+
+      - name: Audit production dependencies
+        run: |
+          set -euo pipefail
+          pnpm audit --prod --json > audit-report.json
+          if [ "$(jq '.vulnerabilities | length' audit-report.json)" -gt 0 ]; then
+            echo '::error::Vulnerabilities detected in production dependency graph'
+            cat audit-report.json
+            exit 1
+          fi
+        shell: bash
+
+      - name: Dry run publish with Changesets
+        if: ${{ inputs.run_release_dry_run }}
+        run: pnpm run release -- --dry-run
+
+      - name: Generate Changesets summary (tolerant)
+        if: ${{ inputs.write_changesets_summary }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if pnpm changeset status --output changesets-summary.json; then
+            echo "Generated changesets-summary.json"
+          else
+            echo '::warning::No changesets found (or packages changed without a changeset). Emitting empty summary for validation only.'
+            echo '{}' > changesets-summary.json
+          fi
+
+      - name: Verify package tarballs install cleanly
+        run: |
+          set -euo pipefail
+          node scripts/verify-workspace-tarballs.js \
+            --summary-file "${{ inputs.tarball_summary_file }}" \
+            --install-prefix "${{ inputs.tarball_install_prefix }}"
+
+      - name: Summarise performance metrics
+        if: always()
+        run: |
+          set -euo pipefail
+          export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
+          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
+          export PERFORMANCE_SUMMARY_PATH="dist/reports/${{ inputs.report_suffix }}/performance-summary.json"
+          node scripts/performance-metrics.js finalize
+
+      - name: Upload artefacts
+        if: ${{ always() && env.ACT != 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: |
+            audit-report.json
+            changesets-summary.json
+            dist/tarballs/${{ inputs.tarball_summary_file }}
+            dist/reports/${{ inputs.report_suffix }}/bundle-parity.json
+            dist/reports/${{ inputs.report_suffix }}/bundle-parity.log
+            dist/reports/${{ inputs.report_suffix }}/a11y/index.json
+            dist/reports/${{ inputs.report_suffix }}/a11y/*.json
+            dist/reports/${{ inputs.report_suffix }}/performance.json
+            dist/reports/${{ inputs.report_suffix }}/performance-summary.json
+          if-no-files-found: ignore
+
+      - name: Clean tarballs
+        if: always()
+        run: |
+          rm -rf dist/tarballs dist/reports
+          pnpm store prune
+
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Quality Gates — ${{ inputs.node_label }}"
+            echo
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Status | ${{ job.status }} |"
+            echo "| Node | ${{ inputs.node_label }} |"
+            echo "| Branch | ${GITHUB_REF_NAME} |"
+            echo
+            echo "- Verified install, build, tests, audit, and bundle parity."
+            echo "- Artifacts: dist/reports/${{ inputs.report_suffix }}/ and dist/tarballs/${{ inputs.tarball_summary_file }}."
+          } >> "$GITHUB_STEP_SUMMARY"

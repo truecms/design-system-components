@@ -53,9 +53,9 @@ All scripts assume Node 22. Running them under earlier versions will emit `EBADE
 
 | Workflow | Location | Trigger | Purpose |
 |----------|----------|---------|---------|
-| Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Runs Node 22 and latest LTS matrices, performs clean `pnpm install --frozen-lockfile` installs, builds the workspace, runs tests, audits dependencies, builds the site bundle, and verifies that every package tarball installs cleanly. |
-| Cloudflare Pages Deploy | `.github/workflows/cloudflare-pages.yml` | `push` (master/main), `pull_request` | Builds the documentation site with Node 22 and deploys previews and production releases to Cloudflare Pages using the configured secrets. |
-| npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release`, `push` tags | Authenticates with npm, runs the pnpm build/test pipeline (including audits and site build), and publishes packages through Changesets to the configurable npm scope (default `@truecms`) and dist-tag, with provenance enabled. |
+| Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Thin orchestration workflow that runs the shared quality gates for Node 22 and latest LTS install sweeps, plus a dry-run release validation stage. |
+| Reusable Quality Gates | `.github/workflows/reusable-quality-gates.yml` | `workflow_call` | Shared CI unit for install/build/test/site-dist/audit/tarball-install verification, performance summaries, and artifact upload. |
+| npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release`, `push` tags | Two-stage release pipeline: reusable quality-gate validation followed by npm publish with Changesets and provenance. |
 
 Refer to [`CONTRIBUTING.md`](./CONTRIBUTING.md) for details on invoking these workflows manually during reviews.
 
@@ -65,7 +65,7 @@ Releases are orchestrated with Changesets and pnpm:
 
 1. Collect changes using `pnpm changeset` and merge the generated markdown files.
 2. When ready to publish, trigger the **npm Release** workflow from the GitHub Actions tab. Supply `dry_run=false` once a release candidate is approved, or keep the default `true` for validation.
-3. The workflow runs `pnpm run build`, `pnpm run test`, `pnpm run build:site-dist`, and `pnpm run release` (Changesets publish) before pushing tags to npm under the selected scope.
+3. The workflow first runs release quality gates, then executes publish via `pnpm run release` (Changesets) under the selected scope.
 4. Release artefacts are mirrored to the legacy `@gov.au/*` names via npm dist-tags so downstream teams can opt in at their own pace.
 
 ## Unified design system migration (Vite/Tailwind/React)
@@ -103,7 +103,7 @@ Open issues or questions on the [GitHub issue tracker](https://github.com/truecm
 
 - `packages/` – component packages, each with its own README and CHANGELOG.
 - `scripts/` – build helpers for Sass/PostCSS, accessibility automation, and migration tooling.
-- `.github/workflows/` – Install Check, Cloudflare Pages, and npm Release pipelines.
+- `.github/workflows/` – Install Check orchestration, reusable quality gates, and npm Release pipelines.
 - `specs/001-already-began-task/` – design artefacts driving the original Node 22 modernisation initiative (plan, research, tasks, and checklists).
 - `specs/001-proceed-task-context/` – feature spec, plan, research, tasks, and checklists for the unified design system migration.
 - `docs/` – platform-specific guides such as Drupal integration, publishing, and migration from the legacy namespace.

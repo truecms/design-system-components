@@ -12,6 +12,14 @@ Highest priority repository. Make this repo release-ready and publishable first.
 
 ## Actionable Execution Queue
 
+### M0. CI/CD decomposition and cross-repo rollout
+- [ ] Complete modular CI refactor in this repo (`install-check` + reusable quality gates + split release validation/publish).
+- [ ] Track Drupal rollout in `ispovednik-org` parent issue: https://github.com/truecms/ispovednik-org/issues/74
+- [ ] Execute sub-item: split workflow into reusable lint/context/test/deploy jobs: https://github.com/truecms/ispovednik-org/issues/75
+- [ ] Execute sub-item: add release-quality preflight gate: https://github.com/truecms/ispovednik-org/issues/77
+- [ ] Execute sub-item: align PR required checks with decomposed pipeline: https://github.com/truecms/ispovednik-org/issues/76
+- [ ] Execute sub-item: publish CI/CD decomposition runbook and rollback notes: https://github.com/truecms/ispovednik-org/issues/78
+
 ### M1. Release-readiness verification
 - [ ] Run `pnpm run build:unified`.
 - [ ] Run `pnpm run test:design-system`.

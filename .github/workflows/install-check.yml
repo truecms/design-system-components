@@ -18,13 +18,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: ['22.x', 'lts/*']
+        include:
+          - node-version: '22.x'
+            suffix: '22.x'
+          - node-version: 'lts/*'
+            suffix: 'lts-star'
     uses: ./.github/workflows/reusable-quality-gates.yml
     with:
       node_version: ${{ matrix.node-version }}
       node_label: ${{ matrix.node-version }}
-      report_suffix: install-check-${{ replace(replace(matrix.node-version, '/', '-'), '*', 'star') }}
-      artifact_name: install-check-artifacts-${{ replace(replace(matrix.node-version, '/', '-'), '*', 'star') }}
+      report_suffix: install-check-${{ matrix.suffix }}
+      artifact_name: install-check-artifacts-${{ matrix.suffix }}
       run_test_design_system: true
       tarball_summary_file: install-check-pack-summary.json
       tarball_install_prefix: install-all-tarballs

@@ -40,3 +40,13 @@ The Digital Transformation Agency (DTA) no longer maintains the Pancake ecosyste
 ## Support
 
 For migration assistance or to report regressions, email `engineering@truecms.com.au` or open an issue in the repository.
+
+## Next step: unified design system package
+
+After migrating from the legacy `@gov.au/*` namespace to `@truecms/*` packages, the long-term path is to move away from Pancake-specific tooling entirely and adopt the unified Vite/Tailwind/React design system package described in:
+
+- `docs/todo/gov-design-system-target-spec.txt`
+- `specs/001-proceed-task-context/spec.md`
+- `specs/001-proceed-task-context/quickstart.md`
+
+The unified package provides Drupal-facing CSS bundles and React components while preserving existing HTML structure, CSS class names, and behaviour. The Drupal and React fixtures under `tests/integration/drupal/fixtures/sample-theme/` and `tests/integration/react/fixtures/sample-app/` are used to validate this migration path.

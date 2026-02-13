@@ -1,0 +1,9 @@
+{
+  "cssFileNames": [
+    "react-app.css"
+  ],
+  "publicPaths": [
+    "/apps/sample-app/css/react-app.css"
+  ]
+}
+

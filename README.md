@@ -9,6 +9,7 @@ This migration allows the maintainers to provide funded support for agencies and
 - Production preview site: <https://design-system-components.truecms.com.au/>
 - Pull requests trigger Cloudflare preview builds linked from the Checks tab.
 - Contributor guides live under [`docs/`](./docs/) with focused walkthroughs for publishing, Drupal integration, and migration steps.
+- The unified GovAU design system migration (Vite/Tailwind/React) is tracked under [`specs/001-proceed-task-context/`](./specs/001-proceed-task-context/) with a planning quickstart in [`specs/001-proceed-task-context/quickstart.md`](./specs/001-proceed-task-context/quickstart.md) and a target-state spec in [`docs/todo/gov-design-system-target-spec.txt`](./docs/todo/gov-design-system-target-spec.txt).
 
 ## Runtime requirements
 
@@ -52,9 +53,9 @@ All scripts assume Node 22. Running them under earlier versions will emit `EBADE
 
 | Workflow | Location | Trigger | Purpose |
 |----------|----------|---------|---------|
-| Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Runs Node 22 and latest LTS matrices, performs clean `pnpm install --frozen-lockfile` installs, builds the workspace, runs tests, audits dependencies, builds the site bundle, and verifies that every package tarball installs cleanly. |
-| Cloudflare Pages Deploy | `.github/workflows/cloudflare-pages.yml` | `push` (master/main), `pull_request` | Builds the documentation site with Node 22 and deploys previews and production releases to Cloudflare Pages using the configured secrets. |
-| npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release`, `push` tags | Authenticates with npm, runs the pnpm build/test pipeline (including audits and site build), and publishes packages through Changesets to the configurable npm scope (default `@truecms`) and dist-tag, with provenance enabled. |
+| Install Check | `.github/workflows/install-check.yml` | `push`, `pull_request`, `workflow_dispatch` | Thin orchestration workflow that runs the shared quality gates for Node 22 and latest LTS install sweeps, plus a dry-run release validation stage. |
+| Reusable Quality Gates | `.github/workflows/reusable-quality-gates.yml` | `workflow_call` | Shared CI unit for install/build/test/site-dist/audit/tarball-install verification, performance summaries, and artifact upload. |
+| npm Release | `.github/workflows/npm-release.yml` | `workflow_dispatch`, `release`, `push` tags | Two-stage release pipeline: reusable quality-gate validation followed by npm publish with Changesets and provenance. |
 
 Refer to [`CONTRIBUTING.md`](./CONTRIBUTING.md) for details on invoking these workflows manually during reviews.
 
@@ -64,8 +65,31 @@ Releases are orchestrated with Changesets and pnpm:
 
 1. Collect changes using `pnpm changeset` and merge the generated markdown files.
 2. When ready to publish, trigger the **npm Release** workflow from the GitHub Actions tab. Supply `dry_run=false` once a release candidate is approved, or keep the default `true` for validation.
-3. The workflow runs `pnpm run build`, `pnpm run test`, `pnpm run build:site-dist`, and `pnpm run release` (Changesets publish) before pushing tags to npm under the selected scope.
+3. The workflow first runs release quality gates, then executes publish via `pnpm run release` (Changesets) under the selected scope.
 4. Release artefacts are mirrored to the legacy `@gov.au/*` names via npm dist-tags so downstream teams can opt in at their own pace.
+
+## Unified design system migration (Vite/Tailwind/React)
+
+In addition to keeping the existing component packages healthy on Node 22, this repository now hosts the unified GovAU design system migration work:
+
+- **Specification and plan**: `specs/001-proceed-task-context/spec.md`, `specs/001-proceed-task-context/plan.md`, `specs/001-proceed-task-context/research.md`.
+- **Target-state architecture**: `docs/todo/gov-design-system-target-spec.txt`.
+- **Planning quickstart**: `specs/001-proceed-task-context/quickstart.md`.
+
+Two in-repo fixtures exercise the Drupal and React migration paths:
+
+- Drupal sample theme: `tests/integration/drupal/fixtures/sample-theme/`
+- React sample app: `tests/integration/react/fixtures/sample-app/`
+
+Once Jest is wired to the new TypeScript tests, you can run the design-system specific checks with:
+
+```sh
+pnpm test:design-system   # Unified Jest + integration/a11y tests
+pnpm test:migrations      # Drupal and React migration suites
+pnpm test:bundle-size     # 30% payload cap enforcement
+```
+
+These commands are intended to gate the unified `@truecms/design-system` package without changing public HTML, CSS class names, or behaviour for existing Drupal and React consumers.
 
 ## Drupal 11 compatibility
 
@@ -79,8 +103,9 @@ Open issues or questions on the [GitHub issue tracker](https://github.com/truecm
 
 - `packages/` – component packages, each with its own README and CHANGELOG.
 - `scripts/` – build helpers for Sass/PostCSS, accessibility automation, and migration tooling.
-- `.github/workflows/` – Install Check, Cloudflare Pages, and npm Release pipelines.
-- `specs/001-already-began-task/` – design artefacts driving the Node 22 initiative (plan, research, tasks, and checklists).
+- `.github/workflows/` – Install Check orchestration, reusable quality gates, and npm Release pipelines.
+- `specs/001-already-began-task/` – design artefacts driving the original Node 22 modernisation initiative (plan, research, tasks, and checklists).
+- `specs/001-proceed-task-context/` – feature spec, plan, research, tasks, and checklists for the unified design system migration.
 - `docs/` – platform-specific guides such as Drupal integration, publishing, and migration from the legacy namespace.
 
-For additional implementation context, see [`docs/wiki/node-22-modernisation.md`](./docs/wiki/node-22-modernisation.md) and the research log in `specs/001-already-began-task/research.md`.
+For additional implementation context, see [`docs/wiki/node-22-modernisation.md`](./docs/wiki/node-22-modernisation.md) and the research log in `specs/001-already-began-task/research.md` for the Node 22 work, and `specs/001-proceed-task-context/research.md` together with `docs/todo/gov-design-system-target-spec.txt` for the unified design system migration.

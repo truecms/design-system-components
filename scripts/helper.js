@@ -724,23 +724,27 @@ HELPER.generate = (() => {
 		 *
 		 * @param {array} allModules - An array of all modules
 		 */
-		json: ( allModules ) => {
-			const packagesPath = Path.normalize(`${ __dirname }/../packages/`);
-			let audsJson = {};   // the auds.json object
+			json: ( allModules ) => {
+				const packagesPath = Path.normalize(`${ __dirname }/../packages/`);
+				let audsJson = {};   // the auds.json object
 
-			// iterate over all packages
-			if( allModules !== undefined && allModules.length > 0 ) {
-				for( let module of allModules ) {
-					const packageJson = require( Path.normalize( `${ packagesPath }/${ module }/package.json` ) );
+				// iterate over all packages
+				if( allModules !== undefined && allModules.length > 0 ) {
+					for( let module of allModules ) {
+						const packageJson = require( Path.normalize( `${ packagesPath }/${ module }/package.json` ) );
+						const packageDependencies = packageJson.dependencies || {};
+						const pancakeModule = packageJson.pancake && packageJson.pancake['pancake-module'] ?
+							packageJson.pancake['pancake-module'] :
+							{};
 
-					audsJson[ packageJson.name ] = { // add to auds.json
-						name: packageJson.name,
-						version: packageJson.version,
-						peerDependencies: HELPER.generate.getAllDependencies( packageJson.dependencies ),
-						'pancake-module': packageJson.pancake['pancake-module'],
-					};
+						audsJson[ packageJson.name ] = { // add to auds.json
+							name: packageJson.name,
+							version: packageJson.version,
+							peerDependencies: HELPER.generate.getAllDependencies( packageDependencies ),
+							'pancake-module': pancakeModule,
+						};
+					}
 				}
-			}
 
 			Fs.writeFile( Path.normalize(`${ __dirname }/../auds.json`), JSON.stringify( audsJson ), 'utf8', ( error ) => { // write file
 				if( error ) {
@@ -760,15 +764,16 @@ HELPER.generate = (() => {
 		 *
 		 * @return {array} dependencyBundle   - An object containing all of the dependencies found
 		 */
-		getAllDependencies: ( dependencies, dependencyBundle = {} ) => {
-			const packagesPath = Path.normalize( `${ __dirname }/../packages/` );
+			getAllDependencies: ( dependencies, dependencyBundle = {} ) => {
+				const packagesPath = Path.normalize( `${ __dirname }/../packages/` );
+				const dependencyMap = dependencies || {};
 
-			// For each dependency received go through each of the keys
-		for( const dependency of Object.keys( dependencies ) ) {
+				// For each dependency received go through each of the keys
+			for( const dependency of Object.keys( dependencyMap ) ) {
 
-			if( !dependency.startsWith( INTERNAL_SCOPE ) ) {
-				continue;
-			}
+				if( !dependency.startsWith( INTERNAL_SCOPE ) ) {
+					continue;
+				}
 
 			const trimmedDepedency = trimScope( dependency );
 			const dependencyPackagePath = Path.normalize( `${ packagesPath }/${ trimmedDepedency }/package.json` );
@@ -776,15 +781,15 @@ HELPER.generate = (() => {
 				// If there is a package.json file
 				if( Fs.existsSync( dependencyPackagePath ) ) {
 					// Get the data inside the package.json
-					const packageJson = require( dependencyPackagePath );
+						const packageJson = require( dependencyPackagePath );
 
-					// Add the dependency information to the bundle
-					dependencyBundle[ dependency ] = dependencies[ dependency ];
+						// Add the dependency information to the bundle
+						dependencyBundle[ dependency ] = dependencyMap[ dependency ];
 
-					// Iterate over new dependencies
-					HELPER.generate.getAllDependencies( packageJson.dependencies, dependencyBundle );
-				}
-			};
+						// Iterate over new dependencies
+						HELPER.generate.getAllDependencies( packageJson.dependencies, dependencyBundle );
+					}
+				};
 
 			return dependencyBundle;
 		},
@@ -794,24 +799,27 @@ HELPER.generate = (() => {
 		 *
 		 * @param {array} allModules - An array of all modules
 		 */
-		index: ( allModules ) => {
-			let index = Fs.readFileSync( Path.normalize(`${ __dirname }/../.templates/index/index.html`), 'utf-8'); // this will be the index file
-			let replacement = '';
+			index: ( allModules ) => {
+				let index = Fs.readFileSync( Path.normalize(`${ __dirname }/../.templates/index/index.html`), 'utf-8'); // this will be the index file
+				let replacement = '';
 
 			// iterate over all packages
-			if( allModules !== undefined && allModules.length > 0 ) {
-				for( let module of allModules ) {
-					const pkg = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
-					let jquery = '';
-					let react = '';
+				if( allModules !== undefined && allModules.length > 0 ) {
+					for( let module of allModules ) {
+						const pkg = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
+						const pancakeModule = pkg.pancake && pkg.pancake['pancake-module'] ?
+							pkg.pancake['pancake-module'] :
+							{};
+						let jquery = '';
+						let react = '';
 
-					if( pkg.pancake['pancake-module'].jquery ) {
-						jquery = `<a class="link" href="packages/${ module }/tests/jquery/">jquery</a>`;
-					}
+						if( pancakeModule.jquery ) {
+							jquery = `<a class="link" href="packages/${ module }/tests/jquery/">jquery</a>`;
+						}
 
-					if( pkg.pancake['pancake-module'].react ) {
-						react = `<a class="link" href="packages/${ module }/tests/react/">react</a>`;
-					}
+						if( pancakeModule.react ) {
+							react = `<a class="link" href="packages/${ module }/tests/react/">react</a>`;
+						}
 
 					replacement += `<li>` +
 						`	<a class="module-list__headline" href="packages/${ module }/tests/">${ module }</a>` +
@@ -982,15 +990,22 @@ HELPER.test = (() => {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // PUBLIC METHODS
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-	return {
-		init: () => {
-			const packagesPath = Path.normalize(`${ __dirname }/../packages/`);
-			const allModules = GetFolders( packagesPath );
+		return {
+			init: () => {
+				const packagesPath = Path.normalize(`${ __dirname }/../packages/`);
+				const allModules = GetFolders( packagesPath );
+				const legacyPancakeModules = allModules.filter( ( module ) => {
+					const packagePath = Path.normalize(`${ __dirname }/../packages/${ module }/package.json`);
+					const packageJson = require( packagePath );
 
-			HELPER.test.dependencies( allModules );
-			HELPER.test.packagejson( allModules );
-			HELPER.test.changelog( allModules );
-		},
+					return packageJson.pancake !== undefined
+						&& packageJson.pancake['pancake-module'] !== undefined;
+				});
+
+				HELPER.test.dependencies( legacyPancakeModules );
+				HELPER.test.packagejson( legacyPancakeModules );
+				HELPER.test.changelog( legacyPancakeModules );
+			},
 
 		/**
 		 * Test all dependencies

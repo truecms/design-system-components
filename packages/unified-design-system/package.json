@@ -24,6 +24,16 @@
     "./css/govau-theme.css": "./dist/css/govau-theme.css",
     "./css/govau-components.css": "./dist/css/govau-components.css"
   },
+  "dependencies": {
+    "@truecms/accordion": "workspace:*",
+    "@truecms/buttons": "workspace:*",
+    "@truecms/header": "workspace:*"
+  },
+  "peerDependencies": {
+    "@truecms/accordion": "^8.0.1",
+    "@truecms/buttons": "^4.0.1",
+    "@truecms/header": "^5.0.1"
+  },
   "engines": {
     "node": ">=22.0.0",
     "npm": ">=10.0.0",

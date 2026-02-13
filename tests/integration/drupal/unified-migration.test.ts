@@ -35,6 +35,4 @@ describe('Drupal unified package migration', () => {
     expect(result.ok).toBe(true);
     expect(result.differences).toHaveLength(0);
   });
-}
-);
-
+});

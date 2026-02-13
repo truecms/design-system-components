@@ -1,0 +1,92 @@
+name: Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Enable Corepack (pnpm)
+        run: |
+          # Use the pnpm version pinned in package.json's "packageManager"
+          corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm run build
+
+      - name: Prepare Pages artifact
+        run: pnpm run build:site-dist
+
+      - name: Verify Pages artifact
+        run: |
+          echo "Listing site-dist:" && ls -la site-dist || true
+          test -f site-dist/index.html || (echo "index.html missing in site-dist" && exit 1)
+
+      - name: Publish to Cloudflare Pages (production/preview)
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PAGES_PROJECT }}
+          directory: site-dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          # For direct uploads (no Git-connected Pages), 'production' forces a production deploy.
+          # For PRs we publish a preview labeled by PR number.
+          branch: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: site-dist
+          if-no-files-found: error
+
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Cloudflare Pages — build-and-deploy"
+            echo
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Status | ${{ job.status }} |"
+            echo "| Event | ${GITHUB_EVENT_NAME} |"
+            echo "| Branch | ${GITHUB_REF_NAME} |"
+            if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+              echo "| PR | #${{ github.event.pull_request.number }} |"
+            fi
+            echo
+            echo "- Built site-dist for Pages deployment."
+          echo "- If this run is on master, a production deploy was attempted."
+          } >> "$GITHUB_STEP_SUMMARY"

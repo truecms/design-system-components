@@ -22,6 +22,9 @@ describe('Drupal migration accessibility (fixture)', () => {
       includeNotices: false,
       includeWarnings: false,
       runners: ['axe'],
+      chromeLaunchConfig: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      },
     });
 
     const seriousIssues = results.issues.filter(

@@ -14,13 +14,23 @@ describe('unified prepublish smoke test', () => {
     });
 
     const packDestination = fs.mkdtempSync(path.join(os.tmpdir(), 'unified-pack-'));
-    const tarballPath = execSync(
+    const packOutput = execSync(
       `pnpm -s pack --pack-destination "${packDestination}"`,
       {
         cwd: packageDir,
         encoding: 'utf8',
       },
-    ).trim();
+    );
+
+    // pnpm can print extra warning lines in CI; keep only the tarball path line.
+    const tarballLine = packOutput
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .findLast((line) => line.endsWith('.tgz')) || '';
+    const tarballPath = path.isAbsolute(tarballLine) ?
+      tarballLine :
+      path.join(packageDir, tarballLine);
 
     expect(fs.existsSync(tarballPath)).toBe(true);
 

@@ -11,17 +11,17 @@ const INCLUDED_DIRS = ['lib', 'tests'];
 const TEMPLATE_INDEX = Path.join(ROOT, '.templates', 'index', 'index.html');
 const BUILT_PACKAGES = new Set();
 
-const readPackageBuildScript = (packagePath) => {
+const readPackageScripts = (packagePath) => {
 	const packageJsonPath = Path.join(packagePath, 'package.json');
 	if (!Fs.existsSync(packageJsonPath)) {
-		return null;
+		return {};
 	}
 
 	try {
 		const packageJson = JSON.parse(Fs.readFileSync(packageJsonPath, 'utf8'));
-		return packageJson && packageJson.scripts ? packageJson.scripts.build : null;
+		return packageJson && packageJson.scripts ? packageJson.scripts : {};
 	} catch {
-		return null;
+		return {};
 	}
 };
 
@@ -53,15 +53,16 @@ const ensurePackageArtifacts = (packageName, packagePath) => {
 		return;
 	}
 
-	const buildScript = readPackageBuildScript(packagePath);
-	if (!buildScript) {
+	const scripts = readPackageScripts(packagePath);
+	if (!scripts['build:js'] && !scripts.build) {
 		return;
 	}
 
 	console.log(
 		`[site-dist] Missing generated tests/site assets for ${packageName}; running package build.`
 	);
-	execSync(`pnpm --filter "./packages/${packageName}" run build`, {
+	const scriptToRun = scripts['build:js'] ? 'build:js' : 'build';
+	execSync(`pnpm --filter "./packages/${packageName}" run ${scriptToRun}`, {
 		cwd: ROOT,
 		stdio: 'inherit',
 	});

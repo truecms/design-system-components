@@ -46,6 +46,16 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [ ] Publish/update migration quickstart references used by downstream repos.
 - [ ] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
 
+### M6. Static major-line branching strategy
+- [ ] Freeze current `master` as legacy major line and preserve it as `1.x`.
+- [ ] Cut modern de-pancake line as `2.x` from the current migration branch baseline.
+- [ ] Switch repository default branch from `master` to `2.x`.
+- [ ] Retire/delete `master` only after default-branch switch, branch protections, and CI required-check updates are complete.
+- [ ] Define release policy:
+  - legacy fixes only on `1.x`
+  - all new feature/de-pancake work on `2.x`
+  - explicit cherry-pick/backport policy between `2.x` and `1.x`
+
 ## Verification Gates
 - [x] No regression in canonical markup/classes/behavior.
 - [x] Accessibility baseline remains green.
@@ -79,3 +89,13 @@ Use `../MULTI_REPO_ROADMAP.md` for cross-repo blockers and sequencing.
   - `pnpm run test:unified`
 - `changeset publish --dry-run` confirms publish intent for all new majors but remains blocked by npm credentials/scope (`NPM_TOKEN` unresolved, `npm whoami` unauthorized, and `E404` on `PUT` for `@truecms/*`).
 - Remaining hard blocker is npm credential/scope access for the authenticated publishing identity.
+
+### 2026-02-14 branch inventory for static lines (planning)
+- Remote branch inventory does not currently include dedicated static major-line branches such as `1.x` or `2.x`.
+- Existing remote tags found:
+  - `v2025.11.04`
+  - `v2025.11.04-dev.0`
+- Agreed target model (planning only, not executed yet):
+  - keep current `master` content as legacy line and preserve it as `1.x`
+  - promote the de-pancake major line to `2.x` and make it the new default branch
+  - remove `master` after default-branch cutover and protection/CI updates

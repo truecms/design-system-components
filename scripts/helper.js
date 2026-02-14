@@ -1045,7 +1045,7 @@ HELPER.test = (() => {
 				}
 			}
 
-			HELPER.log.success(`All pancakes without dependency conflicts`);
+			HELPER.log.success(`All modules without dependency conflicts`);
 		},
 
 		/**
@@ -1061,22 +1061,17 @@ HELPER.test = (() => {
 				for( let module of allModules ) {
 					const packagesPKG = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
 					const hasSass = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/sass/_module.scss`) );
-					const hasJS = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/js/module.js`) );
 					const hasReact = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/js/react.js`) );
+					const dependencies = { ...(packagesPKG.dependencies || {}) };
 					// const hasJQuery = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/js/jquery.js`) );
 
-					// testing lifecycle script
-					if( packagesPKG.scripts.postinstall !== 'pancake' ) {
-						error += `The module ${ module } is missing the postinstall lifecycle script "pancake".\n`;
+					// legacy Pancake hooks should be fully removed
+					if( packagesPKG.scripts && packagesPKG.scripts.postinstall === 'pancake' ) {
+						error += `The module ${ module } still has the legacy postinstall lifecycle script "pancake".\n`;
 					}
 
-					// testing pancake object
-					if( packagesPKG.pancake === undefined ) {
-						error += `The module ${ module } is missing the pancake object.\n`;
-
-						packagesPKG.pancake = {};
-						packagesPKG.pancake['pancake-module'] = {};
-						packagesPKG.pancake['pancake-module'].plugins = [];
+					if( packagesPKG.pancake !== undefined ) {
+						error += `The module ${ module } still has the legacy pancake config object.\n`;
 					}
 
 					// testing build scripts
@@ -1088,83 +1083,25 @@ HELPER.test = (() => {
 						error += `The module ${ module } is missing the "build:react" task inside the build script.\n`;
 					}
 
-					// testing pancake plugins
-					if( !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-json') ) {
-							error += `The module ${ module } is missing the "pancake-json" plugin inside the pancake object.\n`;
-					}
-
-					if( hasSass && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-sass') ) {
-							error += `The module ${ module } is missing the "pancake-sass" plugin inside the pancake object.\n`;
-					}
-
-					if( hasJS && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-js') ) {
-							error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
-					}
-
-					if( hasReact && !packagesPKG.pancake['pancake-module'].plugins.includes('@truecms/pancake-react') ) {
-							error += `The module ${ module } is missing the "pancake-js" plugin inside the pancake object.\n`;
-					}
-
-					// testing pancake plugin settings
-					if( hasSass && packagesPKG.pancake['pancake-module'].sass === undefined ) {
-						error += `The module ${ module } is missing the "pancake-sass" plugin settings inside the pancake object.\n`;
-					}
-
-					if( hasJS && packagesPKG.pancake['pancake-module'].js === undefined ) {
-						error += `The module ${ module } is missing the "pancake-sass" plugin settings inside the pancake object.\n`;
-					}
-
-					if( hasReact && packagesPKG.pancake['pancake-module'].react === undefined ) {
-						error += `The module ${ module } is missing the "pancake-sass" plugin settings inside the pancake object.\n`;
-					}
-
 					// testing react modules have a main entry point
 					if( hasReact && packagesPKG.main === undefined ) {
 						error += `The module ${ module } is missing the main entry point for react.\n`;
 					}
 
-					// testing all pancake plugins are also a dependency
-                    if( packagesPKG.dependencies['@truecms/pancake'] === undefined ) {
-                        error += `The module ${ module } is missing "pancake" as a dependency.\n`;
-                    }
-                    else {
-                        delete packagesPKG.dependencies['@truecms/pancake'];
-                    }
-
-                    if( packagesPKG.dependencies['@truecms/pancake-json'] === undefined ) {
-                        error += `The module ${ module } is missing "pancake-json" as a dependency.\n`;
-                    }
-                    else {
-                        delete packagesPKG.dependencies['@truecms/pancake-json'];
-                    }
-
-                    if( hasSass && packagesPKG.dependencies['@truecms/pancake-sass'] === undefined ) {
-                        error += `The module ${ module } is missing "pancake-sass" as a dependency.\n`;
-                    }
-                    else {
-                        delete packagesPKG.dependencies['@truecms/pancake-sass'];
-                    }
-
-                    if( hasJS && packagesPKG.dependencies['@truecms/pancake-js'] === undefined ) {
-                        error += `The module ${ module } is missing "pancake-js" as a dependency.\n`;
-                    }
-                    else {
-                        delete packagesPKG.dependencies['@truecms/pancake-js'];
-                    }
-
-                    if( hasReact && packagesPKG.dependencies['@truecms/pancake-react'] === undefined ) {
-                        error += `The module ${ module } is missing "pancake-react" as a dependency.\n`;
-                    }
-                    else {
-                        delete packagesPKG.dependencies['@truecms/pancake-react'];
-                    }
+					// no package should declare legacy Pancake dependencies
+					const legacyPancakeDeps = Object.keys( dependencies ).filter( ( dep ) =>
+						dep === '@truecms/pancake' || dep.startsWith( '@truecms/pancake-' )
+					);
+					if( legacyPancakeDeps.length > 0 ) {
+						error += `The module ${ module } still declares legacy dependencies: ${ legacyPancakeDeps.join(', ') }.\n`;
+					}
 
 					// testing all remaining dependencies are also in peerdependencies
 					if( module === 'core' ) { // the exception to the rule is sass-versioning inside core
-						delete packagesPKG.dependencies['sass-versioning'];
+						delete dependencies['sass-versioning'];
 					}
 
-                    const remainingDependencies = packagesPKG.dependencies || {};
+                    const remainingDependencies = dependencies;
                     const peerDependencies = packagesPKG.peerDependencies || {};
 
                     const remainingDependencyKeys = Object.keys( remainingDependencies ).sort();
@@ -1186,16 +1123,11 @@ HELPER.test = (() => {
                         error += `The module ${ module } doesn’t have the right amount of devDependencies.\n`;
                     }
 
-					// testing for pancake config
-					if( packagesPKG.pancake['auto-save'] !== undefined ) {
-						error += `The module ${ module } has the pancake config saved though we don’t want that…\n`;
-					}
-
 				}
 			}
 
 			if( error === '' ) {
-				HELPER.log.success(`All pancakes have the appropriate package.json entries`);
+				HELPER.log.success(`All modules have the appropriate package.json entries`);
 			}
 			else {
 				HELPER.log.error(`Some package.json files contain inconsistencies:\n   ${ error.split('\n').join('\n   ') }`);

@@ -15,4 +15,5 @@ If you need branch-specific instructions before merge (for example `feature/d11`
 ## Required migration inputs
 
 - `PROJECT_ROOT` (path to the Drupal project)
-- `THEME_DIR` (theme path, absolute or relative to `PROJECT_ROOT`)
+- `THEME_DIR` (primary sub-theme path, absolute or relative to `PROJECT_ROOT`)
+- `BASE_THEME_DIR` (optional explicit base theme path; otherwise auto-resolved from `THEME_DIR` `.info.yml`)

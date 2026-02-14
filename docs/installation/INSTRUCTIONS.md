@@ -4,7 +4,7 @@ This file is the canonical, assistant-agnostic workflow for migrating a GovCMS U
 
 ## Objective
 
-- Upgrade a GovCMS UIKit-based Drupal theme from `@gov.au/*` to `@truecms/*`.
+- Upgrade a GovCMS UIKit-based Drupal theme stack (base theme + sub-theme) from `@gov.au/*` to `@truecms/*`.
 - Keep existing Drupal integration intact (no unnecessary Twig or `libraries.yml` rewrites).
 - Produce a successful Node 22 build and clean dependency audit.
 
@@ -63,25 +63,52 @@ The assistant must run this gate and only continue if it passes:
      - https://github.com/nvm-sh/nvm#installing-and-updating
 5. Do not start migration steps until this gate is green.
 
+## Theme Topology Gate (Assistant Must Complete Before Migration)
+
+The assistant must resolve the target theme stack before making changes:
+
+1. Identify the primary sub-theme from input (`THEME_DIR`) and read its `.info.yml`.
+2. Resolve base theme machine name from sub-theme `.info.yml` (`base theme: ...`).
+3. Resolve `BASE_THEME_DIR` by searching `web/themes/custom` then `web/themes/contrib`.
+4. Build `THEME_TARGET_DIRS` as:
+   - `BASE_THEME_DIR` (if resolved)
+   - `THEME_DIR`
+5. Detect where UIKit dependencies are declared:
+   - For each directory in `THEME_TARGET_DIRS`, inspect `package.json` (if present) for `@gov.au/*` and `@truecms/*`.
+6. Decision rules:
+   - If base theme is under `web/themes/contrib` (Composer-managed), ask user whether to vendorize/copy it into `web/themes/custom` and commit a baseline before migration.
+   - If user approves, execute vendorize action:
+     - copy base theme to `web/themes/custom/<base-theme-machine-name>`
+     - ensure working theme points to the custom copy (update `.info.yml` base theme only if machine name changes)
+     - commit baseline before migration changes
+     - document how future Composer updates will avoid overwriting migrated custom base theme
+   - If user declines, continue with explicit acknowledgement that rollback/patching may be harder.
+7. Do not start migration steps until this gate is green and logged in the migration report.
+
 ## Migration Applicability Gate (Assistant Must Complete Before Migration)
 
-The assistant must confirm this is a legacy GovAU theme before applying this migration:
+The assistant must confirm this is a legacy GovAU migration target across the resolved theme stack:
 
-1. In `THEME_DIR/package.json`, confirm legacy dependencies exist:
-   - `rg -n '"@gov\\.au/' "$THEME_DIR/package.json"`
-2. Confirm theme source still contains legacy namespace:
-   - `rg -n "@gov\\.au/" -S "$THEME_DIR"`
-3. Confirm it is not already migrated in dependencies:
-   - `rg -n '"@truecms/' "$THEME_DIR/package.json"`
-4. Decision rules:
-   - If `@gov.au/*` is missing from `package.json`, stop. Migration is not applicable.
-   - If `@truecms/*` is already present in `package.json`, stop and report "already migrated or partially migrated" for manual review.
-5. Do not start migration steps until this gate is green.
+1. For each dependency-owning theme in `THEME_TARGET_DIRS` (where `package.json` declares UIKit dependencies):
+   - Confirm legacy dependencies exist:
+     - `rg -n '"@gov\\.au/' "<theme-dir>/package.json"`
+   - Confirm theme source still contains legacy namespace:
+     - `rg -n "@gov\\.au/" -S "<theme-dir>"`
+   - Confirm it is not already migrated in dependencies:
+     - `rg -n '"@truecms/' "<theme-dir>/package.json"`
+2. Decision rules:
+   - If no theme in `THEME_TARGET_DIRS` declares `@gov.au/*`, stop. Migration is not applicable.
+   - If all dependency-owning themes already declare `@truecms/*`, stop and report "already migrated or partially migrated" for manual review.
+3. Sub-theme dependency rule:
+   - If a sub-theme does not declare UIKit dependencies in its own `package.json`, do not add them there. Keep dependency ownership where it already exists (typically base theme).
+4. Do not start migration steps until this gate is green.
 
 ## Required Inputs
 
 - `PROJECT_ROOT`: path to the Drupal repository.
-- `THEME_DIR`: path to the custom theme directory, or path relative to `PROJECT_ROOT`.
+- `THEME_DIR`: path to the primary sub-theme directory, or path relative to `PROJECT_ROOT`.
+- `BASE_THEME_DIR`: optional explicit base theme path. If omitted, resolve from `THEME_DIR` `.info.yml`.
+- `THEME_TARGET_DIRS`: derived list from topology gate (`BASE_THEME_DIR` + `THEME_DIR`).
 - `MIGRATION_REPORT`: optional path for the run log file. If not provided, use `"$THEME_DIR/migration-report-truecms.md"`.
 
 ## Migration Report (Mandatory, Run-Scoped)
@@ -102,7 +129,9 @@ Recommended report template:
 
 ## Context
 - Project root: <PROJECT_ROOT>
-- Theme dir: <THEME_DIR>
+- Sub-theme dir: <THEME_DIR>
+- Base theme dir: <BASE_THEME_DIR>
+- Theme target dirs: <THEME_TARGET_DIRS>
 - Started at: <ISO8601 timestamp>
 - Assistant: <agent name/version>
 
@@ -148,6 +177,8 @@ Execution discipline (mandatory):
 
 ### Stage 0: Initialize Tracking
 - [ ] Confirm `PROJECT_ROOT` and `THEME_DIR`.
+- [ ] Resolve and confirm `BASE_THEME_DIR`.
+- [ ] Build and confirm `THEME_TARGET_DIRS`.
 - [ ] Set `MIGRATION_REPORT` path.
 - [ ] Create/open migration report.
 - [ ] Log start timestamp and environment context.
@@ -168,45 +199,49 @@ Execution discipline (mandatory):
 - [ ] If needed and `nvm` is missing, stop and provide `nvm` install guidance.
 - [ ] Log prerequisite gate outcome.
 
-### Stage 3: Migration Applicability Gate
-- [ ] Confirm `@gov.au/*` exists in `package.json`.
-- [ ] Confirm source contains `@gov.au/` references.
-- [ ] Confirm `@truecms/*` is not already in `package.json`.
+### Stage 3: Theme Topology + Migration Applicability Gate
+- [ ] Resolve base/sub-theme topology from `.info.yml`.
+- [ ] If base theme is Composer-managed in `contrib`, capture user decision on vendorize-to-custom action.
+- [ ] If vendorize-to-custom is approved, execute copy + baseline commit before migration.
+- [ ] Confirm at least one dependency-owning target theme declares `@gov.au/*`.
+- [ ] Confirm dependency-owning target themes are not already fully migrated to `@truecms/*`.
+- [ ] Confirm sub-theme dependency rule: do not add UIKit dependencies to sub-theme if not declared there.
 - [ ] Stop and log if migration is not applicable.
-- [ ] Log applicability gate outcome.
+- [ ] Log topology and applicability gate outcomes.
 
 ### Stage 4: Baseline Capture
-- [ ] Capture pre-migration dependency list.
-- [ ] Capture pre-migration script/tooling state.
-- [ ] Capture `@gov.au/` scan results.
+- [ ] Capture pre-migration dependency list for each dependency-owning theme in `THEME_TARGET_DIRS`.
+- [ ] Capture pre-migration script/tooling state for each target theme with `package.json`.
+- [ ] Capture `@gov.au/` scan results across all `THEME_TARGET_DIRS`.
 - [ ] Log baseline capture outputs.
 
 ### Stage 5: Dependency Migration
-- [ ] Replace each `@gov.au/*` dependency with mapped `@truecms/*`.
-- [ ] Align migrated packages with expected major versions from table.
-- [ ] Ensure `@truecms/pancake` and `@truecms/pancake-sass` are present.
+- [ ] Replace each `@gov.au/*` dependency with mapped `@truecms/*` in dependency-owning theme(s) only.
+- [ ] Align migrated packages with expected major versions from table for each dependency-owning theme.
+- [ ] Ensure `@truecms/pancake` and `@truecms/pancake-sass` are present in dependency-owning theme(s).
+- [ ] Do not add UIKit dependencies to a sub-theme that does not already declare them.
 - [ ] Log dependency migration changes.
 
 ### Stage 6: Source and Build Script Updates
-- [ ] Replace hard-coded `node_modules/@gov.au/...` import paths.
-- [ ] Ensure Sass base imports reference `@truecms/core`.
-- [ ] Apply setup/restore script updates only if needed.
+- [ ] Replace hard-coded `node_modules/@gov.au/...` import paths across affected files in `THEME_TARGET_DIRS`.
+- [ ] Ensure Sass base imports reference `@truecms/core` in each affected theme.
+- [ ] Apply setup/restore script updates only in theme(s) that actually build UIKit assets.
 - [ ] Log file-level changes.
 
 ### Stage 7: Install, Build, and Validate
-- [ ] Clean install (`rm -rf node_modules package-lock.json` then `npm install --ignore-scripts`).
-- [ ] Run `npm audit`.
-- [ ] Run `npm run build`.
-- [ ] Run package version validation command against matrix.
-- [ ] If needed, run `npm rebuild` or reinstall without `--ignore-scripts`.
+- [ ] For each dependency-owning theme: clean install (`rm -rf node_modules package-lock.json` then `npm install --ignore-scripts`).
+- [ ] For each dependency-owning theme: run `npm audit`.
+- [ ] For each build-owning theme: run `npm run build`.
+- [ ] Run package version validation command against matrix for each dependency-owning theme.
+- [ ] If needed, run `npm rebuild` or reinstall without `--ignore-scripts` in affected theme(s).
 - [ ] Log command outputs and outcomes.
 
 ### Stage 8: Final Verification
-- [ ] Verify no `@gov.au/` references remain.
-- [ ] Verify each pre-migration dependency has mapped replacement.
-- [ ] Verify matrix version checks pass for all migrated packages.
-- [ ] Verify `@truecms/pancake-js >= 2.0.2`.
-- [ ] Verify generated assets exist.
+- [ ] Verify no `@gov.au/` references remain across `THEME_TARGET_DIRS`.
+- [ ] Verify each pre-migration dependency has mapped replacement in dependency-owning theme(s).
+- [ ] Verify matrix version checks pass for all migrated packages in each dependency-owning theme.
+- [ ] Verify `@truecms/pancake-js >= 2.0.2` for each dependency-owning theme.
+- [ ] Verify generated assets exist for base theme and sub-theme build outputs.
 - [ ] Verify Drupal smoke test pass.
 - [ ] Log final verification outcome.
 
@@ -262,7 +297,7 @@ After migration, every migrated package must match the expected target in "Depen
 - For `@truecms/pancake-js`, resolved version must be `>=2.0.2`.
 - For `@truecms/pancake-react`, validate only if present (optional dependency).
 
-Run this command in `THEME_DIR` to enforce the rule:
+Run this command in each dependency-owning theme directory in `THEME_TARGET_DIRS` to enforce the rule:
 
 ```bash
 node -e '
@@ -396,8 +431,10 @@ console.log("Version validation passed");
 1. Preflight and git safety
    - Run `git -C "$PROJECT_ROOT" status -sb` (if Git is initialized).
    - If on `main`/`master`, create or switch to `feature/d11` (or the user-provided feature branch).
-   - Confirm `package.json` exists in `THEME_DIR`.
+   - Confirm `THEME_DIR` exists and resolve `BASE_THEME_DIR`.
+   - Build `THEME_TARGET_DIRS`.
    - Run the "Prerequisite Gate" above and do not proceed unless it passes.
+   - Run the "Theme Topology Gate" above and do not proceed unless it passes.
    - Run the "Migration Applicability Gate" above and do not proceed unless it passes.
    - Run the "Git Safety Gate" above and do not proceed until user decision is captured.
 
@@ -408,39 +445,42 @@ console.log("Version validation passed");
    - Verify `node -v` and `npm -v`.
 
 3. Baseline scan
-   - Run `rg -n "@gov\\.au/" -S "$THEME_DIR"`.
-   - Run `rg -n "node_modules/@gov\\.au" -S "$THEME_DIR"`.
-   - Capture current scripts/dependencies from theme `package.json`.
-   - Capture legacy dependency list from `package.json` to verify 1:1 replacement after migration.
+   - For each directory in `THEME_TARGET_DIRS`:
+     - Run `rg -n "@gov\\.au/" -S "<theme-dir>"`.
+     - Run `rg -n "node_modules/@gov\\.au" -S "<theme-dir>"`.
+   - Capture scripts/dependencies from `package.json` for each theme that has one.
+   - Capture legacy dependency list from each dependency-owning theme to verify 1:1 replacement after migration.
 
 4. Migrate dependencies
-   - Replace each `@gov.au/<component>` dependency with `@truecms/<component>` (same component name).
-   - Align each replaced component with the major version listed in "Dependency Jump Matrix".
-   - Ensure these packages are present:
+   - In dependency-owning theme(s) only, replace each `@gov.au/<component>` dependency with `@truecms/<component>` (same component name).
+   - Align each replaced component with the major version listed in "Dependency Jump Matrix" in each dependency-owning theme.
+   - Ensure these packages are present in dependency-owning theme(s):
      - `@truecms/pancake`
      - `@truecms/pancake-sass`
-   - Ensure `@truecms/pancake-js` resolves to `>=2.0.2` (direct or transitive).
+   - Ensure `@truecms/pancake-js` resolves to `>=2.0.2` (direct or transitive) in each dependency-owning theme.
+   - Do not add UIKit dependencies to sub-theme `package.json` if sub-theme does not declare them.
 
 5. Update scripts and JS restore flow (if needed)
-   - Prefer a safe setup script:
+   - In each build-owning theme, prefer a safe setup script:
      - `"setup": "npm install --ignore-scripts && (./node_modules/.bin/pancake || true) && npm run restore-uikit --if-present"`
-   - If the theme expects component files in `assets/uikit/js`, add:
+   - If a build-owning theme expects component files in `assets/uikit/js`, add:
      - `"restore-uikit": "node restore-uikit-js.js"`
      - `restore-uikit-js.js` that copies `@truecms/*/lib/js/module.js` (or `main.js`) to `assets/uikit/js/<component>.js`.
    - Keep existing project-specific scripts unless they directly block installs or builds.
 
 6. Update imports and paths
-   - Replace hard-coded `node_modules/@gov.au/...` imports with `node_modules/@truecms/...`.
-   - Confirm base Sass imports reference `@truecms/core`.
+   - Across `THEME_TARGET_DIRS`, replace hard-coded `node_modules/@gov.au/...` imports with `node_modules/@truecms/...` where present.
+   - Confirm base Sass imports reference `@truecms/core` in each affected theme.
 
 7. Install, audit, build
-   - In `THEME_DIR`, run:
+   - For each dependency-owning theme, run:
      - `rm -rf node_modules package-lock.json`
      - `npm install --ignore-scripts`
      - `npm ls @truecms/pancake @truecms/pancake-sass @truecms/pancake-js`
      - `npm audit`
+   - For each build-owning theme, run:
      - `npm run build`
-   - If Pancake assets are missing after install, run `npm rebuild` or rerun `npm install` without `--ignore-scripts`.
+   - If Pancake assets are missing after install, run `npm rebuild` or rerun `npm install` without `--ignore-scripts` in the affected theme.
 
 8. Verify migration
    - Complete the Stage 8 atomic task checklist above.
@@ -448,10 +488,11 @@ console.log("Version validation passed");
 
 ## Acceptance Criteria
 
-- Theme source no longer references `@gov.au/*`.
+- Theme source no longer references `@gov.au/*` across base and sub-theme target directories.
 - Build succeeds on Node 22.
 - `npm audit` has no unresolved vulnerabilities (or blockers are explicitly documented with package/version).
 - Atomic task board is fully completed and marked.
+- Base theme + sub-theme topology decision is documented (including Composer-managed parent handling, if applicable).
 - Final report includes:
   - changed files
   - executed commands
@@ -467,20 +508,23 @@ console.log("Version validation passed");
 - [ ] `npm` is `10+`.
 - [ ] If initial Node was not `v22.x` and `nvm` existed, assistant switched runtime to Node 22 automatically.
 - [ ] If initial Node was not `v22.x` and `nvm` did not exist, assistant stopped with prerequisite guidance and did not run migration.
-- [ ] Pre-migration applicability gate passed: `package.json` contained `@gov.au/*` and did not contain `@truecms/*`.
+- [ ] Theme topology gate passed: base theme and sub-theme directories were resolved and logged.
+- [ ] If base theme was Composer-managed in `contrib`, user decision on vendorize-to-custom was captured and executed when approved.
+- [ ] Pre-migration applicability gate passed: at least one dependency-owning theme contained `@gov.au/*` and targets were not already fully migrated.
 - [ ] Git safety gate completed and decision recorded.
 - [ ] If Git was missing, user chose whether to initialize baseline snapshot before migration.
 - [ ] If Git working tree was dirty, user chose stash/commit/proceed-as-is and assistant executed chosen action when applicable.
-- [ ] All `@gov.au/*` dependencies were replaced with `@truecms/*`.
-- [ ] Replaced packages match expected major versions from "Dependency Jump Matrix".
-- [ ] `@truecms/pancake` and `@truecms/pancake-sass` are installed.
-- [ ] Resolved `@truecms/pancake-js` is `>=2.0.2`.
-- [ ] Version validation for every migrated package in the matrix passed (no mismatches).
-- [ ] Every pre-migration legacy dependency has its mapped `@truecms/*` replacement.
-- [ ] `rg -n "@gov\\.au/" -S "$THEME_DIR"` returns no matches.
-- [ ] `npm audit` reports 0 unresolved vulnerabilities.
-- [ ] `npm run build` succeeds.
-- [ ] Expected built assets are present in `assets/uikit/css` and `assets/uikit/js`.
+- [ ] All `@gov.au/*` dependencies were replaced with `@truecms/*` in dependency-owning theme(s).
+- [ ] Sub-theme dependency rule was respected (no UIKit dependency additions where sub-theme did not declare them).
+- [ ] Replaced packages match expected major versions from "Dependency Jump Matrix" in dependency-owning theme(s).
+- [ ] `@truecms/pancake` and `@truecms/pancake-sass` are installed in dependency-owning theme(s).
+- [ ] Resolved `@truecms/pancake-js` is `>=2.0.2` in dependency-owning theme(s).
+- [ ] Version validation for every migrated package in the matrix passed (no mismatches) for each dependency-owning theme.
+- [ ] Every pre-migration legacy dependency has its mapped `@truecms/*` replacement in dependency-owning theme(s).
+- [ ] `rg -n "@gov\\.au/" -S "<theme-dir>"` returns no matches for all `THEME_TARGET_DIRS`.
+- [ ] `npm audit` reports 0 unresolved vulnerabilities for each dependency-owning theme.
+- [ ] `npm run build` succeeds for each build-owning theme.
+- [ ] Expected built assets are present in base-theme and sub-theme output locations (`assets/uikit/css` and `assets/uikit/js` where applicable).
 - [ ] Drupal smoke test confirms core UI components render and behave correctly.
 - [ ] No unchecked items remain in the Atomic Task Board.
 

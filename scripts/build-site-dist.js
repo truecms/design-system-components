@@ -2,12 +2,71 @@
 
 const Fs = require('fs');
 const Path = require('path');
+const { execSync } = require('child_process');
 
 const ROOT = process.cwd();
 const SITE_DIST = Path.join(ROOT, 'site-dist');
 const PACKAGES_DIR = Path.join(ROOT, 'packages');
 const INCLUDED_DIRS = ['lib', 'tests'];
 const TEMPLATE_INDEX = Path.join(ROOT, '.templates', 'index', 'index.html');
+const BUILT_PACKAGES = new Set();
+
+const readPackageBuildScript = (packagePath) => {
+	const packageJsonPath = Path.join(packagePath, 'package.json');
+	if (!Fs.existsSync(packageJsonPath)) {
+		return null;
+	}
+
+	try {
+		const packageJson = JSON.parse(Fs.readFileSync(packageJsonPath, 'utf8'));
+		return packageJson && packageJson.scripts ? packageJson.scripts.build : null;
+	} catch {
+		return null;
+	}
+};
+
+const packageNeedsSiteArtifacts = (packagePath) => {
+	const siteTestsPath = Path.join(packagePath, 'tests', 'site');
+	if (!Fs.existsSync(siteTestsPath)) {
+		return false;
+	}
+
+	const hasTestScss = Fs.existsSync(Path.join(siteTestsPath, 'test.scss'));
+	const hasModuleJs = Fs.existsSync(Path.join(packagePath, 'src', 'js', 'module.js'));
+	if (!hasTestScss && !hasModuleJs) {
+		return false;
+	}
+
+	const hasStyle = Fs.existsSync(Path.join(siteTestsPath, 'style.css'));
+	const hasScript = Fs.existsSync(Path.join(siteTestsPath, 'script.js'));
+	const needsStyle = hasTestScss && !hasStyle;
+	const needsScript = hasModuleJs && !hasScript;
+	return needsStyle || needsScript;
+};
+
+const ensurePackageArtifacts = (packageName, packagePath) => {
+	if (BUILT_PACKAGES.has(packageName)) {
+		return;
+	}
+
+	if (!packageNeedsSiteArtifacts(packagePath)) {
+		return;
+	}
+
+	const buildScript = readPackageBuildScript(packagePath);
+	if (!buildScript) {
+		return;
+	}
+
+	console.log(
+		`[site-dist] Missing generated tests/site assets for ${packageName}; running package build.`
+	);
+	execSync(`pnpm --filter "./packages/${packageName}" run build`, {
+		cwd: ROOT,
+		stdio: 'inherit',
+	});
+	BUILT_PACKAGES.add(packageName);
+};
 
 const getPackageEntries = () => {
 	const dirents = Fs.existsSync(PACKAGES_DIR)
@@ -66,6 +125,7 @@ const copyPackageDirectory = (packageDirent) => {
 	const packageName = packageDirent.name;
 	const packagePath = Path.join(PACKAGES_DIR, packageName);
 	const destinationPath = Path.join(SITE_DIST, 'packages', packageName);
+	ensurePackageArtifacts(packageName, packagePath);
 
 	for (const includedDir of INCLUDED_DIRS) {
 		const sourceDir = Path.join(packagePath, includedDir);

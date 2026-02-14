@@ -7,6 +7,119 @@ This file is the canonical, assistant-agnostic workflow for migrating a GovCMS U
 - Upgrade a GovCMS UIKit-based Drupal theme stack (base theme + sub-theme) from `@gov.au/*` to `@truecms/*`.
 - Keep existing Drupal integration intact (no unnecessary Twig or `libraries.yml` rewrites).
 - Produce a successful Node 22 build and clean dependency audit.
+- Provide a safe follow-up path from per-component `@truecms/*` + Pancake builds to `@truecms/design-system` without breaking existing Drupal libraries and custom Sass.
+
+## Unified Migration Extension (`@truecms/*` -> `@truecms/design-system`)
+
+Use this extension after the namespace migration is already complete and the theme is currently on `@truecms/*`.
+
+### Unified Applicability Gate (Assistant Must Complete Before Removing Pancake)
+
+Run in each build-owning theme:
+
+1. Detect Sass coupling to AU mixins/functions/variables:
+   - `rg -n "@include\\s+AU|\\$AU-|AU-[a-zA-Z]" "<theme-dir>/assets/scss" --glob '!**/uikit/**'`
+2. Detect hard dependency on generated UIKit assets:
+   - `rg -n "assets/uikit|uikit\\.min|uikit_js|scripts_uikit" "<theme-dir>"`
+3. Detect Drupal library reliance on per-component JS files:
+   - `rg -n "js/(accordion|main-nav|side-nav|animate)\\.js" "<theme-dir>/*.libraries.yml"`
+4. Confirm whether unified package is already present:
+   - `rg -n "\"@truecms/design-system\"" "<theme-dir>/package.json"`
+
+Decision rules:
+
+- If Step 1 has matches, **do not** remove Pancake in the same change. The theme still compiles against AU Sass primitives.
+- If Step 2 or Step 3 has matches, treat migration as **hybrid-first**. The theme expects generated UIKit file layouts and/or per-component JS artifacts.
+- Only attempt full Pancake removal when Steps 1-3 are clear or explicit compatibility shims are implemented and verified.
+
+### Hybrid-First Pilot (Recommended)
+
+When applicability gate shows coupling, run a pilot instead of hard cutover:
+
+1. Keep existing component dependencies and build scripts intact.
+2. Add `@truecms/design-system` as an additional dependency.
+3. Sync unified assets into a separate path (for example `assets/unified/`) without overwriting current `assets/uikit/`.
+4. Register a separate Drupal library for pilot testing (for example `unified-design-system-pilot`) and attach it selectively on test pages.
+5. Compare rendering, behaviour, and JS initialization on representative pages.
+6. Record blockers before attempting package removals.
+
+### Blocker Resolution Matrix (Observed in `drupal-ispovednik`, 2026-02-14)
+
+- **Blocker: AU Sass primitives are used across custom SCSS**  
+  Resolution: keep Pancake/component Sass pipeline until custom SCSS is refactored away from AU mixins/functions/variables, or a compatibility layer is introduced.
+
+- **Blocker: theme relies on `assets/uikit` generated structure**  
+  Resolution: introduce compatibility copying/shimming first; do not delete `assets/uikit` pipeline in initial unified pilot.
+
+- **Blocker: Drupal libraries expect per-component JS files (`accordion.js`, `main-nav.js`, etc.)**  
+  Resolution: keep existing JS artifact pipeline, or implement explicit compatibility bundles that preserve expected filenames/paths.
+
+- **Blocker: lint includes minified/vendor JS and fails noisily**  
+  Resolution: exclude vendored/minified assets from lint scope before using lint as a migration quality gate.
+
+### Hard Cutover to Modern Build Stack (Validated Path)
+
+Use this path when the theme is already migrated to `@truecms/*` and the immediate goal is removing theme-level Gulp/Pancake build tooling.
+
+Validated in:
+
+- `web/themes/custom/govcms8_uikit_starter`
+- `web/themes/custom/cdr`
+
+Core implementation pattern:
+
+1. Replace build tooling in `package.json`:
+   - `build`: `vite build && node assets/modern/sync-build.mjs`
+   - `build:dev`: `vite build --watch --mode development`
+   - `lint`: `eslint assets/js assets/modern --max-warnings=0`
+2. Remove active legacy build files:
+   - `gulpfile.js`
+   - `config.json`
+3. Add:
+   - `vite.config.mjs` (emit JS artifacts to `build/js/*`)
+   - `assets/modern/entry-*.js` (explicit build entrypoints)
+   - `assets/modern/sync-build.mjs` (copy required outputs to Drupal `js/`)
+   - `eslint.config.mjs` (ignore vendored/minified sources)
+4. Add `build` to theme `.gitignore`.
+5. Upgrade vulnerable tooling:
+   - use `vite@^7.3.1` (addresses `esbuild` advisory path),
+   - pin `locutus` to `2.0.39` via `overrides` when legacy styleguide stack pulls vulnerable versions.
+
+Hard-cutover verification commands (run in each theme root):
+
+```bash
+npm install
+npm audit
+npm run build
+npm run lint
+```
+
+Expected result:
+
+- `npm audit`: 0 vulnerabilities
+- `npm run build`: pass
+- `npm run lint`: pass
+- No Sass deprecation noise from the active build path (because Sass/Pancake compile path is no longer active)
+
+Important scope note:
+
+- This hard cutover removes theme-level Gulp/Pancake build usage.
+- It does **not** by itself complete full unified package adoption (`@truecms/design-system`) where AU Sass coupling and runtime compatibility still require dedicated follow-up work.
+
+### Upstream Package De-Pancake Track (Next Program Step)
+
+Status clarification:
+
+- Destination-theme migration to Vite can be completed using existing published `@truecms/*` packages.
+- This does **not** mean Pancake is fully removed from upstream package internals.
+
+If the goal is full Pancake elimination across the ecosystem, run this as a separate upstream program in `design-system-components`:
+
+1. Refactor package build internals to remove `@truecms/pancake*` assumptions.
+2. Rebuild/verify component outputs and compatibility fixtures (Drupal + React).
+3. Bump package versions (major where required by compatibility impact).
+4. Publish new npm releases.
+5. Roll those new versions into downstream consumer repos and re-run migration validation.
 
 ## Prerequisites
 
@@ -504,6 +617,9 @@ console.log("Version validation passed");
 
 ## Final Verification Checklist
 
+Use this checklist for namespace migration (`@gov.au/*` -> `@truecms/*`).  
+For the modern build-stack hard cutover (Gulp/Pancake removal in already-migrated themes), use the additional checklist below.
+
 - [ ] Node runtime is `v22.x`.
 - [ ] `npm` is `10+`.
 - [ ] If initial Node was not `v22.x` and `nvm` existed, assistant switched runtime to Node 22 automatically.
@@ -527,6 +643,19 @@ console.log("Version validation passed");
 - [ ] Expected built assets are present in base-theme and sub-theme output locations (`assets/uikit/css` and `assets/uikit/js` where applicable).
 - [ ] Drupal smoke test confirms core UI components render and behave correctly.
 - [ ] No unchecked items remain in the Atomic Task Board.
+
+## Hard Cutover Verification Checklist (Modern Build Stack)
+
+- [ ] Theme is already on `@truecms/*` namespace (no `@gov.au/*` dependency work pending).
+- [ ] `gulpfile.js` and `config.json` are removed from active build path.
+- [ ] `vite.config.mjs` exists and produces required Drupal JS artifacts.
+- [ ] `assets/modern/entry-*.js` and `assets/modern/sync-build.mjs` are present.
+- [ ] `.gitignore` includes `build`.
+- [ ] `npm audit` reports 0 vulnerabilities.
+- [ ] `npm run build` succeeds.
+- [ ] `npm run lint` succeeds.
+- [ ] Active build logs do not include legacy Sass/Pancake deprecation noise.
+- [ ] Drupal library asset paths still resolve to existing files and smoke test confirms behavior.
 
 ## Guardrails
 

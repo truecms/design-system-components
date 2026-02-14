@@ -1,5 +1,11 @@
 @truecms/core CHANGELOG
 
+## 6.0.0
+
+### Major Changes
+
+- Major release for modern-stack migration and upstream package refactoring baseline.
+
 ## 5.0.2
 
 ### Patch Changes

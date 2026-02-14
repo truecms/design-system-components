@@ -1,5 +1,17 @@
 @truecms/accordion CHANGELOG
 
+## 9.0.0
+
+### Major Changes
+
+- Major release for modern-stack migration and upstream package refactoring baseline.
+
+### Patch Changes
+
+- Updated dependencies
+  - @truecms/animate@3.0.0
+  - @truecms/core@6.0.0
+
 ## 8.0.2
 
 ### Patch Changes

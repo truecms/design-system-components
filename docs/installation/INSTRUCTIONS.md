@@ -121,6 +121,37 @@ If the goal is full Pancake elimination across the ecosystem, run this as a sepa
 4. Publish new npm releases.
 5. Roll those new versions into downstream consumer repos and re-run migration validation.
 
+### Upstream Major-Bump and Publish Runbook (Validated 2026-02-14)
+
+Use this when moving from destination-level Vite migration to real npm major releases for `@truecms/*`.
+
+1. Create major changesets for all publish-target packages.
+2. Apply versions with:
+   - `pnpm run prepare:version`
+3. Verify major versions are real semver (no snapshot `0.0.0-*` values).
+4. Build local tarballs:
+   - `pnpm run pack:tarballs`
+5. Validate in downstream Drupal themes using tarballs:
+   - `npm install --no-save --ignore-scripts /absolute/path/to/design-system-components/dist/tarballs/*.tgz`
+   - `npm run build`
+   - `npm run lint`
+
+Observed blocker:
+
+- Installing local tarballs **without** `--ignore-scripts` runs package `postinstall: pancake` and can fail during Pancake JS build (`pancake.min.mjs` duplicate default export errors). Use `--ignore-scripts` for downstream validation until upstream package internals remove Pancake postinstall reliance.
+
+Completion update:
+
+- Upstream package manifests have now been migrated off Pancake hooks (`postinstall`, `pancake` config object, and `@truecms/pancake*` dependencies removed), and helper checks were updated to enforce that de-Pancake state.
+
+Publish prerequisites (must be green before `changeset publish`):
+
+1. npm auth must be valid (`npm whoami` succeeds).
+2. `NPM_TOKEN` must be exported for `.npmrc` token interpolation.
+3. Publishing identity must have scope rights for `@truecms/*` (`npm access ls-packages <account>`).
+4. Only then run:
+   - `pnpm changeset publish`
+
 ## Prerequisites
 
 - Node.js `22.x` is required.

@@ -1,5 +1,17 @@
 @truecms/page-alerts CHANGELOG
 
+## 4.0.0
+
+### Major Changes
+
+- Major release for modern-stack migration and upstream package refactoring baseline.
+
+### Patch Changes
+
+- Updated dependencies
+  - @truecms/body@4.0.0
+  - @truecms/core@6.0.0
+
 ## 3.0.2
 
 ### Patch Changes

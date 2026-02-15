@@ -20,6 +20,7 @@ on:
   push:
     tags:
       - 'v*'
+      - '@truecms/**'
 
 jobs:
   release-validation:
@@ -41,6 +42,9 @@ jobs:
     needs: release-validation
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: read
+      id-token: write
     env:
       CI: true
 
@@ -50,9 +54,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ensure master branch fetched
+      - name: Ensure default branch fetched
         run: |
           set -euo pipefail
+          default_branch="${{ github.event.repository.default_branch }}"
+          if [ -z "${default_branch}" ]; then
+            default_branch="master"
+          fi
           token="${{ secrets.GITHUB_TOKEN }}"
           repo="${{ github.repository }}"
           if [ -n "${token}" ]; then
@@ -60,12 +68,12 @@ jobs:
           else
             git remote set-url origin "https://github.com/${repo}.git"
           fi
-          git fetch --no-tags --prune origin master || true
-          if git show-ref --verify --quiet refs/remotes/origin/master; then
-            if git rev-parse --verify master >/dev/null 2>&1; then
-              git branch -f master origin/master || true
+          git fetch --no-tags --prune origin "${default_branch}" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/${default_branch}"; then
+            if git rev-parse --verify "${default_branch}" >/dev/null 2>&1; then
+              git branch -f "${default_branch}" "origin/${default_branch}" || true
             else
-              git branch master origin/master || true
+              git branch "${default_branch}" "origin/${default_branch}" || true
             fi
           fi
 
@@ -128,12 +136,35 @@ jobs:
         if: steps.release-params.outputs.dry_run != 'true'
         run: |
           pnpm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
+          pnpm config set @truecms:registry "https://registry.npmjs.org/"
           pnpm whoami || pnpm whoami
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_TRUECMS }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Validate no Pancake runtime dependencies
+        run: |
+          set -euo pipefail
+          if rg -n --glob 'packages/*/package.json' '"(@truecms|@gov\\.au)/pancake[^"]*"' packages; then
+            echo '::error::Pancake dependency detected in publishable package manifests.'
+            exit 1
+          fi
+          echo 'No Pancake dependencies found in package manifests.'
+
+      - name: Build unified package scaffold
+        run: |
+          set -euo pipefail
+          pnpm run build:unified
+
+      - name: Verify unified package artefacts
+        run: |
+          set -euo pipefail
+          test -f packages/unified-design-system/dist/js/components.js
+          test -f packages/unified-design-system/dist/js/components.d.ts
+          test -f packages/unified-design-system/dist/css/govau-components.css
+          test -f packages/unified-design-system/dist/css/govau-theme.css
 
       - name: Publish packages with Changesets
         env:
@@ -168,8 +199,8 @@ jobs:
 
           if grep -qiE "No packages are being published|No unpublished packages found" changesets-publish.log; then
             echo "::notice::No release plan detected. Retrying with --from-package."
-            echo "Running: pnpm changeset publish --from-package -- ${args[*]}"
-            pnpm changeset publish --from-package -- "${args[@]}"
+            echo "Running: pnpm changeset publish --from-package ${args[*]}"
+            pnpm changeset publish --from-package "${args[@]}"
           else
             exit "$status"
           fi

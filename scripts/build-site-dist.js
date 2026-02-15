@@ -30,34 +30,71 @@ const readPackageMetadata = (packagePath) => {
 	}
 };
 
-const packageNeedsSiteArtifacts = (packagePath) => {
+const getMissingArtifacts = (packagePath) => {
+	const missing = {
+		siteStyle: false,
+		siteScript: false,
+		reactBundle: false,
+	};
+
 	const siteTestsPath = Path.join(packagePath, 'tests', 'site');
-	if (!Fs.existsSync(siteTestsPath)) {
-		return false;
+	if (Fs.existsSync(siteTestsPath)) {
+		const hasTestScss = Fs.existsSync(Path.join(siteTestsPath, 'test.scss'));
+		const siteIndexPath = Path.join(siteTestsPath, 'index.html');
+		const siteIndex = Fs.existsSync(siteIndexPath)
+			? Fs.readFileSync(siteIndexPath, 'utf8')
+			: '';
+		const expectsSiteScript = /src=["']script\.js["']/.test(siteIndex);
+
+		if (hasTestScss && !Fs.existsSync(Path.join(siteTestsPath, 'style.css'))) {
+			missing.siteStyle = true;
+		}
+
+		if (expectsSiteScript && !Fs.existsSync(Path.join(siteTestsPath, 'script.js'))) {
+			missing.siteScript = true;
+		}
 	}
 
-	const hasTestScss = Fs.existsSync(Path.join(siteTestsPath, 'test.scss'));
-	const siteIndexPath = Path.join(siteTestsPath, 'index.html');
-	const siteIndex = Fs.existsSync(siteIndexPath)
-		? Fs.readFileSync(siteIndexPath, 'utf8')
-		: '';
-	const expectsScript = /src=["']script\.js["']/.test(siteIndex);
-	if (!hasTestScss && !expectsScript) {
-		return false;
+	const reactTestsPath = Path.join(packagePath, 'tests', 'react');
+	if (Fs.existsSync(reactTestsPath)) {
+		const reactIndexPath = Path.join(reactTestsPath, 'index.html');
+		const reactIndex = Fs.existsSync(reactIndexPath)
+			? Fs.readFileSync(reactIndexPath, 'utf8')
+			: '';
+		const expectsReactBundle = /src=["']bundle\.js["']/.test(reactIndex);
+
+		if (expectsReactBundle && !Fs.existsSync(Path.join(reactTestsPath, 'bundle.js'))) {
+			missing.reactBundle = true;
+		}
 	}
 
-	const hasStyle = Fs.existsSync(Path.join(siteTestsPath, 'style.css'));
-	const hasScript = Fs.existsSync(Path.join(siteTestsPath, 'script.js'));
-	const needsStyle = hasTestScss && !hasStyle;
-	const needsScript = expectsScript && !hasScript;
-	return needsStyle || needsScript;
+	return missing;
 };
 
-const pickBuildScripts = (scripts) => {
+const pickBuildScripts = (scripts, { needsReact = false } = {}) => {
 	const hasBuildJs = Boolean(scripts['build:js']);
 	const hasBuildPre = Boolean(scripts['build:pre']);
+	const hasBuildReact = Boolean(scripts['build:react']);
 	const hasBuild = Boolean(scripts.build);
 	const buildJsIncludesPrecompile = hasBuildJs && /build:pre/.test(scripts['build:js']);
+
+	if (needsReact) {
+		if (hasBuild) {
+			return ['build'];
+		}
+
+		const scriptsToRun = [];
+		if (hasBuildPre) {
+			scriptsToRun.push('build:pre');
+		}
+		if (hasBuildJs) {
+			scriptsToRun.push('build:js');
+		}
+		if (hasBuildReact) {
+			scriptsToRun.push('build:react');
+		}
+		return scriptsToRun;
+	}
 
 	if (buildJsIncludesPrecompile) {
 		return ['build:js'];
@@ -83,19 +120,28 @@ const ensurePackageArtifacts = (packageName, packagePath) => {
 		return;
 	}
 
-	if (!packageNeedsSiteArtifacts(packagePath)) {
+	const missingArtifacts = getMissingArtifacts(packagePath);
+	const needsBuild = missingArtifacts.siteStyle || missingArtifacts.siteScript || missingArtifacts.reactBundle;
+	if (!needsBuild) {
 		return;
 	}
 
 	const metadata = readPackageMetadata(packagePath);
 	const scripts = metadata.scripts;
-	const scriptsToRun = pickBuildScripts(scripts);
+	const scriptsToRun = pickBuildScripts(scripts, {
+		needsReact: missingArtifacts.reactBundle,
+	});
 	if (scriptsToRun.length === 0) {
 		return;
 	}
 
+	const missingKeys = Object.entries(missingArtifacts)
+		.filter(([, isMissing]) => isMissing)
+		.map(([key]) => key)
+		.join(', ');
+
 	console.log(
-		`[site-dist] Missing generated tests/site assets for ${packageName}; running package ${scriptsToRun.join(', ')}.`
+		`[site-dist] Missing generated test assets for ${packageName} (${missingKeys}); running package ${scriptsToRun.join(', ')}.`
 	);
 	const filterTarget = metadata.name || `./packages/${packageName}`;
 	// Include workspace dependencies in the build filter so generated test bundles
@@ -196,12 +242,9 @@ const buildSiteDist = () => {
 	Fs.rmSync(SITE_DIST, { recursive: true, force: true });
 	Fs.mkdirSync(SITE_DIST, { recursive: true });
 
-	const indexHtml = Path.join(ROOT, 'index.html');
-	if (Fs.existsSync(indexHtml)) {
-		Fs.copyFileSync(indexHtml, Path.join(SITE_DIST, 'index.html'));
-	} else {
-		Fs.writeFileSync(Path.join(SITE_DIST, 'index.html'), buildDefaultIndex(), 'utf8');
-	}
+	// Always build a fresh index for site-dist so links reflect the
+	// generated artefacts currently available in each package.
+	Fs.writeFileSync(Path.join(SITE_DIST, 'index.html'), buildDefaultIndex(), 'utf8');
 
 	if (!Fs.existsSync(PACKAGES_DIR)) {
 		console.warn('No packages directory found, skipping package copy.');

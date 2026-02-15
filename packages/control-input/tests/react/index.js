@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { AUcheckbox, AUradio } from './control-input.js';
 
@@ -96,7 +96,7 @@ class CheckboxList extends React.Component {
 }
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<div className="split-wrapper">
 			<div className="split">
@@ -483,7 +483,5 @@ ReactDOM.render(
 				<AUradio id="radio-alt-dark-invalid" alt dark label="I agree" required />
 			</div>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

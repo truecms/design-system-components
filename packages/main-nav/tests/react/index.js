@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 import AUmainNav, { AUmainNavContent } from './main-nav.js';
 
@@ -42,7 +42,7 @@ const menu = [
 ];
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<h2>main-nav</h2>
 		<AUmainNav>
@@ -155,11 +155,11 @@ ReactDOM.render(
 						</div>
 					</div>
 				</AUmainNav>
-				<Route path="/one" render={ () => ( <p>Route one</p> )} />
-				<Route path="/two" render={ () => ( <p>Route two</p> )} />
+				<Routes>
+				<Route path="/one" element={ <p>Route one</p> } />
+				<Route path="/two" element={ <p>Route two</p> } />
+				</Routes>
 			</Fragment>
 		</BrowserRouter>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

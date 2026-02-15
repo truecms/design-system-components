@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { AUlabel, AUhintText, AUerrorText, AUformGroup, AUfieldset, AUForm, AUlegend } from './form.js';
 import AUtextInput from '../../../text-inputs/src/js/react';
@@ -392,7 +392,4 @@ class App extends React.Component {
 
 export default App;
 
-ReactDOM.render(<App />,
-
-	document.getElementById('root'),
-);
+createRoot(document.getElementById('root')).render(<App />);

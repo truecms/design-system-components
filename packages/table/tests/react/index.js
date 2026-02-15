@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import AUtags from '../../../tags/src/js/react.js';
 
 
@@ -108,7 +108,7 @@ const headerUsingRecord = [
 ];
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<h3>Simple Table, first cell is header</h3>
 
@@ -266,7 +266,5 @@ ReactDOM.render(
 </div>
 
 	</div>
-	,
-
-	document.getElementById('root'),
+	
 );

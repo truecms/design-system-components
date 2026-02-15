@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUcard, { AUcardInner, AUcardDivider, AUcardHeader, AUcardTitle, AUcardLink, AUcardFooter } from './card.js';
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 	<div className="row">
 		<div className="col-md-4">
@@ -254,7 +254,5 @@ ReactDOM.render(
 				</li>
 			</ul>
 	</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

@@ -11,17 +11,20 @@ const INCLUDED_DIRS = ['lib', 'tests'];
 const TEMPLATE_INDEX = Path.join(ROOT, '.templates', 'index', 'index.html');
 const BUILT_PACKAGES = new Set();
 
-const readPackageScripts = (packagePath) => {
+const readPackageMetadata = (packagePath) => {
 	const packageJsonPath = Path.join(packagePath, 'package.json');
 	if (!Fs.existsSync(packageJsonPath)) {
-		return {};
+		return { name: null, scripts: {} };
 	}
 
 	try {
 		const packageJson = JSON.parse(Fs.readFileSync(packageJsonPath, 'utf8'));
-		return packageJson && packageJson.scripts ? packageJson.scripts : {};
+		return {
+			name: packageJson && packageJson.name ? packageJson.name : null,
+			scripts: packageJson && packageJson.scripts ? packageJson.scripts : {},
+		};
 	} catch {
-		return {};
+		return { name: null, scripts: {} };
 	}
 };
 
@@ -53,7 +56,8 @@ const ensurePackageArtifacts = (packageName, packagePath) => {
 		return;
 	}
 
-	const scripts = readPackageScripts(packagePath);
+	const metadata = readPackageMetadata(packagePath);
+	const scripts = metadata.scripts;
 	if (!scripts['build:js'] && !scripts.build) {
 		return;
 	}
@@ -62,7 +66,10 @@ const ensurePackageArtifacts = (packageName, packagePath) => {
 		`[site-dist] Missing generated tests/site assets for ${packageName}; running package build.`
 	);
 	const scriptToRun = scripts['build:js'] ? 'build:js' : 'build';
-	execSync(`pnpm --filter "./packages/${packageName}" run ${scriptToRun}`, {
+	const filterTarget = metadata.name || `./packages/${packageName}`;
+	// Include workspace dependencies in the build filter so generated test bundles
+	// can inline dependency JS (for example accordion -> animate).
+	execSync(`pnpm --filter "${filterTarget}..." run ${scriptToRun}`, {
 		cwd: ROOT,
 		stdio: 'inherit',
 	});

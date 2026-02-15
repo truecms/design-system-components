@@ -1,345 +1,246 @@
-# GovCMS UIKit Migration Instructions (`@gov.au/*` -> `@truecms/*`)
+# GovCMS UIKit Upgrade Instructions (`@gov.au/*` or prior `@truecms/*` -> current `@truecms/*` major)
 
-This file is the canonical, assistant-agnostic workflow for migrating a GovCMS UIKit-based theme.
+This is the canonical, assistant-agnostic workflow for upgrading GovCMS UIKit-based theme stacks to the current TrueCMS release line and modern build stack.
 
 ## Objective
 
-- Upgrade a GovCMS UIKit-based Drupal theme stack (base theme + sub-theme) from `@gov.au/*` to `@truecms/*`.
-- Keep existing Drupal integration intact (no unnecessary Twig or `libraries.yml` rewrites).
+- Support two upgrade entry points:
+  - legacy scope migration: `@gov.au/*` -> `@truecms/*`
+  - previous TrueCMS major -> current TrueCMS major
+- Remove deprecated Pancake build/package dependencies from consumer themes.
+- Keep Drupal integration stable (no unnecessary Twig or `libraries.yml` rewrites).
 - Produce a successful Node 22 build and clean dependency audit.
+
+## Supported Upgrade Paths
+
+- Path A: legacy GovAU namespace
+  - At least one dependency-owning theme declares `@gov.au/*`.
+  - Action: migrate scopes to `@truecms/*` and pin to current target majors.
+
+- Path B: prior TrueCMS major
+  - No `@gov.au/*` dependencies remain, but one or more `@truecms/*` packages are below the current target major.
+  - Action: bump `@truecms/*` to current target majors and remove deprecated packages.
+
+If neither Path A nor Path B applies, stop and report "already on current major".
+
+## Current Target Majors (Release Line)
+
+Source of truth: package manifests in this repository (validated 2026-02-14).
+
+Use these targets in dependency-owning theme `package.json` files:
+
+| Legacy package | TrueCMS package | Target |
+| --- | --- | --- |
+| `@gov.au/accordion` | `@truecms/accordion` | `^9.0.0` |
+| `@gov.au/animate` | `@truecms/animate` | `^3.0.0` |
+| `@gov.au/body` | `@truecms/body` | `^4.0.0` |
+| `@gov.au/breadcrumbs` | `@truecms/breadcrumbs` | `^5.0.0` |
+| `@gov.au/buttons` | `@truecms/buttons` | `^5.0.0` |
+| `@gov.au/callout` | `@truecms/callout` | `^5.0.0` |
+| `@gov.au/card` | `@truecms/card` | `^2.0.0` |
+| `@gov.au/control-input` | `@truecms/control-input` | `^5.0.0` |
+| `@gov.au/core` | `@truecms/core` | `^6.0.0` |
+| `@gov.au/cta-link` | `@truecms/cta-link` | `^4.0.0` |
+| `@gov.au/direction-links` | `@truecms/direction-links` | `^5.0.0` |
+| `@gov.au/footer` | `@truecms/footer` | `^5.0.0` |
+| `@gov.au/form` | `@truecms/form` | `^2.0.0` |
+| `@gov.au/grid-12` | `@truecms/grid-12` | `^4.0.0` |
+| `@gov.au/header` | `@truecms/header` | `^6.0.0` |
+| `@gov.au/headings` | `@truecms/headings` | `^4.0.0` |
+| `@gov.au/inpage-nav` | `@truecms/inpage-nav` | `^5.0.0` |
+| `@gov.au/keyword-list` | `@truecms/keyword-list` | `^5.0.0` |
+| `@gov.au/link-list` | `@truecms/link-list` | `^5.0.0` |
+| `@gov.au/main-nav` | `@truecms/main-nav` | `^3.0.0` |
+| `@gov.au/page-alerts` | `@truecms/page-alerts` | `^4.0.0` |
+| `@gov.au/progress-indicator` | `@truecms/progress-indicator` | `^5.0.0` |
+| `@gov.au/responsive-media` | `@truecms/responsive-media` | `^4.0.0` |
+| `@gov.au/searchbox` | `@truecms/searchbox` | `^2.0.0` |
+| `@gov.au/select` | `@truecms/select` | `^4.0.0` |
+| `@gov.au/side-nav` | `@truecms/side-nav` | `^7.0.0` |
+| `@gov.au/skip-link` | `@truecms/skip-link` | `^4.0.0` |
+| `@gov.au/table` | `@truecms/table` | `^2.0.0` |
+| `@gov.au/tags` | `@truecms/tags` | `^6.0.0` |
+| `@gov.au/text-inputs` | `@truecms/text-inputs` | `^4.0.0` |
+
+Unified package target:
+
+- `@truecms/design-system`: `^1.0.0` (optional downstream adoption track)
+
+## Deprecated Packages (Must Be Removed From Consumer Themes)
+
+Do not declare or install these in upgraded themes:
+
+- `@gov.au/pancake`
+- `@gov.au/pancake-react`
+- `@gov.au/pancake-sass`
+- `@truecms/pancake`
+- `@truecms/pancake-js`
+- `@truecms/pancake-json`
+- `@truecms/pancake-react`
+- `@truecms/pancake-sass`
 
 ## Prerequisites
 
-- Node.js `22.x` is required.
-- `npm` `10+` is required.
-- `nvm` is optional but recommended for automatic version switching.
-- Migration is run from a git working copy with write access.
-
-## Git Safety Gate (Strongly Recommended, Non-Blocking)
-
-Why this matters:
-
-- This migration changes many dependencies and build outputs.
-- A clean Git baseline makes rollback and retry predictable if anything fails.
-
-The assistant must run this gate before migration steps:
-
-1. Detect whether `PROJECT_ROOT` is a Git repository:
-   - `git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree`
-2. If Git is not initialized:
-   - Inform user migration can continue, but rollback will be manual and riskier.
-   - Ask user whether to initialize a baseline snapshot now.
-   - If user says yes, run:
-     - `git -C "$PROJECT_ROOT" init`
-     - `git -C "$PROJECT_ROOT" add -A`
-     - `git -C "$PROJECT_ROOT" commit -m "chore: baseline before truecms migration"`
-   - If user says no, continue only after explicit acknowledgement to proceed without Git safety.
-3. If Git is initialized, check for uncommitted changes:
-   - `git -C "$PROJECT_ROOT" status --porcelain`
-4. If working tree is dirty:
-   - Ask user to choose one path:
-     - stash existing changes (recommended): `git -C "$PROJECT_ROOT" stash push -u -m "pre-truecms-migration"`
-     - commit existing changes
-     - proceed as-is (allowed, but higher risk)
-   - If user chooses stash or commit, assistant must execute that action.
-5. Record the chosen path in the migration report before continuing.
-
-## Prerequisite Gate (Assistant Must Complete Before Migration)
-
-The assistant must run this gate and only continue if it passes:
-
-1. Check current runtime:
-   - `node -v`
-   - `npm -v`
-2. If Node is `v22.x` and npm is `10+`, proceed.
-3. If Node is not `v22.x` and `nvm` is available:
-   - `source ~/.nvm/nvm.sh`
-   - `nvm install 22 --latest-npm`
-   - `nvm use 22`
-   - Re-check `node -v` and `npm -v`.
-4. If Node is not `v22.x` and `nvm` is not available:
-   - Stop and report a prerequisite failure.
-   - Provide guidance to install `nvm` and retry:
-     - https://github.com/nvm-sh/nvm#installing-and-updating
-5. Do not start migration steps until this gate is green.
-
-## Theme Topology Gate (Assistant Must Complete Before Migration)
-
-The assistant must resolve the target theme stack before making changes:
-
-1. Identify the primary sub-theme from input (`THEME_DIR`) and read its `.info.yml`.
-2. Resolve base theme machine name from sub-theme `.info.yml` (`base theme: ...`).
-3. Resolve `BASE_THEME_DIR` by searching `web/themes/custom` then `web/themes/contrib`.
-4. Build `THEME_TARGET_DIRS` as:
-   - `BASE_THEME_DIR` (if resolved)
-   - `THEME_DIR`
-5. Detect where UIKit dependencies are declared:
-   - For each directory in `THEME_TARGET_DIRS`, inspect `package.json` (if present) for `@gov.au/*` and `@truecms/*`.
-6. Decision rules:
-   - If base theme is under `web/themes/contrib` (Composer-managed), ask user whether to vendorize/copy it into `web/themes/custom` and commit a baseline before migration.
-   - If user approves, execute vendorize action:
-     - copy base theme to `web/themes/custom/<base-theme-machine-name>`
-     - ensure working theme points to the custom copy (update `.info.yml` base theme only if machine name changes)
-     - commit baseline before migration changes
-     - document how future Composer updates will avoid overwriting migrated custom base theme
-   - If user declines, continue with explicit acknowledgement that rollback/patching may be harder.
-7. Do not start migration steps until this gate is green and logged in the migration report.
-
-## Migration Applicability Gate (Assistant Must Complete Before Migration)
-
-The assistant must confirm this is a legacy GovAU migration target across the resolved theme stack:
-
-1. For each dependency-owning theme in `THEME_TARGET_DIRS` (where `package.json` declares UIKit dependencies):
-   - Confirm legacy dependencies exist:
-     - `rg -n '"@gov\\.au/' "<theme-dir>/package.json"`
-   - Confirm theme source still contains legacy namespace:
-     - `rg -n "@gov\\.au/" -S "<theme-dir>"`
-   - Confirm it is not already migrated in dependencies:
-     - `rg -n '"@truecms/' "<theme-dir>/package.json"`
-2. Decision rules:
-   - If no theme in `THEME_TARGET_DIRS` declares `@gov.au/*`, stop. Migration is not applicable.
-   - If all dependency-owning themes already declare `@truecms/*`, stop and report "already migrated or partially migrated" for manual review.
-3. Sub-theme dependency rule:
-   - If a sub-theme does not declare UIKit dependencies in its own `package.json`, do not add them there. Keep dependency ownership where it already exists (typically base theme).
-4. Do not start migration steps until this gate is green.
+- Node.js `22.x`
+- npm `10+`
+- Git working copy with write access
+- `nvm` recommended for runtime switching
 
 ## Required Inputs
 
-- `PROJECT_ROOT`: path to the Drupal repository.
-- `THEME_DIR`: path to the primary sub-theme directory, or path relative to `PROJECT_ROOT`.
-- `BASE_THEME_DIR`: optional explicit base theme path. If omitted, resolve from `THEME_DIR` `.info.yml`.
-- `THEME_TARGET_DIRS`: derived list from topology gate (`BASE_THEME_DIR` + `THEME_DIR`).
-- `MIGRATION_REPORT`: optional path for the run log file. If not provided, use `"$THEME_DIR/migration-report-truecms.md"`.
+- `PROJECT_ROOT`: path to the Drupal repository
+- `THEME_DIR`: primary sub-theme path (absolute or relative to `PROJECT_ROOT`)
+- `BASE_THEME_DIR`: optional explicit base theme path; otherwise resolve from `THEME_DIR/.info.yml`
+- `THEME_TARGET_DIRS`: derived list (`BASE_THEME_DIR` + `THEME_DIR`)
+- `MIGRATION_REPORT`: optional run log path; default `"$THEME_DIR/migration-report-truecms.md"`
 
-## Migration Report (Mandatory, Run-Scoped)
+## Mandatory Gates
 
-The assistant must maintain a migration report from start to finish.
+Run these gates in order before changing dependencies.
 
-Rules:
+### 1) Git Safety Gate
 
-- Start report logging before any migration change is applied.
-- On resume/retry, read the existing report first and continue from the last incomplete task.
-- Log every gate result, user decision, command executed, output summary, and failure/retry.
-- Mark task completion in the atomic checklist as soon as each task is completed.
+1. Confirm repository and branch:
+   - `git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree`
+   - `git -C "$PROJECT_ROOT" status --porcelain`
+2. If dirty, capture user choice and execute it:
+   - stash (recommended)
+   - commit
+   - proceed as-is
+3. Record decision in `MIGRATION_REPORT`.
 
-Recommended report template:
+### 2) Runtime Gate
 
-```md
-# TrueCMS Migration Report
+1. Run `node -v` and `npm -v`.
+2. If Node is not `v22.x` and `nvm` exists:
+   - `source ~/.nvm/nvm.sh && nvm install 22 --latest-npm && nvm use 22`
+3. If Node is not `v22.x` and `nvm` is missing: stop and report prerequisite failure.
 
-## Context
-- Project root: <PROJECT_ROOT>
-- Sub-theme dir: <THEME_DIR>
-- Base theme dir: <BASE_THEME_DIR>
-- Theme target dirs: <THEME_TARGET_DIRS>
-- Started at: <ISO8601 timestamp>
-- Assistant: <agent name/version>
+### 3) Theme Topology Gate
 
-## Decisions Log
-| Time | Stage | Decision | Reason | User confirmation |
-| --- | --- | --- | --- | --- |
-| <time> | Git Safety | Stash dirty working tree | Keep reversible baseline | yes |
+1. Resolve base theme from `THEME_DIR/.info.yml`.
+2. Resolve `BASE_THEME_DIR` (custom first, then contrib).
+3. Build `THEME_TARGET_DIRS` from resolved base + sub-theme.
+4. Identify dependency-owning theme(s): those with `package.json` that declare UIKit/TrueCMS deps.
 
-## Command Log
-| Time | Stage | Command | Result |
-| --- | --- | --- | --- |
-| <time> | Prerequisite Gate | `node -v` | `v22.3.0` |
-| <time> | Prerequisite Gate | `npm -v` | `10.8.2` |
+### 4) Upgrade Path Detection Gate
 
-## Outcomes
-- Build: <pass/fail + summary>
-- Audit: <pass/fail + summary>
-- Version matrix validation: <pass/fail + summary>
-- Smoke test: <pass/fail + summary>
+Run for each dependency-owning theme:
+
+- `rg -n '"@gov\\.au/' "<theme-dir>/package.json"`
+- `rg -n '"@truecms/' "<theme-dir>/package.json"`
+- `rg -n '"@(gov\\.au|truecms)/pancake' "<theme-dir>/package.json"`
+
+Decision rules:
+
+- Path A if any `@gov.au/*` dependency exists.
+- Path B if no `@gov.au/*`, but `@truecms/*` deps exist and are below target major or deprecated Pancake packages are declared.
+- Stop if neither path applies.
 
 ## Atomic Task Board
-- [ ] Stage 0 complete
-- [ ] Stage 1 complete
-- [ ] Stage 2 complete
-- [ ] Stage 3 complete
-- [ ] Stage 4 complete
-- [ ] Stage 5 complete
-- [ ] Stage 6 complete
-- [ ] Stage 7 complete
-- [ ] Stage 8 complete
-- [ ] Final verification complete
-```
-
-## Atomic Task Board (Must Be Ticked During Execution)
-
-Use this checklist during execution. Tasks are intentionally atomic to avoid rediscovery on resume.
-
-Execution discipline (mandatory):
-
-- After completing any task, immediately tick that checkbox and log the outcome in `MIGRATION_REPORT` before starting the next task.
-- Do not start the next stage while any item in the current stage remains unchecked.
-- Before declaring migration complete, verify there are no unchecked items in this task board.
 
 ### Stage 0: Initialize Tracking
-- [ ] Confirm `PROJECT_ROOT` and `THEME_DIR`.
-- [ ] Resolve and confirm `BASE_THEME_DIR`.
-- [ ] Build and confirm `THEME_TARGET_DIRS`.
-- [ ] Set `MIGRATION_REPORT` path.
-- [ ] Create/open migration report.
+- [ ] Confirm `PROJECT_ROOT`, `THEME_DIR`, `BASE_THEME_DIR`, and `THEME_TARGET_DIRS`.
+- [ ] Create/open `MIGRATION_REPORT`.
 - [ ] Log start timestamp and environment context.
 
-### Stage 1: Git Safety Gate
-- [ ] Detect whether `PROJECT_ROOT` is a Git repository.
-- [ ] If Git is missing, ask user whether to initialize baseline snapshot.
-- [ ] If user approved Git init, run `git init`, `git add -A`, and baseline commit.
-- [ ] If Git exists, check working tree status.
-- [ ] If working tree is dirty, ask user to choose stash/commit/proceed-as-is.
-- [ ] Execute user choice for stash/commit when selected.
-- [ ] Log Git safety decision and outcome.
+### Stage 1: Run Gates
+- [ ] Git Safety Gate completed.
+- [ ] Runtime Gate completed.
+- [ ] Theme Topology Gate completed.
+- [ ] Upgrade Path Detection Gate completed.
+- [ ] Path A or Path B selected and logged.
 
-### Stage 2: Runtime Prerequisite Gate
-- [ ] Check `node -v`.
-- [ ] Check `npm -v`.
-- [ ] If needed and `nvm` exists, switch/install Node 22 and re-check versions.
-- [ ] If needed and `nvm` is missing, stop and provide `nvm` install guidance.
-- [ ] Log prerequisite gate outcome.
+### Stage 2: Baseline Capture
+- [ ] Capture dependency list from each dependency-owning theme.
+- [ ] Capture scripts/tooling state from each build-owning theme.
+- [ ] Capture namespace scan results across `THEME_TARGET_DIRS`.
 
-### Stage 3: Theme Topology + Migration Applicability Gate
-- [ ] Resolve base/sub-theme topology from `.info.yml`.
-- [ ] If base theme is Composer-managed in `contrib`, capture user decision on vendorize-to-custom action.
-- [ ] If vendorize-to-custom is approved, execute copy + baseline commit before migration.
-- [ ] Confirm at least one dependency-owning target theme declares `@gov.au/*`.
-- [ ] Confirm dependency-owning target themes are not already fully migrated to `@truecms/*`.
-- [ ] Confirm sub-theme dependency rule: do not add UIKit dependencies to sub-theme if not declared there.
-- [ ] Stop and log if migration is not applicable.
-- [ ] Log topology and applicability gate outcomes.
+### Stage 3: Dependency Upgrade
+- [ ] Path A: replace `@gov.au/*` with mapped `@truecms/*`.
+- [ ] Path A/Path B: align all relevant `@truecms/*` to current target majors.
+- [ ] Remove deprecated Pancake packages from dependencies/devDependencies.
+- [ ] Respect dependency ownership (do not add packages to sub-theme if it does not own deps).
 
-### Stage 4: Baseline Capture
-- [ ] Capture pre-migration dependency list for each dependency-owning theme in `THEME_TARGET_DIRS`.
-- [ ] Capture pre-migration script/tooling state for each target theme with `package.json`.
-- [ ] Capture `@gov.au/` scan results across all `THEME_TARGET_DIRS`.
-- [ ] Log baseline capture outputs.
+### Stage 4: Source and Build Updates
+- [ ] Replace hard-coded `node_modules/@gov.au/...` imports with `node_modules/@truecms/...`.
+- [ ] Ensure Sass base imports reference `@truecms/core`.
+- [ ] Remove Pancake-only setup/build steps from active scripts.
+- [ ] For modern build stack migrations, configure Vite build scripts and sync step.
 
-### Stage 5: Dependency Migration
-- [ ] Replace each `@gov.au/*` dependency with mapped `@truecms/*` in dependency-owning theme(s) only.
-- [ ] Align migrated packages with expected major versions from table for each dependency-owning theme.
-- [ ] Ensure `@truecms/pancake` and `@truecms/pancake-sass` are present in dependency-owning theme(s).
-- [ ] Do not add UIKit dependencies to a sub-theme that does not already declare them.
-- [ ] Log dependency migration changes.
+### Stage 5: Install and Validate
+- [ ] For each dependency-owning theme: `rm -rf node_modules package-lock.json && npm install`.
+- [ ] For each dependency-owning theme: `npm audit`.
+- [ ] For each build-owning theme: `npm run build`.
+- [ ] Run version validation command (below) in each dependency-owning theme.
+- [ ] If lint exists: `npm run lint`.
 
-### Stage 6: Source and Build Script Updates
-- [ ] Replace hard-coded `node_modules/@gov.au/...` import paths across affected files in `THEME_TARGET_DIRS`.
-- [ ] Ensure Sass base imports reference `@truecms/core` in each affected theme.
-- [ ] Apply setup/restore script updates only in theme(s) that actually build UIKit assets.
-- [ ] Log file-level changes.
-
-### Stage 7: Install, Build, and Validate
-- [ ] For each dependency-owning theme: clean install (`rm -rf node_modules package-lock.json` then `npm install --ignore-scripts`).
-- [ ] For each dependency-owning theme: run `npm audit`.
-- [ ] For each build-owning theme: run `npm run build`.
-- [ ] Run package version validation command against matrix for each dependency-owning theme.
-- [ ] If needed, run `npm rebuild` or reinstall without `--ignore-scripts` in affected theme(s).
-- [ ] Log command outputs and outcomes.
-
-### Stage 8: Final Verification
-- [ ] Verify no `@gov.au/` references remain across `THEME_TARGET_DIRS`.
-- [ ] Verify each pre-migration dependency has mapped replacement in dependency-owning theme(s).
-- [ ] Verify matrix version checks pass for all migrated packages in each dependency-owning theme.
-- [ ] Verify `@truecms/pancake-js >= 2.0.2` for each dependency-owning theme.
-- [ ] Verify generated assets exist for base theme and sub-theme build outputs.
-- [ ] Verify Drupal smoke test pass.
-- [ ] Log final verification outcome.
-
-## Dependency Jump Matrix
-
-Use this as the expected namespace/version jump when replacing packages.
-
-| Legacy package | Replacement package | Expected target |
-| --- | --- | --- |
-| `@gov.au/accordion` | `@truecms/accordion` | `~8.x` |
-| `@gov.au/animate` | `@truecms/animate` | `~2.x` |
-| `@gov.au/body` | `@truecms/body` | `~3.x` |
-| `@gov.au/breadcrumbs` | `@truecms/breadcrumbs` | `~4.x` |
-| `@gov.au/buttons` | `@truecms/buttons` | `~4.x` |
-| `@gov.au/callout` | `@truecms/callout` | `~4.x` |
-| `@gov.au/card` | `@truecms/card` | `~1.x` |
-| `@gov.au/control-input` | `@truecms/control-input` | `~4.x` |
-| `@gov.au/core` | `@truecms/core` | `~5.x` |
-| `@gov.au/cta-link` | `@truecms/cta-link` | `~3.x` |
-| `@gov.au/direction-links` | `@truecms/direction-links` | `~4.x` |
-| `@gov.au/footer` | `@truecms/footer` | `~4.x` |
-| `@gov.au/form` | `@truecms/form` | `~1.x` |
-| `@gov.au/grid-12` | `@truecms/grid-12` | `~3.x` |
-| `@gov.au/header` | `@truecms/header` | `~5.x` |
-| `@gov.au/headings` | `@truecms/headings` | `~3.x` |
-| `@gov.au/inpage-nav` | `@truecms/inpage-nav` | `~4.x` |
-| `@gov.au/keyword-list` | `@truecms/keyword-list` | `~4.x` |
-| `@gov.au/link-list` | `@truecms/link-list` | `~4.x` |
-| `@gov.au/main-nav` | `@truecms/main-nav` | `~2.x` |
-| `@gov.au/page-alerts` | `@truecms/page-alerts` | `~3.x` |
-| `@gov.au/pancake` | `@truecms/pancake` | `^2.0.1` or newer `2.x` |
-| `@gov.au/pancake-react` | `@truecms/pancake-react` | matching theme need (optional) |
-| `@gov.au/pancake-sass` | `@truecms/pancake-sass` | compatible `2.x` |
-| `@gov.au/progress-indicator` | `@truecms/progress-indicator` | `~4.x` |
-| `@gov.au/responsive-media` | `@truecms/responsive-media` | `~3.x` |
-| `@gov.au/select` | `@truecms/select` | `~3.x` |
-| `@gov.au/side-nav` | `@truecms/side-nav` | `~6.x` |
-| `@gov.au/skip-link` | `@truecms/skip-link` | `~3.x` |
-| `@gov.au/tags` | `@truecms/tags` | `~5.x` |
-| `@gov.au/text-inputs` | `@truecms/text-inputs` | `~3.x` |
-
-Security floor:
-
-- Resolved `@truecms/pancake-js` must be `>=2.0.2`.
+### Stage 6: Final Verification
+- [ ] No `@gov.au/` references remain across `THEME_TARGET_DIRS`.
+- [ ] All migrated packages match target majors.
+- [ ] No deprecated Pancake packages are declared.
+- [ ] Build outputs exist and Drupal smoke checks pass.
 
 ## Version Validation Rule
 
-After migration, every migrated package must match the expected target in "Dependency Jump Matrix".
+After migration, every declared `@truecms/*` package must match the target major listed above, and no deprecated Pancake packages can remain.
 
-- For `~N.x` rows, resolved major version must be `N`.
-- For `@truecms/pancake`, resolved major must be `2` and version must be `>=2.0.1`.
-- For `@truecms/pancake-sass`, resolved major must be `2`.
-- For `@truecms/pancake-js`, resolved version must be `>=2.0.2`.
-- For `@truecms/pancake-react`, validate only if present (optional dependency).
-
-Run this command in each dependency-owning theme directory in `THEME_TARGET_DIRS` to enforce the rule:
+Run in each dependency-owning theme directory:
 
 ```bash
 node -e '
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
+
+const expectedMajors = {
+  "@truecms/accordion": 9,
+  "@truecms/animate": 3,
+  "@truecms/body": 4,
+  "@truecms/breadcrumbs": 5,
+  "@truecms/buttons": 5,
+  "@truecms/callout": 5,
+  "@truecms/card": 2,
+  "@truecms/control-input": 5,
+  "@truecms/core": 6,
+  "@truecms/cta-link": 4,
+  "@truecms/direction-links": 5,
+  "@truecms/footer": 5,
+  "@truecms/form": 2,
+  "@truecms/grid-12": 4,
+  "@truecms/header": 6,
+  "@truecms/headings": 4,
+  "@truecms/inpage-nav": 5,
+  "@truecms/keyword-list": 5,
+  "@truecms/link-list": 5,
+  "@truecms/main-nav": 3,
+  "@truecms/page-alerts": 4,
+  "@truecms/progress-indicator": 5,
+  "@truecms/responsive-media": 4,
+  "@truecms/searchbox": 2,
+  "@truecms/select": 4,
+  "@truecms/side-nav": 7,
+  "@truecms/skip-link": 4,
+  "@truecms/table": 2,
+  "@truecms/tags": 6,
+  "@truecms/text-inputs": 4
+};
+
+const deprecated = [
+  "@gov.au/pancake",
+  "@gov.au/pancake-react",
+  "@gov.au/pancake-sass",
+  "@truecms/pancake",
+  "@truecms/pancake-js",
+  "@truecms/pancake-json",
+  "@truecms/pancake-react",
+  "@truecms/pancake-sass"
+];
+
 const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
 const declared = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
-const expectedMajors = {
-  "@truecms/accordion": 8,
-  "@truecms/animate": 2,
-  "@truecms/body": 3,
-  "@truecms/breadcrumbs": 4,
-  "@truecms/buttons": 4,
-  "@truecms/callout": 4,
-  "@truecms/card": 1,
-  "@truecms/control-input": 4,
-  "@truecms/core": 5,
-  "@truecms/cta-link": 3,
-  "@truecms/direction-links": 4,
-  "@truecms/footer": 4,
-  "@truecms/form": 1,
-  "@truecms/grid-12": 3,
-  "@truecms/header": 5,
-  "@truecms/headings": 3,
-  "@truecms/inpage-nav": 4,
-  "@truecms/keyword-list": 4,
-  "@truecms/link-list": 4,
-  "@truecms/main-nav": 2,
-  "@truecms/page-alerts": 3,
-  "@truecms/progress-indicator": 4,
-  "@truecms/responsive-media": 3,
-  "@truecms/select": 3,
-  "@truecms/side-nav": 6,
-  "@truecms/skip-link": 3,
-  "@truecms/tags": 5,
-  "@truecms/text-inputs": 3,
-  "@truecms/pancake": 2,
-  "@truecms/pancake-sass": 2
-};
 const failures = [];
-const readVersion = (name) => {
+
+const readInstalledVersion = (name) => {
   try {
     const p = path.join("node_modules", ...name.split("/"), "package.json");
     return JSON.parse(fs.readFileSync(p, "utf8")).version;
@@ -347,39 +248,10 @@ const readVersion = (name) => {
     return null;
   }
 };
-const getNpmTree = () => {
-  try {
-    return JSON.parse(execSync("npm ls --all --json", { stdio: ["ignore", "pipe", "pipe"] }).toString());
-  } catch (err) {
-    const fallback = err && err.stdout ? String(err.stdout) : "";
-    if (fallback) {
-      return JSON.parse(fallback);
-    }
-    return { dependencies: {} };
-  }
-};
-const collectDependencyVersions = (treeNode, packageName, acc) => {
-  if (!treeNode || !treeNode.dependencies) return;
-  for (const [depName, dep] of Object.entries(treeNode.dependencies)) {
-    if (!dep) continue;
-    if (depName === packageName && dep.version) {
-      acc.push(dep.version);
-    }
-    collectDependencyVersions(dep, packageName, acc);
-  }
-};
-const semverCmp = (a, b) => {
-  const pa = a.split(".").map((x) => parseInt(x, 10) || 0);
-  const pb = b.split(".").map((x) => parseInt(x, 10) || 0);
-  for (let i = 0; i < 3; i += 1) {
-    if (pa[i] > pb[i]) return 1;
-    if (pa[i] < pb[i]) return -1;
-  }
-  return 0;
-};
+
 for (const [name, major] of Object.entries(expectedMajors)) {
   if (!declared[name]) continue;
-  const installed = readVersion(name);
+  const installed = readInstalledVersion(name);
   if (!installed) {
     failures.push(`${name} is declared but not installed`);
     continue;
@@ -389,147 +261,82 @@ for (const [name, major] of Object.entries(expectedMajors)) {
     failures.push(`${name}@${installed} expected major ${major}.x`);
   }
 }
-const pancake = declared["@truecms/pancake"] ? readVersion("@truecms/pancake") : null;
-if (pancake && semverCmp(pancake, "2.0.1") < 0) {
-  failures.push(`@truecms/pancake@${pancake} must be >=2.0.1`);
+
+for (const dep of deprecated) {
+  if (declared[dep]) failures.push(`${dep} must be removed from package.json`);
 }
-const pancakeJsVersions = [];
-const pancakeJsTopLevel = readVersion("@truecms/pancake-js");
-if (pancakeJsTopLevel) {
-  pancakeJsVersions.push(pancakeJsTopLevel);
+
+const legacyGov = Object.keys(declared).filter((name) => name.startsWith("@gov.au/"));
+for (const dep of legacyGov) {
+  failures.push(`${dep} must be replaced with @truecms/* equivalent`);
 }
-collectDependencyVersions(getNpmTree(), "@truecms/pancake-js", pancakeJsVersions);
-const pancakeJsUniqueVersions = [...new Set(pancakeJsVersions)];
-if (!pancakeJsUniqueVersions.length) {
-  failures.push("@truecms/pancake-js is not installed");
-} else {
-  const pancakeJsHighest = pancakeJsUniqueVersions
-    .sort((a, b) => semverCmp(a, b))
-    .slice(-1)[0];
-  if (semverCmp(pancakeJsHighest, "2.0.2") < 0) {
-    failures.push(
-      `@truecms/pancake-js versions [${pancakeJsUniqueVersions.join(", ")}] must include >=2.0.2`
-    );
-  }
-}
-if (declared["@truecms/pancake-react"]) {
-  const pancakeReact = readVersion("@truecms/pancake-react");
-  if (!pancakeReact) {
-    failures.push("@truecms/pancake-react is declared but not installed");
-  }
-}
+
 if (failures.length) {
-  console.error("Version validation failed:\\n" + failures.join("\\n"));
+  console.error("Version validation failed:\n" + failures.join("\n"));
   process.exit(1);
 }
+
 console.log("Version validation passed");
 '
 ```
 
-## Workflow
+## Modern Build-Stack Cutover (Vite)
 
-1. Preflight and git safety
-   - Run `git -C "$PROJECT_ROOT" status -sb` (if Git is initialized).
-   - If on `main`/`master`, create or switch to `feature/d11` (or the user-provided feature branch).
-   - Confirm `THEME_DIR` exists and resolve `BASE_THEME_DIR`.
-   - Build `THEME_TARGET_DIRS`.
-   - Run the "Prerequisite Gate" above and do not proceed unless it passes.
-   - Run the "Theme Topology Gate" above and do not proceed unless it passes.
-   - Run the "Migration Applicability Gate" above and do not proceed unless it passes.
-   - Run the "Git Safety Gate" above and do not proceed until user decision is captured.
+Use this when the theme is already on `@truecms/*` and you are removing theme-level legacy build tooling.
 
-2. Set toolchain
-   - Ensure active runtime remains Node `v22.x` and npm `10+`.
-   - If shell context changed, rerun:
-     - `source ~/.nvm/nvm.sh && nvm use 22` (when `nvm` is available)
-   - Verify `node -v` and `npm -v`.
+Core pattern in build-owning theme(s):
 
-3. Baseline scan
-   - For each directory in `THEME_TARGET_DIRS`:
-     - Run `rg -n "@gov\\.au/" -S "<theme-dir>"`.
-     - Run `rg -n "node_modules/@gov\\.au" -S "<theme-dir>"`.
-   - Capture scripts/dependencies from `package.json` for each theme that has one.
-   - Capture legacy dependency list from each dependency-owning theme to verify 1:1 replacement after migration.
+1. Replace scripts in `package.json`:
+   - `build`: `vite build && node assets/modern/sync-build.mjs`
+   - `build:dev`: `vite build --watch --mode development`
+   - `lint`: `eslint assets/js assets/modern --max-warnings=0`
+2. Remove legacy active build files:
+   - `gulpfile.js`
+   - `config.json`
+3. Add modern build files:
+   - `vite.config.mjs`
+   - `assets/modern/entry-*.js`
+   - `assets/modern/sync-build.mjs`
+   - `eslint.config.mjs` (exclude vendored/minified assets)
+4. Ensure `.gitignore` includes `build`.
 
-4. Migrate dependencies
-   - In dependency-owning theme(s) only, replace each `@gov.au/<component>` dependency with `@truecms/<component>` (same component name).
-   - Align each replaced component with the major version listed in "Dependency Jump Matrix" in each dependency-owning theme.
-   - Ensure these packages are present in dependency-owning theme(s):
-     - `@truecms/pancake`
-     - `@truecms/pancake-sass`
-   - Ensure `@truecms/pancake-js` resolves to `>=2.0.2` (direct or transitive) in each dependency-owning theme.
-   - Do not add UIKit dependencies to sub-theme `package.json` if sub-theme does not declare them.
+Verification commands:
 
-5. Update scripts and JS restore flow (if needed)
-   - In each build-owning theme, prefer a safe setup script:
-     - `"setup": "npm install --ignore-scripts && (./node_modules/.bin/pancake || true) && npm run restore-uikit --if-present"`
-   - If a build-owning theme expects component files in `assets/uikit/js`, add:
-     - `"restore-uikit": "node restore-uikit-js.js"`
-     - `restore-uikit-js.js` that copies `@truecms/*/lib/js/module.js` (or `main.js`) to `assets/uikit/js/<component>.js`.
-   - Keep existing project-specific scripts unless they directly block installs or builds.
+```bash
+npm install
+npm audit
+npm run build
+npm run lint
+```
 
-6. Update imports and paths
-   - Across `THEME_TARGET_DIRS`, replace hard-coded `node_modules/@gov.au/...` imports with `node_modules/@truecms/...` where present.
-   - Confirm base Sass imports reference `@truecms/core` in each affected theme.
+Expected result:
 
-7. Install, audit, build
-   - For each dependency-owning theme, run:
-     - `rm -rf node_modules package-lock.json`
-     - `npm install --ignore-scripts`
-     - `npm ls @truecms/pancake @truecms/pancake-sass @truecms/pancake-js`
-     - `npm audit`
-   - For each build-owning theme, run:
-     - `npm run build`
-   - If Pancake assets are missing after install, run `npm rebuild` or rerun `npm install` without `--ignore-scripts` in the affected theme.
-
-8. Verify migration
-   - Complete the Stage 8 atomic task checklist above.
-   - Complete the "Final Verification Checklist" below.
-
-## Acceptance Criteria
-
-- Theme source no longer references `@gov.au/*` across base and sub-theme target directories.
-- Build succeeds on Node 22.
-- `npm audit` has no unresolved vulnerabilities (or blockers are explicitly documented with package/version).
-- Atomic task board is fully completed and marked.
-- Base theme + sub-theme topology decision is documented (including Composer-managed parent handling, if applicable).
-- Final report includes:
-  - changed files
-  - executed commands
-  - audit/build outputs
-  - follow-up risks/actions
-  - Git safety decision (initialized/stashed/committed/proceeded as-is)
-  - all gate outcomes and user decisions
-  - task completion state
+- `npm audit`: 0 vulnerabilities
+- `npm run build`: pass
+- `npm run lint`: pass
+- no active Pancake compilation/deprecation warnings
 
 ## Final Verification Checklist
 
-- [ ] Node runtime is `v22.x`.
-- [ ] `npm` is `10+`.
-- [ ] If initial Node was not `v22.x` and `nvm` existed, assistant switched runtime to Node 22 automatically.
-- [ ] If initial Node was not `v22.x` and `nvm` did not exist, assistant stopped with prerequisite guidance and did not run migration.
-- [ ] Theme topology gate passed: base theme and sub-theme directories were resolved and logged.
-- [ ] If base theme was Composer-managed in `contrib`, user decision on vendorize-to-custom was captured and executed when approved.
-- [ ] Pre-migration applicability gate passed: at least one dependency-owning theme contained `@gov.au/*` and targets were not already fully migrated.
-- [ ] Git safety gate completed and decision recorded.
-- [ ] If Git was missing, user chose whether to initialize baseline snapshot before migration.
-- [ ] If Git working tree was dirty, user chose stash/commit/proceed-as-is and assistant executed chosen action when applicable.
-- [ ] All `@gov.au/*` dependencies were replaced with `@truecms/*` in dependency-owning theme(s).
-- [ ] Sub-theme dependency rule was respected (no UIKit dependency additions where sub-theme did not declare them).
-- [ ] Replaced packages match expected major versions from "Dependency Jump Matrix" in dependency-owning theme(s).
-- [ ] `@truecms/pancake` and `@truecms/pancake-sass` are installed in dependency-owning theme(s).
-- [ ] Resolved `@truecms/pancake-js` is `>=2.0.2` in dependency-owning theme(s).
-- [ ] Version validation for every migrated package in the matrix passed (no mismatches) for each dependency-owning theme.
-- [ ] Every pre-migration legacy dependency has its mapped `@truecms/*` replacement in dependency-owning theme(s).
-- [ ] `rg -n "@gov\\.au/" -S "<theme-dir>"` returns no matches for all `THEME_TARGET_DIRS`.
-- [ ] `npm audit` reports 0 unresolved vulnerabilities for each dependency-owning theme.
-- [ ] `npm run build` succeeds for each build-owning theme.
-- [ ] Expected built assets are present in base-theme and sub-theme output locations (`assets/uikit/css` and `assets/uikit/js` where applicable).
-- [ ] Drupal smoke test confirms core UI components render and behave correctly.
-- [ ] No unchecked items remain in the Atomic Task Board.
+- [ ] Runtime is Node `v22.x` and npm `10+`.
+- [ ] Path A or Path B was explicitly detected and logged.
+- [ ] All `@gov.au/*` dependencies were removed/replaced.
+- [ ] All relevant `@truecms/*` dependencies match current target majors.
+- [ ] Deprecated Pancake packages are not declared in `package.json`.
+- [ ] Version validation command passed in each dependency-owning theme.
+- [ ] `npm audit` reports 0 unresolved vulnerabilities (or blockers are documented).
+- [ ] `npm run build` succeeds in each build-owning theme.
+- [ ] Drupal smoke test confirms UI components render and behave correctly.
+
+## Acceptance Criteria
+
+- Migration path was correctly selected and completed (Path A or Path B).
+- Consumer themes no longer depend on Pancake packages.
+- Build and verification gates pass on Node 22.
+- Migration report includes decisions, commands, and outcomes.
 
 ## Guardrails
 
 - Do not edit minified files directly.
 - Do not revert unrelated working tree changes.
-- Keep migration changes scoped to theme front-end dependencies, imports, and build scripts.
+- Keep migration changes scoped to dependencies, imports, and build scripts.

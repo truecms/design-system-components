@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUfooter, { AUfooterNav, AUfooterEnd } from './footer.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<h2>footer</h2>
 
@@ -221,7 +221,5 @@ ReactDOM.render(
 				</div>
 			</AUfooter>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

@@ -1,4 +1,4 @@
-# Install + Apply: GovCMS UIKit Migration to `@truecms` (Claude Code)
+# Install + Apply: GovCMS UIKit Upgrade to current `@truecms` (Claude Code)
 
 Use the canonical installation entrypoint in this repository:
 

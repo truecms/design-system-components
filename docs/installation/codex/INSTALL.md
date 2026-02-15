@@ -1,4 +1,4 @@
-# Install + Apply: GovCMS UIKit Migration to `@truecms` (Codex)
+# Install + Apply: GovCMS UIKit Upgrade to current `@truecms` (Codex)
 
 Use the canonical installation entrypoint in this repository:
 

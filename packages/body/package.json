@@ -1,11 +1,9 @@
 {
   "name": "@truecms/body",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Basic body styles for body HTML elements",
   "keywords": [
     "auds",
-    "pancake",
-    "pancake-module",
     "sass",
     "scss",
     "css",
@@ -18,11 +16,10 @@
     "paragraphs"
   ],
   "scripts": {
-    "postinstall": "pancake",
     "test:a11y": "node ../../scripts/a11y.js",
     "test:helper": "node ../../scripts/helper.js test",
     "test": "npm-run-all --parallel test:*",
-    "prepublish": "npm run test:helper && npm run build:pre",
+    "prepublish": "npm run test:helper",
     "build:pre": "node ../../scripts/helper.js precompile publish",
     "build:js": "npm run build:pre && node ../../scripts/helper.js compile",
     "build": "npm run build:js",
@@ -32,27 +29,11 @@
     "watch:sass": "onchange \"src/sass/*.scss\" \"tests/site/test.scss\" -- npm run build",
     "watch": "npm run build && npm-run-all --parallel serve watch:*"
   },
-  "pancake": {
-    "pancake-module": {
-      "version": "1.0.0",
-      "plugins": [
-        "@truecms/pancake-sass",
-        "@truecms/pancake-json"
-      ],
-      "sass": {
-        "path": "lib/sass/_module.scss",
-        "sass-versioning": true
-      }
-    }
-  },
   "dependencies": {
-    "@truecms/core": "workspace:*",
-    "@truecms/pancake": "^2.0.0",
-    "@truecms/pancake-json": "^2.0.0",
-    "@truecms/pancake-sass": "^3.0.0"
+    "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^5.0.2"
+    "@truecms/core": "^6.0.0"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",

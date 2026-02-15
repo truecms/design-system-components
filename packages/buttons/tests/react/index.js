@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 import AUbutton from './buttons.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<form>
 		<div className="split-wrapper">
 			<div className="split">
@@ -132,13 +132,13 @@ ReactDOM.render(
 						<AUbutton dark linkComponent={ Link } link="one" >One</AUbutton>&nbsp;
 						<AUbutton dark linkComponent={ Link } link="two" >Two</AUbutton>
 						<br />
-						<Route path="/one" render={ () => ( <p>Route one</p> )} />
-						<Route path="/two" render={ () => ( <p>Route two</p> )} />
+						<Routes>
+						<Route path="/one" element={ <p>Route one</p> } />
+						<Route path="/two" element={ <p>Route two</p> } />
+						</Routes>
 					</Fragment>
 				</BrowserRouter>
 			</div>
 		</div>
-	</form>,
-
-	document.getElementById('root'),
+	</form>
 );

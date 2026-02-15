@@ -1,6 +1,10 @@
-# Install + Apply: GovCMS UIKit Migration to `@truecms`
+# Install + Apply: GovCMS UIKit Upgrade to current `@truecms`
 
 This is the canonical installation and execution entrypoint for AI coding assistants.
+It covers both upgrade paths:
+
+- `@gov.au/*` -> current `@truecms/*` major
+- previous `@truecms/*` major -> current `@truecms/*` major
 
 ## Use in any assistant
 

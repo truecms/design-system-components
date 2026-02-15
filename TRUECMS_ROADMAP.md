@@ -1,6 +1,6 @@
 # TRUECMS Roadmap: design-system-components
 
-Last updated: 2026-02-13
+Last updated: 2026-02-14
 
 ## Current Priority
 Highest priority repository. Make this repo release-ready and publishable first.
@@ -34,7 +34,7 @@ Highest priority repository. Make this repo release-ready and publishable first.
 ### M3. Publish preparation
 - [x] Ensure package metadata and exports for `@truecms/design-system` are final.
 - [x] Prepare/update changeset entries for release.
-- [ ] Run release dry-run workflow/commands.
+- [x] Run release dry-run workflow/commands.
 
 ### M4. Prerelease publication
 - [ ] Publish prerelease under `@truecms/design-system`.
@@ -45,6 +45,16 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [ ] Publish/update legacy-to-unified mapping document.
 - [ ] Publish/update migration quickstart references used by downstream repos.
 - [ ] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
+
+### M6. Static major-line branching strategy
+- [ ] Freeze current `master` as legacy major line and preserve it as `1.x`.
+- [ ] Cut modern de-pancake line as `2.x` from the current migration branch baseline.
+- [ ] Switch repository default branch from `master` to `2.x`.
+- [ ] Retire/delete `master` only after default-branch switch, branch protections, and CI required-check updates are complete.
+- [ ] Define release policy:
+  - legacy fixes only on `1.x`
+  - all new feature/de-pancake work on `2.x`
+  - explicit cherry-pick/backport policy between `2.x` and `1.x`
 
 ## Verification Gates
 - [x] No regression in canonical markup/classes/behavior.
@@ -61,3 +71,31 @@ Use `../MULTI_REPO_ROADMAP.md` for cross-repo blockers and sequencing.
 - M2 had no code failures to fix; rerun requirement satisfied by clean M1 command set and passing migration suites.
 - Publish preparation confirmed via package metadata in `packages/unified-design-system/package.json` and existing changeset `/.changeset/unified-design-system-package.md`.
 - `pnpm changeset publish --dry-run` attempted and reached npm publish step, but failed due registry/auth constraints (`Access token expired or revoked` / `E404` for `@truecms/design-system` scope). Keep M3 dry-run and all M4 publication tasks open until authenticated publish context is available.
+
+### 2026-02-14 major-bump and downstream validation evidence
+- Major version updates were generated with Changesets for all publishable `@truecms/*` packages; key outputs include `@truecms/core@6.0.0`, `@truecms/accordion@9.0.0`, and `@truecms/design-system@1.0.0`.
+- Legacy Pancake package coupling was removed from publishable component manifests:
+  - removed `postinstall: pancake`,
+  - removed `pancake` config blocks,
+  - removed `@truecms/pancake*` dependency declarations.
+- `scripts/helper.js` package validation was updated to enforce de-Pancake package manifests and reject legacy Pancake dependency/config regressions.
+- Local tarballs were produced via `pnpm run pack:tarballs` under `dist/tarballs/` and installed into downstream themes in `drupal-ispovednik` using `npm install --no-save --ignore-scripts <tarballs>`.
+- Downstream validation passed for both themes after major tarball install:
+  - `web/themes/custom/govcms8_uikit_starter`: `npm run build` and `npm run lint`.
+  - `web/themes/custom/cdr`: `npm run build` and `npm run lint`.
+- Repository verification passed in this branch:
+  - `pnpm run build:unified`
+  - `pnpm run test:design-system`
+  - `pnpm run test:unified`
+- `changeset publish --dry-run` confirms publish intent for all new majors but remains blocked by npm credentials/scope (`NPM_TOKEN` unresolved, `npm whoami` unauthorized, and `E404` on `PUT` for `@truecms/*`).
+- Remaining hard blocker is npm credential/scope access for the authenticated publishing identity.
+
+### 2026-02-14 branch inventory for static lines (planning)
+- Remote branch inventory does not currently include dedicated static major-line branches such as `1.x` or `2.x`.
+- Existing remote tags found:
+  - `v2025.11.04`
+  - `v2025.11.04-dev.0`
+- Agreed target model (planning only, not executed yet):
+  - keep current `master` content as legacy line and preserve it as `1.x`
+  - promote the de-pancake major line to `2.x` and make it the new default branch
+  - remove `master` after default-branch cutover and protection/CI updates

@@ -1,6 +1,6 @@
 {
   "name": "@truecms/design-system",
-  "version": "0.0.0-unified-local",
+  "version": "1.0.0",
   "description": "Unified GovAU design system package for Drupal and React consumers.",
   "keywords": [
     "auds",
@@ -30,9 +30,9 @@
     "@truecms/header": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/accordion": "^8.0.1",
-    "@truecms/buttons": "^4.0.1",
-    "@truecms/header": "^5.0.1"
+    "@truecms/accordion": "^9.0.0",
+    "@truecms/buttons": "^5.0.0",
+    "@truecms/header": "^6.0.0"
   },
   "engines": {
     "node": ">=22.0.0",

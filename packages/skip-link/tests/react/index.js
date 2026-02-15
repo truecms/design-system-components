@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUskipLink from './skip-link.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<AUskipLink links={[
 			{
@@ -65,7 +65,5 @@ ReactDOM.render(
 		<main id="content" role="main" tabIndex="0">
 			<p>This is paragraph inside the main content space (a <code>main</code> element).</p>
 		</main>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

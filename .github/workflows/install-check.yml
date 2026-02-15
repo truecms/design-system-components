@@ -3,13 +3,11 @@ name: Install Check
 on:
   push:
     branches:
-      - main
-      - master
+      - 2.x
       - 'release/**'
   pull_request:
     branches:
-      - main
-      - master
+      - 2.x
   workflow_dispatch:
 
 jobs:

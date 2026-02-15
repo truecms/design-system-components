@@ -59,7 +59,7 @@ jobs:
           set -euo pipefail
           default_branch="${{ github.event.repository.default_branch }}"
           if [ -z "${default_branch}" ]; then
-            default_branch="master"
+            default_branch="2.x"
           fi
           token="${{ secrets.GITHUB_TOKEN }}"
           repo="${{ github.repository }}"

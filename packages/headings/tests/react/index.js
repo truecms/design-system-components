@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUheading from './headings.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div className="split-wrapper">
 		<div className="split">
 			<h2>headings</h2>
@@ -32,7 +32,5 @@ ReactDOM.render(
 
 			<AUheading size="xl"   level="6" className="testing">with additional classes</AUheading>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

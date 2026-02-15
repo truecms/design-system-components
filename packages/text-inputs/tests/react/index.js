@@ -1,10 +1,10 @@
 import React    from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUtextInput from './text-inputs.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div className="split-wrapper">
 		<div className="split">
 			<h2>Default</h2>
@@ -184,7 +184,5 @@ ABCZ abcjg liI1 12340" />
 			<label htmlFor="width-full-dark" className="label">Width full</label>
 			<AUtextInput id="width-full-dark" dark block/>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

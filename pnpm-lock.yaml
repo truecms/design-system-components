@@ -86,21 +86,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-js':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -137,16 +122,6 @@ importers:
         version: 6.0.1(webpack@5.102.1)
 
   packages/animate:
-    dependencies:
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-js':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
     devDependencies:
       browser-sync:
         specifier: ^3.0.4
@@ -166,15 +141,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       browser-sync:
         specifier: ^3.0.4
@@ -194,18 +160,6 @@ importers:
       '@truecms/link-list':
         specifier: workspace:*
         version: link:../link-list
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -249,18 +203,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -304,18 +246,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -356,18 +286,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -408,18 +326,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -457,15 +363,6 @@ importers:
 
   packages/core:
     dependencies:
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
       sass-versioning:
         specifier: ^0.4.5
         version: 0.4.5
@@ -485,18 +382,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -540,18 +425,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -595,18 +468,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -647,18 +508,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -702,15 +551,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       browser-sync:
         specifier: ^3.0.4
@@ -727,18 +567,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -782,18 +610,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -837,18 +653,6 @@ importers:
       '@truecms/link-list':
         specifier: workspace:*
         version: link:../link-list
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -892,18 +696,6 @@ importers:
       '@truecms/link-list':
         specifier: workspace:*
         version: link:../link-list
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -950,18 +742,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1011,21 +791,6 @@ importers:
       '@truecms/link-list':
         specifier: workspace:*
         version: link:../link-list
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-js':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1072,18 +837,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1124,18 +877,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1179,15 +920,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       browser-sync:
         specifier: ^3.0.4
@@ -1207,18 +939,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
       '@truecms/text-inputs':
         specifier: workspace:*
         version: link:../text-inputs
@@ -1265,18 +985,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1326,21 +1034,6 @@ importers:
       '@truecms/link-list':
         specifier: workspace:*
         version: link:../link-list
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-js':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1384,18 +1077,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1436,18 +1117,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1488,18 +1157,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1543,18 +1200,6 @@ importers:
       '@truecms/core':
         specifier: workspace:*
         version: link:../core
-      '@truecms/pancake':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-json':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-react':
-        specifier: ^2.0.0
-        version: 2.0.0
-      '@truecms/pancake-sass':
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -2954,27 +2599,6 @@ packages:
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
-
-  '@truecms/pancake-js@2.0.0':
-    resolution: {integrity: sha512-tWDsyo9hL7/pr1+P9YkNT4biz4B8jtNyGpVOpPl2AYplMFykv3D2eMbRsQ6LgLpCOThDi5PftR2YNMLrJM7tVw==}
-    engines: {node: '>=22', npm: '>=10'}
-
-  '@truecms/pancake-json@2.0.0':
-    resolution: {integrity: sha512-znaVnXx0JL2xnv7CDrGrgLfhAkaxaXRxC/jj8voW7SUeeYGf0OO2v47HCbb/IFj/AorBtH6SXjt9yVOpbqSrwg==}
-    engines: {node: '>=22', npm: '>=10'}
-
-  '@truecms/pancake-react@2.0.0':
-    resolution: {integrity: sha512-BCwAqE9OuOgtF1TrnAUJGHviXowMJTCy+lVwjZtB5bRgYKFEeSmA69GiK/W79MA6lpk0QEbSv3Ri3Nf09GN3UA==}
-    engines: {node: '>=22', npm: '>=10'}
-
-  '@truecms/pancake-sass@3.0.0':
-    resolution: {integrity: sha512-dKTc4CY0HjmT8X/EdEHRtTuQnishJhdgr921Y5KUy3XwI3YKaBQ0YyMAnDnQ05K1EinNB94lxVWWPXVWbKn+5w==}
-    engines: {node: '>=22', npm: '>=10'}
-
-  '@truecms/pancake@2.0.0':
-    resolution: {integrity: sha512-kUVKo65ScID2K36LaMfumab6kPYye0+OtQujOpl7Y/e4eLEKTXtc6X7mjSOg2H0rPlMnAnvAsFCbSU/XWwbcmQ==}
-    engines: {node: '>=22', npm: '>=10'}
-    hasBin: true
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -7668,29 +7292,6 @@ snapshots:
   '@socket.io/component-emitter@3.1.2': {}
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
-
-  '@truecms/pancake-js@2.0.0':
-    dependencies:
-      '@truecms/pancake': 2.0.0
-      esbuild: 0.25.12
-
-  '@truecms/pancake-json@2.0.0':
-    dependencies:
-      '@truecms/pancake': 2.0.0
-
-  '@truecms/pancake-react@2.0.0':
-    dependencies:
-      '@truecms/pancake': 2.0.0
-
-  '@truecms/pancake-sass@3.0.0':
-    dependencies:
-      '@truecms/pancake': 2.0.0
-      autoprefixer: 10.4.21(postcss@8.5.6)
-      browserslist: 4.27.0
-      postcss: 8.5.6
-      sass: 1.93.3
-
-  '@truecms/pancake@2.0.0': {}
 
   '@tybys/wasm-util@0.10.1':
     dependencies:

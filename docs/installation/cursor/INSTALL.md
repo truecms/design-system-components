@@ -1,4 +1,4 @@
-# Install + Apply: GovCMS UIKit Migration to `@truecms` (Cursor)
+# Install + Apply: GovCMS UIKit Upgrade to current `@truecms` (Cursor)
 
 Use the canonical installation entrypoint in this repository:
 

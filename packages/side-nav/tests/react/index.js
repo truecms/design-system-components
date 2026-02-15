@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 
 import AUsideNav from './side-nav.js';
@@ -110,7 +110,7 @@ class SideNavWrapper extends React.Component {
 }
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<div className="split-wrapper">
 			<div className="split au-body">
@@ -180,7 +180,5 @@ ReactDOM.render(
 				<SideNavWrapper />
 			</div>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

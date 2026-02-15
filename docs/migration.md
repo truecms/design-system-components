@@ -1,52 +1,45 @@
-# Migrating from `@gov.au` to `@truecms`
+# Migrating to the current `@truecms` release line
 
-The Digital Transformation Agency (DTA) no longer maintains the Pancake ecosystem. This guide explains how to migrate projects to the new `@truecms` namespace that supersedes DTA packages.
+This guide covers both supported upgrade cases:
 
-## Why the migration matters
+- from legacy `@gov.au/*` packages
+- from an earlier major of `@truecms/*`
 
-- All future fixes and security patches are published under `@truecms/*`.
-- Node 22+ is required; older runtimes will no longer receive compatibility updates.
-- The new packages are published from the `@truecms/pancake` monorepo and are distributed through the `@truecms` scope on npm.
+## Why this migration matters
 
-## Migration checklist
+- Active maintenance and fixes are published under `@truecms/*`.
+- Current supported runtime is Node 22+.
+- Modern downstream build stacks are Vite-based; Pancake package dependencies are deprecated for consumers.
 
-1. **Pin Node and pnpm versions**
-   - Add an `.nvmrc` with `22` and update CI workflows to run against Node `22.x` and `lts/*`.
-   - Ensure `package.json` has `"engines": { "node": ">=22.0.0", "pnpm": ">=9.0.0" }`.
+## Supported paths
 
-2. **Update dependencies**
-   - Replace every `@gov.au/...` package reference with the equivalent `@truecms/...` name.
-   - Update Pancake tooling dependencies to `@truecms/pancake`, `@truecms/pancake-sass`, `@truecms/pancake-js`, and `@truecms/pancake-json`.
-   - Run `pnpm up --latest --recursive` to refresh lockfiles.
+1. **Path A: `@gov.au/*` -> `@truecms/*`**
+   - Replace legacy scope dependencies with matching `@truecms/*` package names.
+   - Pin to the current target majors documented in `/Users/localuser/websites/sites/govau/design-system-components/docs/installation/INSTRUCTIONS.md`.
 
-3. **Refresh Pancake configuration**
-   - Update `pancake` config blocks within each component to reference the new plugin names.
-   - Regenerate compiled assets (`pnpm run build`) and confirm no references to `@gov.au` remain in the output bundles.
+2. **Path B: previous `@truecms/*` major -> current major**
+   - Keep package names, bump major versions to current targets.
+   - Remove deprecated packages (`@truecms/pancake*`, plus any `@gov.au/pancake*`).
 
-4. **Verify build and tests**
-   - Run the full CI pipeline locally: `pnpm install --frozen-lockfile`, `pnpm run build`, `pnpm run test`, `pnpm run build:site-dist`, and `pnpm audit --prod`.
-   - Review accessibility and visual regression results to ensure parity with the legacy scope.
+## Verification gates
 
-5. **Communicate to consumers**
-   - Update README files, changelogs, and support documentation to highlight the namespace change.
-   - Inform integrators that the `@gov.au` namespace is deprecated and will no longer receive updates.
+- `node -v` must be `v22.x`.
+- `npm -v` must be `10+`.
+- `npm audit` should pass (or blockers documented).
+- `npm run build` should pass for build-owning themes.
+- No `@gov.au/*` dependencies should remain.
+- No deprecated Pancake packages should remain in consumer theme `package.json` files.
 
-## Common pitfalls
+## Build-stack direction
 
-- **Mixed scopes**: ensure `pnpm-lock.yaml` does not contain a mix of `@gov.au` and `@truecms` packages after the migration.
-- **Workspace links**: within monorepos, prefer `"workspace:*"` dependency specifiers so pnpm does not attempt to fetch unpublished packages.
-- **CI secrets**: confirm `NPM_TOKEN_TRUECMS` exists; without it, publish workflows fail during authentication.
+For themes that are already on `@truecms/*`, the preferred active build stack is:
+
+- Vite (`vite.config.mjs`)
+- explicit entrypoints in `assets/modern/`
+- post-build sync step to Drupal asset locations
+
+Use the full runbook in `/Users/localuser/websites/sites/govau/design-system-components/docs/installation/INSTRUCTIONS.md` for step-by-step execution and version validation.
 
 ## Support
 
-For migration assistance or to report regressions, email `engineering@truecms.com.au` or open an issue in the repository.
-
-## Next step: unified design system package
-
-After migrating from the legacy `@gov.au/*` namespace to `@truecms/*` packages, the long-term path is to move away from Pancake-specific tooling entirely and adopt the unified Vite/Tailwind/React design system package described in:
-
-- `docs/todo/gov-design-system-target-spec.txt`
-- `specs/001-proceed-task-context/spec.md`
-- `specs/001-proceed-task-context/quickstart.md`
-
-The unified package provides Drupal-facing CSS bundles and React components while preserving existing HTML structure, CSS class names, and behaviour. The Drupal and React fixtures under `tests/integration/drupal/fixtures/sample-theme/` and `tests/integration/react/fixtures/sample-app/` are used to validate this migration path.
+For migration assistance or regressions, open an issue in this repository.

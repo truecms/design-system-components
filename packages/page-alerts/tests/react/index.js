@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUpageAlert from './page-alerts.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div>
 		<div className="split-wrapper">
 			<div className="split">
@@ -150,7 +150,5 @@ ReactDOM.render(
 				</AUpageAlert>
 			</div>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

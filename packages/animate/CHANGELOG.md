@@ -1,5 +1,11 @@
 @truecms/animate CHANGELOG
 
+## 3.0.0
+
+### Major Changes
+
+- Major release for modern-stack migration and upstream package refactoring baseline.
+
 ## 2.0.2
 
 ### Patch Changes

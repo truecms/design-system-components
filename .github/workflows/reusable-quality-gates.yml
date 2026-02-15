@@ -165,6 +165,11 @@ jobs:
 
           node scripts/performance-metrics.js record --step build --duration "$((end - start))"
 
+      - name: Ensure Puppeteer Chrome is installed
+        run: |
+          set -euo pipefail
+          pnpm exec puppeteer browsers install chrome
+
       - name: Run tests
         run: |
           set -euo pipefail

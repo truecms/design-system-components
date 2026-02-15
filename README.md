@@ -38,7 +38,7 @@ If you are testing before merge (for example from `feature/d11`), replace `2.x` 
 
 - `1.x`: legacy LTS line that preserves the pre-de-pancake build and package behaviour.
 - `2.x`: active trunk line for the modern Vite/Tailwind/de-pancake stack.
-- `master`: retired as an active development line after the branch-line split; kept only for archive/cutover safety until final deletion.
+- `archive/master`: static snapshot of the old `master` head preserved for historical rollback/reference.
 
 ## Runtime requirements
 

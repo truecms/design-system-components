@@ -69,7 +69,7 @@ jobs:
             base_ref="${{ github.event.pull_request.base.ref }}"
           fi
 
-          if [ -z "${base_ref}" ]; then
+          if [ -z "${base_ref}" ] || [ "${base_ref}" = "master" ] || [ "${base_ref}" = "main" ]; then
             base_ref="1.x"
           fi
 
@@ -81,8 +81,14 @@ jobs:
           else
             git remote set-url origin "https://github.com/${repo}.git"
           fi
-          git fetch --no-tags --prune origin "${base_ref}"
-          git branch --force "${base_ref}" "origin/${base_ref}" 2>/dev/null || git branch "${base_ref}" "origin/${base_ref}"
+          git fetch --no-tags --prune origin "${base_ref}" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/${base_ref}"; then
+            if git rev-parse --verify "${base_ref}" >/dev/null 2>&1; then
+              git branch --force "${base_ref}" "origin/${base_ref}" || true
+            else
+              git branch "${base_ref}" "origin/${base_ref}" || true
+            fi
+          fi
 
           baseline_ref="1.x"
           if [ "${base_ref}" != "${baseline_ref}" ]; then
@@ -91,7 +97,11 @@ jobs:
           fi
 
           if git show-ref --verify --quiet "refs/remotes/origin/${baseline_ref}"; then
-            git branch --force "${baseline_ref}" "origin/${baseline_ref}" 2>/dev/null || git branch "${baseline_ref}" "origin/${baseline_ref}"
+            if git rev-parse --verify "${baseline_ref}" >/dev/null 2>&1; then
+              git branch --force "${baseline_ref}" "origin/${baseline_ref}" || true
+            else
+              git branch "${baseline_ref}" "origin/${baseline_ref}" || true
+            fi
           fi
 
       - name: Install dependencies
@@ -329,7 +339,11 @@ jobs:
           fi
           git fetch --no-tags --prune origin 1.x || true
           if git show-ref --verify --quiet refs/remotes/origin/1.x; then
-            git branch --force 1.x origin/1.x 2>/dev/null || git branch 1.x origin/1.x
+            if git rev-parse --verify 1.x >/dev/null 2>&1; then
+              git branch --force 1.x origin/1.x || true
+            else
+              git branch 1.x origin/1.x || true
+            fi
           fi
 
       - name: Set up pnpm

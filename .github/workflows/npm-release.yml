@@ -33,7 +33,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ensure master branch fetched
+      - name: Ensure 1.x branch fetched
         run: |
           set -euo pipefail
           token="${{ secrets.GITHUB_TOKEN }}"
@@ -43,9 +43,9 @@ jobs:
           else
             git remote set-url origin "https://github.com/${repo}.git"
           fi
-          git fetch --no-tags --prune origin master || true
-          if git show-ref --verify --quiet refs/remotes/origin/master; then
-            git branch --force master origin/master 2>/dev/null || git branch master origin/master
+          git fetch --no-tags --prune origin 1.x || true
+          if git show-ref --verify --quiet refs/remotes/origin/1.x; then
+            git branch --force 1.x origin/1.x 2>/dev/null || git branch 1.x origin/1.x
           fi
 
       - name: Set up pnpm

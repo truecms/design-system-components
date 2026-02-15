@@ -3,12 +3,10 @@ name: Cloudflare Pages
 on:
   push:
     branches:
-      - main
-      - master
+      - 1.x
   pull_request:
     branches:
-      - main
-      - master
+      - 1.x
   workflow_dispatch:
 
 jobs:
@@ -60,7 +58,7 @@ jobs:
           directory: site-dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
-          productionBranch: main
+          productionBranch: 1.x
 
       - name: Upload Pages artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false

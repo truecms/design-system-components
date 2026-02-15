@@ -9,6 +9,8 @@ const SITE_DIST = Path.join(ROOT, 'site-dist');
 const PACKAGES_DIR = Path.join(ROOT, 'packages');
 const INCLUDED_DIRS = ['lib', 'tests'];
 const TEMPLATE_INDEX = Path.join(ROOT, '.templates', 'index', 'index.html');
+const PACKAGE_SCOPE = '@truecms';
+const README_BASE_URL = 'https://github.com/truecms/design-system-components/blob/master/packages';
 const BUILT_PACKAGES = new Set();
 
 const readPackageMetadata = (packagePath) => {
@@ -35,16 +37,45 @@ const packageNeedsSiteArtifacts = (packagePath) => {
 	}
 
 	const hasTestScss = Fs.existsSync(Path.join(siteTestsPath, 'test.scss'));
-	const hasModuleJs = Fs.existsSync(Path.join(packagePath, 'src', 'js', 'module.js'));
-	if (!hasTestScss && !hasModuleJs) {
+	const siteIndexPath = Path.join(siteTestsPath, 'index.html');
+	const siteIndex = Fs.existsSync(siteIndexPath)
+		? Fs.readFileSync(siteIndexPath, 'utf8')
+		: '';
+	const expectsScript = /src=["']script\.js["']/.test(siteIndex);
+	if (!hasTestScss && !expectsScript) {
 		return false;
 	}
 
 	const hasStyle = Fs.existsSync(Path.join(siteTestsPath, 'style.css'));
 	const hasScript = Fs.existsSync(Path.join(siteTestsPath, 'script.js'));
 	const needsStyle = hasTestScss && !hasStyle;
-	const needsScript = hasModuleJs && !hasScript;
+	const needsScript = expectsScript && !hasScript;
 	return needsStyle || needsScript;
+};
+
+const pickBuildScripts = (scripts) => {
+	const hasBuildJs = Boolean(scripts['build:js']);
+	const hasBuildPre = Boolean(scripts['build:pre']);
+	const hasBuild = Boolean(scripts.build);
+	const buildJsIncludesPrecompile = hasBuildJs && /build:pre/.test(scripts['build:js']);
+
+	if (buildJsIncludesPrecompile) {
+		return ['build:js'];
+	}
+
+	if (hasBuildPre && hasBuildJs) {
+		return ['build:pre', 'build:js'];
+	}
+
+	if (hasBuild) {
+		return ['build'];
+	}
+
+	if (hasBuildJs) {
+		return ['build:js'];
+	}
+
+	return [];
 };
 
 const ensurePackageArtifacts = (packageName, packagePath) => {
@@ -58,21 +89,23 @@ const ensurePackageArtifacts = (packageName, packagePath) => {
 
 	const metadata = readPackageMetadata(packagePath);
 	const scripts = metadata.scripts;
-	if (!scripts['build:js'] && !scripts.build) {
+	const scriptsToRun = pickBuildScripts(scripts);
+	if (scriptsToRun.length === 0) {
 		return;
 	}
 
 	console.log(
-		`[site-dist] Missing generated tests/site assets for ${packageName}; running package build.`
+		`[site-dist] Missing generated tests/site assets for ${packageName}; running package ${scriptsToRun.join(', ')}.`
 	);
-	const scriptToRun = scripts['build:js'] ? 'build:js' : 'build';
 	const filterTarget = metadata.name || `./packages/${packageName}`;
 	// Include workspace dependencies in the build filter so generated test bundles
 	// can inline dependency JS (for example accordion -> animate).
-	execSync(`pnpm --filter "${filterTarget}..." run ${scriptToRun}`, {
-		cwd: ROOT,
-		stdio: 'inherit',
-	});
+	for (const scriptToRun of scriptsToRun) {
+		execSync(`pnpm --filter "${filterTarget}..." run ${scriptToRun}`, {
+			cwd: ROOT,
+			stdio: 'inherit',
+		});
+	}
 	BUILT_PACKAGES.add(packageName);
 };
 
@@ -81,23 +114,36 @@ const getPackageEntries = () => {
 		? Fs.readdirSync(PACKAGES_DIR, { withFileTypes: true })
 		: [];
 
-	return dirents
+	const packageNames = dirents
 		.filter((dirent) => dirent.isDirectory())
-		.map((dirent) => dirent.name)
-		.sort();
+		.map((dirent) => dirent.name);
+
+	const withoutCore = packageNames.filter((name) => name !== 'core');
+	return packageNames.includes('core') ? ['core', ...withoutCore] : withoutCore;
+};
+
+const hasTestVariant = (packagePath, variant) => {
+	const variantPath = Path.join(packagePath, 'tests', variant);
+	return Fs.existsSync(variantPath) && Fs.statSync(variantPath).isDirectory();
 };
 
 const buildDefaultIndex = () => {
 	const packageEntries = getPackageEntries();
 	const moduleLinks = packageEntries
 		.map((moduleName) => {
-			return [
-				`\t\t<li><span class="module-list__headline">${moduleName}</span>`,
-				`\t\t\t<div>`,
-				`\t\t\t\t<a class="link" href="packages/${moduleName}/tests/">tests</a>`,
-				`\t\t\t</div>`,
-				`\t\t</li>`,
-			].join('\n');
+			const packagePath = Path.join(PACKAGES_DIR, moduleName);
+			const hasJquery = hasTestVariant(packagePath, 'jquery');
+			const hasReact = hasTestVariant(packagePath, 'react');
+			const jqueryLink = hasJquery ? `<a class="link" href="packages/${moduleName}/tests/jquery/">jquery</a>` : '';
+			const reactLink = hasReact ? `<a class="link" href="packages/${moduleName}/tests/react/">react</a>` : '';
+
+			return `<li>` +
+				`\t<a class="module-list__headline" href="packages/${moduleName}/tests/">${moduleName}</a>` +
+				`<img class="badge badge--version" src="https://img.shields.io/npm/v/${PACKAGE_SCOPE}/${moduleName}.svg?label=NPM%20&colorA=ffffff&colorB=00698f&style=flat-square" alt="${moduleName} version">` +
+				`\t<br>` +
+				`\t<a class="link" href="packages/${moduleName}/tests/site/">site</a> ${jqueryLink} ${reactLink}` +
+				`\t<a class="link" href="${README_BASE_URL}/${moduleName}/README.md">readme</a>` +
+				`</li>`;
 		})
 		.join('\n');
 
@@ -129,8 +175,7 @@ const buildDefaultIndex = () => {
 	].join('\n');
 };
 
-const copyPackageDirectory = (packageDirent) => {
-	const packageName = packageDirent.name;
+const copyPackageDirectory = (packageName) => {
 	const packagePath = Path.join(PACKAGES_DIR, packageName);
 	const destinationPath = Path.join(SITE_DIST, 'packages', packageName);
 	ensurePackageArtifacts(packageName, packagePath);
@@ -163,13 +208,9 @@ const buildSiteDist = () => {
 		return;
 	}
 
-	const packageDirents = Fs.readdirSync(PACKAGES_DIR, { withFileTypes: true });
-	for (const dirent of packageDirents) {
-		if (!dirent.isDirectory()) {
-			continue;
-		}
-
-		copyPackageDirectory(dirent);
+	const packageEntries = getPackageEntries();
+	for (const packageName of packageEntries) {
+		copyPackageDirectory(packageName);
 	}
 };
 

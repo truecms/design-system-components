@@ -1,6 +1,6 @@
 # TRUECMS Roadmap: design-system-components
 
-Last updated: 2026-02-14
+Last updated: 2026-02-15
 
 ## Current Priority
 Highest priority repository. Make this repo release-ready and publishable first.
@@ -47,14 +47,18 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [ ] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
 
 ### M6. Static major-line branching strategy
-- [ ] Freeze current `master` as legacy major line and preserve it as `1.x`.
-- [ ] Cut modern de-pancake line as `2.x` from the current migration branch baseline.
-- [ ] Switch repository default branch from `master` to `2.x`.
-- [ ] Retire/delete `master` only after default-branch switch, branch protections, and CI required-check updates are complete.
-- [ ] Define release policy:
+- [x] Freeze current `master` as legacy major line and preserve it as `1.x`.
+- [x] Cut modern de-pancake line as `2.x` from the current migration branch baseline.
+- [x] Switch repository default branch from `master` to `2.x`.
+- [x] Retire/delete `master` only after default-branch switch, branch protections, and CI required-check updates are complete.
+- [x] Define release policy:
   - legacy fixes only on `1.x`
   - all new feature/de-pancake work on `2.x`
   - explicit cherry-pick/backport policy between `2.x` and `1.x`
+
+### M7. Future package-line simplification (backlog)
+- [ ] Evaluate single-install adoption via `@truecms/design-system` (component packages become internal dependencies for new consumers).
+- [ ] Align major versions to branch lines in the next breaking release cycle (`1.x` line mapped to `1.*`, `2.x` line mapped to `2.0.0+`), with explicit deprecation/removal policy for obsolete package names.
 
 ## Verification Gates
 - [x] No regression in canonical markup/classes/behavior.
@@ -90,12 +94,10 @@ Use `../MULTI_REPO_ROADMAP.md` for cross-repo blockers and sequencing.
 - `changeset publish --dry-run` confirms publish intent for all new majors but remains blocked by npm credentials/scope (`NPM_TOKEN` unresolved, `npm whoami` unauthorized, and `E404` on `PUT` for `@truecms/*`).
 - Remaining hard blocker is npm credential/scope access for the authenticated publishing identity.
 
-### 2026-02-14 branch inventory for static lines (planning)
-- Remote branch inventory does not currently include dedicated static major-line branches such as `1.x` or `2.x`.
-- Existing remote tags found:
-  - `v2025.11.04`
-  - `v2025.11.04-dev.0`
-- Agreed target model (planning only, not executed yet):
-  - keep current `master` content as legacy line and preserve it as `1.x`
-  - promote the de-pancake major line to `2.x` and make it the new default branch
-  - remove `master` after default-branch cutover and protection/CI updates
+### 2026-02-15 branch-line cutover execution evidence
+- Legacy line was cut to `1.x` from commit `d819c2d1` (pre-de-pancake/Pancake-era baseline).
+- Modern line was cut to `2.x` from commit `97eb6fd7` (latest migration baseline), then advanced with CI/doc cutover commits.
+- Repository default branch was switched to `2.x`.
+- Repository ruleset `protected` (id `12779074`) was updated to protect `refs/heads/1.x` and `refs/heads/2.x`.
+- Remote `master` branch was retired/deleted after the default-branch and ruleset updates.
+- Safety archive branch `archive/master` was created before deletion to preserve the previous `master` head snapshot.

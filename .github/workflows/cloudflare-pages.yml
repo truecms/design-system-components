@@ -3,12 +3,10 @@ name: Cloudflare Pages
 on:
   push:
     branches:
-      - main
-      - master
+      - 2.x
   pull_request:
     branches:
-      - main
-      - master
+      - 2.x
   workflow_dispatch:
 
 jobs:
@@ -88,5 +86,5 @@ jobs:
             fi
             echo
             echo "- Built site-dist for Pages deployment."
-          echo "- If this run is on master, a production deploy was attempted."
+            echo "- If this run is on 2.x, a production deploy was attempted."
           } >> "$GITHUB_STEP_SUMMARY"

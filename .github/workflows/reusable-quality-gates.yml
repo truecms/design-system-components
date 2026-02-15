@@ -103,7 +103,7 @@ jobs:
           fi
 
           if [ -z "${base_ref}" ]; then
-            base_ref="master"
+            base_ref="2.x"
           fi
 
           echo "Fetching base ref: ${base_ref}"
@@ -123,16 +123,17 @@ jobs:
             fi
           fi
 
-          if [ "${base_ref}" != "master" ]; then
-            echo "Fetching master for Changesets baseline"
-            git fetch --no-tags --prune origin master || true
+          baseline_ref="2.x"
+          if [ "${base_ref}" != "${baseline_ref}" ]; then
+            echo "Fetching ${baseline_ref} for Changesets baseline"
+            git fetch --no-tags --prune origin "${baseline_ref}" || true
           fi
 
-          if git show-ref --verify --quiet refs/remotes/origin/master; then
-            if git rev-parse --verify master >/dev/null 2>&1; then
-              git branch -f master origin/master || true
+          if git show-ref --verify --quiet "refs/remotes/origin/${baseline_ref}"; then
+            if git rev-parse --verify "${baseline_ref}" >/dev/null 2>&1; then
+              git branch -f "${baseline_ref}" "origin/${baseline_ref}" || true
             else
-              git branch master origin/master || true
+              git branch "${baseline_ref}" "origin/${baseline_ref}" || true
             fi
           fi
 

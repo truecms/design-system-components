@@ -17,22 +17,28 @@ Use these prompts in your coding assistant to run the legacy `@gov.au/*` to `@tr
 
 - `Codex`
   ```text
-  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/codex/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/codex/INSTALL.md
   ```
 - `Claude Code`
   ```text
-  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/claude/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/claude/INSTALL.md
   ```
 - `OpenCode`
   ```text
-  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/opencode/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/opencode/INSTALL.md
   ```
 - `Cursor`
   ```text
-  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/cursor/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/cursor/INSTALL.md
   ```
 
-If you are testing before merge (for example from `feature/d11`), replace `main` in each URL with your branch name.
+If you are testing before merge (for example from `feature/d11`), replace `2.x` in each URL with your branch name.
+
+## Branch lines
+
+- `1.x`: legacy LTS line that preserves the pre-de-pancake build and package behaviour.
+- `2.x`: active trunk line for the modern Vite/Tailwind/de-pancake stack.
+- `master`: retired as an active development line after the branch-line split; kept only for archive/cutover safety until final deletion.
 
 ## Runtime requirements
 

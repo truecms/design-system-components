@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 import AUprogressIndicator from './progress-indicator.js';
 
@@ -69,7 +69,7 @@ class ProgressIndicatorWrapper extends React.Component {
 }
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div className="split-wrapper">
 		<div className="split au-body">
 		<h2>progress-indicator default</h2>
@@ -303,12 +303,12 @@ ReactDOM.render(
 					},
 				]} />
 				<br />
-				<Route path="/one" render={ () => ( <p>Route one</p> )} />
-				<Route path="/two" render={ () => ( <p>Route two</p> )} />
+				<Routes>
+				<Route path="/one" element={ <p>Route one</p> } />
+				<Route path="/two" element={ <p>Route two</p> } />
+				</Routes>
 			</Fragment>
 		</BrowserRouter>
 	</div>
-</div>,
-
-	document.getElementById('root'),
+</div>
 );

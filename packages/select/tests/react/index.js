@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUselect from './select.js';
 
@@ -59,7 +59,7 @@ class SelectWrapper extends React.Component {
 }
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div className="split-wrapper">
 		<div className="split">
 		<h2>select default</h2>
@@ -400,7 +400,5 @@ ReactDOM.render(
 
 			<SelectWrapper dark />
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

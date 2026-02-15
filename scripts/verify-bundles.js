@@ -52,11 +52,23 @@ function listFilesRecursive(baseDir) {
 function hashFile(filePath) {
   const raw = fs.readFileSync(filePath, 'utf8');
 
-  // Normalise version banner comments so intentional patch bumps
-  // (e.g. "/*! @truecms/<pkg> vX.Y.Z */") don’t cause false positives.
-  // We only collapse the version number; all other content must match.
+  // Normalise metadata-only changes so deliberate version bumps do not
+  // trigger parity failures.
+  // Source maps are removed because their base64 payload embeds version strings.
+  const sourceMapCommentRegex =
+    /\/\/# sourceMappingURL=data:application\/json[^\r\n]*/gi;
   const bannerVersionRegex = /(\/\*!\s*@truecms\/[a-z0-9-]+\s+v)\d+\.\d+\.\d+(\s*\*\/)/gi;
-  const normalised = raw.replace(bannerVersionRegex, '$10.0.0$2');
+  const sassVersionVariableRegex = /(\$version:\s*")[^"]+(";)/gi;
+  const sassDependencyVersionRegex =
+    /(\(\s*"@[a-z0-9.-]+\/[a-z0-9-]+"\s*,\s*")[^"]+("\s*\),?)/gi;
+  const jsonVersionRegex = /("version"\s*:\s*")[^"]+(")/gi;
+
+  const normalised = raw
+    .replace(sourceMapCommentRegex, '')
+    .replace(bannerVersionRegex, '$10.0.0$2')
+    .replace(sassVersionVariableRegex, '$10.0.0$2')
+    .replace(sassDependencyVersionRegex, '$10.0.0$2')
+    .replace(jsonVersionRegex, '$10.0.0$2');
 
   return crypto.createHash('sha256').update(normalised).digest('hex');
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { AUinpageNavLinks, AUinpageNavSection } from './inpage-nav.js';
 
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
 	<div className="split-wrapper">
 		<div className="split au-body">
 		<h2>inpage-nav</h2>
@@ -229,7 +229,5 @@ ReactDOM.render(
 				</p>
 			</AUinpageNavSection>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

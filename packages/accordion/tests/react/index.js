@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUaccordion from './accordion.js';
 
@@ -188,8 +188,6 @@ class App extends React.Component {
 
 
 // render to page
-ReactDOM.render(
-	<App />,
-
-	document.getElementById('root'),
+createRoot(document.getElementById('root')).render(
+	<App />
 );

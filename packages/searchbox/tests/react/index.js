@@ -1,12 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import AUsearchbox from './searchbox.js';
 import { AUlabel } from '../../../form/src/js/react';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 
+const SearchboxRouteDemo = () => {
+	const navigate = useNavigate();
 
-ReactDOM.render(
+	return (
+		<AUsearchbox
+			dark
+			label="Search"
+			btnText="Search"
+			id="def-search--click-route"
+			btnProps={{ onClick: () => { navigate('/one') } }}
+		/>
+	);
+};
+
+createRoot(document.getElementById('root')).render(
 	<div className="au-grid">
 		<div className="split-wrapper">
 			<div className="split">
@@ -43,18 +56,13 @@ ReactDOM.render(
 				<h2>Button with change route</h2>
 
 				<BrowserRouter>
-					<React.Fragment>
-
-						<Route render={({history}) => (
-								<AUsearchbox dark label="Search" btnText="Search" id="def-search--click-route" btnProps={{onClick: () => { history.push('/one') }}}/>
-						)} />
-						<Route path="/one" render={ () => ( <p>Route one</p> )} />
-						<Route path="/two" render={ () => ( <p>Route two</p> )} />
-					</React.Fragment>
+					<Routes>
+						<Route path="/" element={ <SearchboxRouteDemo /> } />
+						<Route path="/one" element={ <p>Route one</p> } />
+						<Route path="/two" element={ <p>Route two</p> } />
+					</Routes>
 				</BrowserRouter>
 			</div>
 		</div>
-	</div>,
-
-	document.getElementById('root'),
+	</div>
 );

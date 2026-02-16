@@ -11,10 +11,10 @@ It covers both upgrade paths:
 Ask your assistant to:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/main/docs/installation/INSTRUCTIONS.md
+Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/INSTRUCTIONS.md
 ```
 
-If you need branch-specific instructions before merge (for example `feature/d11`), replace `main` in the URL with your branch name.
+If you need branch-specific instructions before merge (for example `feature/d11`), replace `2.x` in the URL with your branch name.
 
 ## Required migration inputs
 

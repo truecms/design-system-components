@@ -9,6 +9,7 @@ This migration allows the maintainers to provide funded support for agencies and
 - Production preview site: <https://design-system-components.truecms.com.au/>
 - Pull requests trigger Cloudflare preview builds linked from the Checks tab.
 - Contributor guides live under [`docs/`](./docs/) with focused walkthroughs for publishing, Drupal integration, and migration steps.
+- Assistant installation entrypoint: [`docs/installation/INSTALL.md`](./docs/installation/INSTALL.md).
 
 ## Runtime requirements
 

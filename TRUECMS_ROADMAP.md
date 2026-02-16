@@ -1,6 +1,6 @@
 # TRUECMS Roadmap: design-system-components
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 ## Current Priority
 Highest priority repository. Make this repo release-ready and publishable first.
@@ -42,8 +42,8 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [ ] Notify downstream repos (`design-system-site`, `govcms8_uikit_starter`) via their roadmap files.
 
 ### M5. Migration handoff assets
-- [ ] Publish/update legacy-to-unified mapping document.
-- [ ] Publish/update migration quickstart references used by downstream repos.
+- [x] Publish/update legacy-to-unified mapping document.
+- [x] Publish/update migration quickstart references used by downstream repos.
 - [ ] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
 
 ### M6. Static major-line branching strategy
@@ -101,3 +101,15 @@ Use `../MULTI_REPO_ROADMAP.md` for cross-repo blockers and sequencing.
 - Repository ruleset `protected` (id `12779074`) was updated to protect `refs/heads/1.x` and `refs/heads/2.x`.
 - Remote `master` branch was retired/deleted after the default-branch and ruleset updates.
 - Safety archive branch `archive/master` was created before deletion to preserve the previous `master` head snapshot.
+
+### 2026-02-16 installation handoff evidence
+- Branch-correct installation quickstart references were fixed on `2.x` (PR #16), removing stale `refs/heads/main` links from:
+  - `docs/installation/INSTALL.md`
+  - `docs/installation/claude/INSTALL.md`
+  - `docs/installation/codex/INSTALL.md`
+  - `docs/installation/cursor/INSTALL.md`
+  - `docs/installation/opencode/INSTALL.md`
+- Canonical raw installation endpoints for the active line now resolve:
+  - `https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/INSTALL.md` (`200`)
+  - `https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/INSTRUCTIONS.md` (`200`)
+- Legacy placeholder-image cleanup tracking issue was closed after verification (`#7`), with zero `placehold.it` matches on both `origin/2.x` and `origin/master`.

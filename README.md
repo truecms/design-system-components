@@ -70,7 +70,7 @@ Earlier Node releases are no longer supported. Automated workflows and published
    ```sh
    pnpm run build
    ```
-5. Execute the full verification sweep (Jest unit tests, Pa11y accessibility, helper smoke tests, and bundle parity checks):
+5. Execute the full verification sweep (Jest unit tests, Pa11y accessibility, and helper smoke tests):
    ```sh
    pnpm run test
    ```

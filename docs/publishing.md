@@ -43,9 +43,9 @@ Download those artifacts from the workflow run to confirm the release plan befor
 
 ### Artifact reference
 
-- `install-check-artifacts-<node>`: contains `install-check-audit-report.json`, bundle parity summaries, Pa11y reports for each exercised component, performance metrics, and `dist/tarballs/install-check-pack-summary.json`.
-- `dry-run-release-artifacts`: captures `changesets-summary.json`, the aggregate tarball install summary, bundle parity outputs, the Pa11y report bundle, and performance metrics for the dry run pipeline.
-- `npm-release-artifacts`: stores the final audit output alongside bundle parity, Pa11y logs, and performance summaries so maintainers can prove what was published.
+- `install-check-artifacts-<node>`: contains `install-check-audit-report.json`, Pa11y reports for each exercised component, performance metrics, and `dist/tarballs/install-check-pack-summary.json`.
+- `dry-run-release-artifacts`: captures `changesets-summary.json`, the aggregate tarball install summary, the Pa11y report bundle, and performance metrics for the dry run pipeline.
+- `npm-release-artifacts`: stores the final audit output alongside Pa11y logs and performance summaries so maintainers can prove what was published.
 
 ## Manual Publish (Fallback)
 

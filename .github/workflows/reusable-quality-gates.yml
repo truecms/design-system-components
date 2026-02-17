@@ -174,8 +174,6 @@ jobs:
       - name: Run tests
         run: |
           set -euo pipefail
-          export BUNDLE_PARITY_REPORT_PATH="dist/reports/${{ inputs.report_suffix }}/bundle-parity.json"
-          export BUNDLE_PARITY_LOG_PATH="dist/reports/${{ inputs.report_suffix }}/bundle-parity.log"
           export PA11Y_REPORT_DIR="dist/reports/${{ inputs.report_suffix }}/a11y"
           export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
           export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
@@ -261,8 +259,6 @@ jobs:
             audit-report.json
             changesets-summary.json
             dist/tarballs/${{ inputs.tarball_summary_file }}
-            dist/reports/${{ inputs.report_suffix }}/bundle-parity.json
-            dist/reports/${{ inputs.report_suffix }}/bundle-parity.log
             dist/reports/${{ inputs.report_suffix }}/a11y/index.json
             dist/reports/${{ inputs.report_suffix }}/a11y/*.json
             dist/reports/${{ inputs.report_suffix }}/performance.json
@@ -288,6 +284,6 @@ jobs:
             echo "| Node | ${{ inputs.node_label }} |"
             echo "| Branch | ${GITHUB_REF_NAME} |"
             echo
-            echo "- Verified install, build, tests, audit, and bundle parity."
+            echo "- Verified install, build, tests, and audit."
             echo "- Artifacts: dist/reports/${{ inputs.report_suffix }}/ and dist/tarballs/${{ inputs.tarball_summary_file }}."
           } >> "$GITHUB_STEP_SUMMARY"

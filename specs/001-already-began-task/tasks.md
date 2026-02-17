@@ -1,6 +1,6 @@
 # Tasks: Modernise Design System Components for Node 22 Support
 
-**Input**: Design documents from `/Users/localuser/websites/sites/govau/design-system-components/specs/001-already-began-task/`
+**Input**: Design documents from `specs/001-already-began-task/`
 **Prerequisites**: plan.md (required), spec.md (required), research.md, data-model.md, contracts/
 
 **Tests**: Tests are required (per spec and Constitution Principle III). Include Jest unit tests, Pa11y accessibility checks, smoke tests via `scripts/helper.js`, bundle parity checks, and CI audit gates.
@@ -19,7 +19,7 @@
 
 **Purpose**: Establish Node 22 baseline and workspace hygiene.
 
-- [x] T001 [US0] Add Node pin: create `.nvmrc` with `22` at repo root (`/Users/localuser/websites/sites/govau/design-system-components/.nvmrc`).
+- [x] T001 [US0] Add Node pin: create `.nvmrc` with `22` at repo root (`.nvmrc`).
 - [x] T002 [US0] Verify engines across workspace: ensure `"engines": {"node": ">=22.0.0", "npm": ">=10.0.0", "pnpm": ">=9.0.0"}` exist in `package.json` and all `packages/*/package.json` (update if missing).
 - [x] T003 [P] [US0] Validate GitHub Actions Node matrix aligns with spec: confirm `22.x` plus `lts/*` in `.github/workflows/install-check.yml` and Node `22.x` in `.github/workflows/npm-release.yml`.
 - [x] T004 [US0] Bootstrap deps: run `pnpm run bootstrap` (refreshes `pnpm-lock.yaml`) and commit lockfile changes.
@@ -36,7 +36,7 @@
   - `packages/*/package.json` (`dependencies`, `devDependencies`, any `pancake` config blocks)
   - `auds.json` (`pancake-module.plugins` arrays)
 
-- [x] T102 [P] [US0] Update `auds.json`: migrate all `pancake-module.plugins` entries to `@truecms/pancake-*` and preserve paths (file: `/Users/localuser/websites/sites/govau/design-system-components/auds.json`).
+- [x] T102 [P] [US0] Update `auds.json`: migrate all `pancake-module.plugins` entries to `@truecms/pancake-*` and preserve paths (file: `auds.json`).
 
 - [x] T103 [P] [US0] Migrate package manifests: rewrite `@gov.au/pancake` and `@gov.au/pancake-*` to `@truecms/pancake` and `@truecms/pancake-*` in all `packages/*/package.json` and the root `package.json` if present.
 
@@ -48,7 +48,7 @@
 
 - [x] T107 [P] [US0] Node engines guard: add a preflight CI step that logs the active Node version and clearly fails with guidance if `<22` is detected (use `node -v` and an if-check) in both workflows.
 
-- [x] T108 [US0] Document Drupal smoke plan scaffold: create `/Users/localuser/websites/sites/govau/design-system-components/docs/drupal.md` with the verification steps from `quickstart.md` (to be expanded during US1/US2).
+- [x] T108 [US0] Document Drupal smoke plan scaffold: create `docs/drupal.md` with the verification steps from `quickstart.md` (to be expanded during US1/US2).
 
 **Checkpoint**: Migration tooling, upgrades, audits, and documentation build are in place.
 
@@ -92,7 +92,7 @@
 - [x] T303 [US2] Friendly secrets guard: add a step at the start of `.github/workflows/npm-release.yml` to fail with a clear message if `secrets.NPM_TOKEN_TRUECMS` is empty.
 - [x] T304 [US2] Enable npm provenance: set `NPM_CONFIG_PROVENANCE=true` env on the publish step in `.github/workflows/npm-release.yml`.
 - [x] T305 [US2] Ensure `build:site-dist` runs in release workflow after tests to keep docs in sync.
-- [x] T306 [US2] Author a short maintainer guide `/Users/localuser/websites/sites/govau/design-system-components/docs/publishing.md` covering inputs (`npm_scope`, `dist_tag`, `dry_run`), required secrets, and recovery steps.
+- [x] T306 [US2] Author a short maintainer guide `docs/publishing.md` covering inputs (`npm_scope`, `dist_tag`, `dry_run`), required secrets, and recovery steps.
 - [x] T307 [US2] Smoke tag test: exercise signed `v0.0.0-dev` flow via `act` using new release parameter resolver; confirmed dry-run publish path and artifacts succeed under Node 22 with mocked credentials.
 
 **Checkpoint**: US2 independently verifiable; publish path validated.
@@ -113,7 +113,7 @@
 
 - [x] T402 [US3] Sweep and replace documentation references: update `@gov.au` → `@truecms` ownership language across `README.md`, `CONTRIBUTING.md`, `FAQ.md`, `SUPPORT.md`, and `packages/*/README.md`.
 - [x] T403 [P] [US3] Update installation snippets in `packages/*/README.md` to `npm i @truecms/<name>` and verify examples.
-- [x] T404 [US3] Create migration guide `/Users/localuser/websites/sites/govau/design-system-components/docs/migration.md` (moving from `@gov.au/*` to `@truecms/*`, Node 22 requirements, command changes).
+- [x] T404 [US3] Create migration guide `docs/migration.md` (moving from `@gov.au/*` to `@truecms/*`, Node 22 requirements, command changes).
 - [x] T405 [US3] Fix internal references in `README.md` to current spec folder paths (e.g., link to `specs/001-already-began-task/research.md`).
 - [x] T406 [US3] Add a Changeset summarising stewardship transfer and Node 22 requirement (`pnpm changeset`).
 

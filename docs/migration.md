@@ -15,7 +15,7 @@ This guide covers both supported upgrade cases:
 
 1. **Path A: `@gov.au/*` -> `@truecms/*`**
    - Replace legacy scope dependencies with matching `@truecms/*` package names.
-   - Pin to the current target majors documented in `/Users/localuser/websites/sites/govau/design-system-components/docs/installation/INSTRUCTIONS.md`.
+   - Pin to the current target majors documented in `docs/installation/INSTRUCTIONS.md`.
 
 2. **Path B: previous `@truecms/*` major -> current major**
    - Keep package names, bump major versions to current targets.
@@ -38,7 +38,7 @@ For themes that are already on `@truecms/*`, the preferred active build stack is
 - explicit entrypoints in `assets/modern/`
 - post-build sync step to Drupal asset locations
 
-Use the full runbook in `/Users/localuser/websites/sites/govau/design-system-components/docs/installation/INSTRUCTIONS.md` for step-by-step execution and version validation.
+Use the full runbook in `docs/installation/INSTRUCTIONS.md` for step-by-step execution and version validation.
 
 ## Support
 

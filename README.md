@@ -9,7 +9,7 @@ This migration allows the maintainers to provide funded support for agencies and
 - Production preview site: <https://design-system-components.truecms.com.au/>
 - Pull requests trigger Cloudflare preview builds linked from the Checks tab.
 - Contributor guides live under [`docs/`](./docs/) with focused walkthroughs for publishing, Drupal integration, and migration steps.
-- The unified GovAU design system migration (Vite/Tailwind/React) is tracked under [`specs/001-proceed-task-context/`](./specs/001-proceed-task-context/) with a planning quickstart in [`specs/001-proceed-task-context/quickstart.md`](./specs/001-proceed-task-context/quickstart.md) and a target-state spec in [`docs/todo/gov-design-system-target-spec.txt`](./docs/todo/gov-design-system-target-spec.txt).
+- The unified GovAU design system migration (Vite/Tailwind/React) is documented via the target-state spec in [`docs/todo/gov-design-system-target-spec.txt`](./docs/todo/gov-design-system-target-spec.txt) and verification guides under [`docs/`](./docs/).
 
 ## Quick AI-assisted GovCMS migration
 
@@ -101,9 +101,8 @@ Releases are orchestrated with Changesets and pnpm:
 
 In addition to keeping the existing component packages healthy on Node 22, this repository now hosts the unified GovAU design system migration work:
 
-- **Specification and plan**: `specs/001-proceed-task-context/spec.md`, `specs/001-proceed-task-context/plan.md`, `specs/001-proceed-task-context/research.md`.
 - **Target-state architecture**: `docs/todo/gov-design-system-target-spec.txt`.
-- **Planning quickstart**: `specs/001-proceed-task-context/quickstart.md`.
+- **Verification guides**: `docs/drupal.md`, `docs/wiki/node-22-modernisation.md`.
 
 Two in-repo fixtures exercise the Drupal and React migration paths:
 
@@ -133,8 +132,6 @@ Open issues or questions on the [GitHub issue tracker](https://github.com/truecm
 - `packages/` – component packages, each with its own README and CHANGELOG.
 - `scripts/` – build helpers for Sass/PostCSS, accessibility automation, and migration tooling.
 - `.github/workflows/` – Install Check orchestration, reusable quality gates, and npm Release pipelines.
-- `specs/001-already-began-task/` – design artefacts driving the original Node 22 modernisation initiative (plan, research, tasks, and checklists).
-- `specs/001-proceed-task-context/` – feature spec, plan, research, tasks, and checklists for the unified design system migration.
 - `docs/` – platform-specific guides such as Drupal integration, publishing, and migration from the legacy namespace.
 
-For additional implementation context, see [`docs/wiki/node-22-modernisation.md`](./docs/wiki/node-22-modernisation.md) and the research log in `specs/001-already-began-task/research.md` for the Node 22 work, and `specs/001-proceed-task-context/research.md` together with `docs/todo/gov-design-system-target-spec.txt` for the unified design system migration.
+For additional implementation context, see [`docs/wiki/node-22-modernisation.md`](./docs/wiki/node-22-modernisation.md) for Node 22 work and [`docs/todo/gov-design-system-target-spec.txt`](./docs/todo/gov-design-system-target-spec.txt) for the unified design system migration target state.

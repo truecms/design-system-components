@@ -4,6 +4,7 @@
 codekit-config.json
 *.codekit
 node_modules
+specs/
 .sass-cache
 .idea
 validation-report.json

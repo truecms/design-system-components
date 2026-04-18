@@ -38,8 +38,8 @@ export default defineConfig({
       input: {
         components: 'src/components/index.ts',
         drupal: 'src/drupal/index.ts',
-        drupalTheme: 'src/styles/drupal/govau-theme.css',
-        drupalComponents: 'src/styles/drupal/govau-components.css',
+        drupalTheme: 'src/styles/drupal/govau-theme.scss',
+        drupalComponents: 'src/styles/drupal/govau-components.scss',
       },
       external: [
         'react',

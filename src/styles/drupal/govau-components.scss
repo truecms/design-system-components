@@ -1,0 +1,27 @@
+/* Baseline GovAU components CSS bundle entrypoint.
+ *
+ * The Vite build should emit this file under the same filename and
+ * public path used by existing Pancake-based Drupal themes so that
+ * libraries.yml configuration does not need to change.
+ */
+
+@import "../../../packages/accordion/src/sass/_dependencies.scss";
+@import "../../../packages/breadcrumbs/src/sass/_dependencies.scss";
+@import "../../../packages/buttons/src/sass/_dependencies.scss";
+@import "../../../packages/callout/src/sass/_dependencies.scss";
+@import "../../../packages/card/src/sass/_dependencies.scss";
+@import "../../../packages/control-input/src/sass/_dependencies.scss";
+@import "../../../packages/cta-link/src/sass/_dependencies.scss";
+@import "../../../packages/direction-links/src/sass/_dependencies.scss";
+@import "../../../packages/form/src/sass/_dependencies.scss";
+@import "../../../packages/headings/src/sass/_dependencies.scss";
+@import "../../../packages/inpage-nav/src/sass/_dependencies.scss";
+@import "../../../packages/keyword-list/src/sass/_dependencies.scss";
+@import "../../../packages/link-list/src/sass/_dependencies.scss";
+@import "../../../packages/page-alerts/src/sass/_dependencies.scss";
+@import "../../../packages/progress-indicator/src/sass/_dependencies.scss";
+@import "../../../packages/searchbox/src/sass/_dependencies.scss";
+@import "../../../packages/select/src/sass/_dependencies.scss";
+@import "../../../packages/table/src/sass/_dependencies.scss";
+@import "../../../packages/tags/src/sass/_dependencies.scss";
+@import "../../../packages/text-inputs/src/sass/_dependencies.scss";

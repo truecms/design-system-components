@@ -60,6 +60,16 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [ ] Evaluate single-install adoption via `@truecms/design-system` (component packages become internal dependencies for new consumers).
 - [ ] Align major versions to branch lines in the next breaking release cycle (`1.x` line mapped to `1.*`, `2.x` line mapped to `2.0.0+`), with explicit deprecation/removal policy for obsolete package names.
 
+### 2026-04-18 single-install evaluation progress
+- PR #21 (`feature/unified-package-govcms-surface`) expands `@truecms/design-system` dependencies to cover the full `govcms8_uikit_starter` package surface and removes the peer-dependency-only trap that prevented true single-install downstream use.
+- Unified Drupal CSS entrypoints were updated to build from source `_dependencies.scss` entry surfaces in a clean checkout instead of relying on prebuilt `lib/css` artefacts.
+- Added integration coverage in `tests/integration/build/unified-prepublish.test.ts` that packs the unified tarball, installs it into a temp npm project, and asserts the GovCMS starter theme's expected `@truecms/*` package set is available from that single install.
+- Verification on the clean branch passed:
+  - `pnpm run build:unified`
+  - `pnpm exec jest --runInBand --config jest.integration.config.cjs tests/integration/build/unified-build-output.test.ts tests/integration/build/unified-prepublish.test.ts`
+  - `pnpm run test:unified`
+- Remaining blocker: downstream GovCMS pilot should wait for a prerelease/publication of the updated unified package before switching consumer branches.
+
 ## Verification Gates
 - [x] No regression in canonical markup/classes/behavior.
 - [x] Accessibility baseline remains green.

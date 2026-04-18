@@ -191,16 +191,16 @@ jobs:
             args+=(--dry-run)
           fi
 
-          echo "Running: pnpm run release -- ${args[*]}"
+          echo "Running: pnpm run release ${args[*]}"
           set +e
-          pnpm run release -- "${args[@]}" | tee changesets-publish.log
+          pnpm run release ${args[@]} | tee changesets-publish.log
           status=$?
           set -e
 
           if grep -qiE "No packages are being published|No unpublished packages found" changesets-publish.log; then
             echo "::notice::No release plan detected. Retrying with --from-package."
             echo "Running: pnpm changeset publish --from-package ${args[*]}"
-            pnpm changeset publish --from-package "${args[@]}"
+            pnpm changeset publish --from-package ${args[@]}
           else
             exit "$status"
           fi

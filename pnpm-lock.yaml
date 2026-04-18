@@ -1240,12 +1240,93 @@ importers:
       '@truecms/accordion':
         specifier: workspace:*
         version: link:../accordion
+      '@truecms/animate':
+        specifier: workspace:*
+        version: link:../animate
+      '@truecms/body':
+        specifier: workspace:*
+        version: link:../body
+      '@truecms/breadcrumbs':
+        specifier: workspace:*
+        version: link:../breadcrumbs
       '@truecms/buttons':
         specifier: workspace:*
         version: link:../buttons
+      '@truecms/callout':
+        specifier: workspace:*
+        version: link:../callout
+      '@truecms/card':
+        specifier: workspace:*
+        version: link:../card
+      '@truecms/control-input':
+        specifier: workspace:*
+        version: link:../control-input
+      '@truecms/core':
+        specifier: workspace:*
+        version: link:../core
+      '@truecms/cta-link':
+        specifier: workspace:*
+        version: link:../cta-link
+      '@truecms/direction-links':
+        specifier: workspace:*
+        version: link:../direction-links
+      '@truecms/footer':
+        specifier: workspace:*
+        version: link:../footer
+      '@truecms/form':
+        specifier: workspace:*
+        version: link:../form
+      '@truecms/grid-12':
+        specifier: workspace:*
+        version: link:../grid-12
       '@truecms/header':
         specifier: workspace:*
         version: link:../header
+      '@truecms/headings':
+        specifier: workspace:*
+        version: link:../headings
+      '@truecms/inpage-nav':
+        specifier: workspace:*
+        version: link:../inpage-nav
+      '@truecms/keyword-list':
+        specifier: workspace:*
+        version: link:../keyword-list
+      '@truecms/link-list':
+        specifier: workspace:*
+        version: link:../link-list
+      '@truecms/main-nav':
+        specifier: workspace:*
+        version: link:../main-nav
+      '@truecms/page-alerts':
+        specifier: workspace:*
+        version: link:../page-alerts
+      '@truecms/progress-indicator':
+        specifier: workspace:*
+        version: link:../progress-indicator
+      '@truecms/responsive-media':
+        specifier: workspace:*
+        version: link:../responsive-media
+      '@truecms/searchbox':
+        specifier: workspace:*
+        version: link:../searchbox
+      '@truecms/select':
+        specifier: workspace:*
+        version: link:../select
+      '@truecms/side-nav':
+        specifier: workspace:*
+        version: link:../side-nav
+      '@truecms/skip-link':
+        specifier: workspace:*
+        version: link:../skip-link
+      '@truecms/table':
+        specifier: workspace:*
+        version: link:../table
+      '@truecms/tags':
+        specifier: workspace:*
+        version: link:../tags
+      '@truecms/text-inputs':
+        specifier: workspace:*
+        version: link:../text-inputs
 
 packages:
 
@@ -3838,7 +3919,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}

@@ -5,8 +5,12 @@
  * libraries.yml configuration does not need to change.
  */
 
-@import "../../../packages/header/lib/css/styles.css";
-@import "../../../packages/footer/lib/css/styles.css";
-@import "../../../packages/main-nav/lib/css/styles.css";
-@import "../../../packages/side-nav/lib/css/styles.css";
-@import "../../../packages/skip-link/lib/css/styles.css";
+@import "../../../packages/core/src/sass/_dependencies.scss";
+@import "../../../packages/body/src/sass/_dependencies.scss";
+@import "../../../packages/grid-12/src/sass/_dependencies.scss";
+@import "../../../packages/header/src/sass/_dependencies.scss";
+@import "../../../packages/footer/src/sass/_dependencies.scss";
+@import "../../../packages/main-nav/src/sass/_dependencies.scss";
+@import "../../../packages/side-nav/src/sass/_dependencies.scss";
+@import "../../../packages/skip-link/src/sass/_dependencies.scss";
+@import "../../../packages/responsive-media/src/sass/_dependencies.scss";

@@ -22,17 +22,40 @@
       "import": "./dist/js/components.js"
     },
     "./css/govau-theme.css": "./dist/css/govau-theme.css",
-    "./css/govau-components.css": "./dist/css/govau-components.css"
+    "./css/govau-components.css": "./dist/css/govau-components.css",
+    "./js/drupal.js": "./dist/js/drupal.js"
   },
   "dependencies": {
     "@truecms/accordion": "workspace:*",
+    "@truecms/animate": "workspace:*",
+    "@truecms/body": "workspace:*",
+    "@truecms/breadcrumbs": "workspace:*",
     "@truecms/buttons": "workspace:*",
-    "@truecms/header": "workspace:*"
-  },
-  "peerDependencies": {
-    "@truecms/accordion": "^9.0.0",
-    "@truecms/buttons": "^5.0.0",
-    "@truecms/header": "^6.0.0"
+    "@truecms/callout": "workspace:*",
+    "@truecms/card": "workspace:*",
+    "@truecms/control-input": "workspace:*",
+    "@truecms/core": "workspace:*",
+    "@truecms/cta-link": "workspace:*",
+    "@truecms/direction-links": "workspace:*",
+    "@truecms/footer": "workspace:*",
+    "@truecms/form": "workspace:*",
+    "@truecms/grid-12": "workspace:*",
+    "@truecms/header": "workspace:*",
+    "@truecms/headings": "workspace:*",
+    "@truecms/inpage-nav": "workspace:*",
+    "@truecms/keyword-list": "workspace:*",
+    "@truecms/link-list": "workspace:*",
+    "@truecms/main-nav": "workspace:*",
+    "@truecms/page-alerts": "workspace:*",
+    "@truecms/progress-indicator": "workspace:*",
+    "@truecms/responsive-media": "workspace:*",
+    "@truecms/searchbox": "workspace:*",
+    "@truecms/select": "workspace:*",
+    "@truecms/side-nav": "workspace:*",
+    "@truecms/skip-link": "workspace:*",
+    "@truecms/table": "workspace:*",
+    "@truecms/tags": "workspace:*",
+    "@truecms/text-inputs": "workspace:*"
   },
   "engines": {
     "node": ">=22.0.0",

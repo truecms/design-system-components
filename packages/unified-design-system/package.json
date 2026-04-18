@@ -10,6 +10,10 @@
     "drupal",
     "react"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/truecms/design-system-components"
+  },
   "main": "dist/js/components.js",
   "module": "dist/js/components.js",
   "types": "dist/js/components.d.ts",

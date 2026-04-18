@@ -1,6 +1,6 @@
 {
   "name": "@truecms/design-system",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Unified GovAU design system package for Drupal and React consumers.",
   "keywords": [
     "auds",

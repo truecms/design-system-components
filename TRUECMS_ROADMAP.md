@@ -72,6 +72,7 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - Published prerelease confirmed: `@truecms/design-system@beta` = `1.1.0`.
 - Downstream consumer confirmation landed via merged `govcms8_uikit_starter` PR #4, so the single-install evaluation and pilot handoff are complete.
 - Post-merge sanity sweep on `2026-04-19` passed on `2.x` with `pnpm run build:unified`.
+- Follow-up remediation is now tracked in issue #23: reduce Sass deprecation warnings on the `2.x` unified package path before promoting the package beyond beta.
 
 ## Verification Gates
 - [x] No regression in canonical markup/classes/behavior.

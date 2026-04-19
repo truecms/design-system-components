@@ -1,6 +1,6 @@
 # TRUECMS Roadmap: design-system-components
 
-Last updated: 2026-02-16
+Last updated: 2026-04-19
 
 ## Current Priority
 Highest priority repository. Make this repo release-ready and publishable first.
@@ -37,14 +37,14 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - [x] Run release dry-run workflow/commands.
 
 ### M4. Prerelease publication
-- [ ] Publish prerelease under `@truecms/design-system`.
-- [ ] Capture version/tag and publish details in this file.
-- [ ] Notify downstream repos (`design-system-site`, `govcms8_uikit_starter`) via their roadmap files.
+- [x] Publish prerelease under `@truecms/design-system`.
+- [x] Capture version/tag and publish details in this file.
+- [x] Notify downstream repos (`design-system-site`, `govcms8_uikit_starter`) via their roadmap files.
 
 ### M5. Migration handoff assets
 - [x] Publish/update legacy-to-unified mapping document.
 - [x] Publish/update migration quickstart references used by downstream repos.
-- [ ] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
+- [x] Mark handoff complete in `../MULTI_REPO_ROADMAP.md`.
 
 ### M6. Static major-line branching strategy
 - [x] Freeze current `master` as legacy major line and preserve it as `1.x`.
@@ -57,18 +57,21 @@ Highest priority repository. Make this repo release-ready and publishable first.
   - explicit cherry-pick/backport policy between `2.x` and `1.x`
 
 ### M7. Future package-line simplification (backlog)
-- [ ] Evaluate single-install adoption via `@truecms/design-system` (component packages become internal dependencies for new consumers).
+- [x] Evaluate single-install adoption via `@truecms/design-system` (component packages become internal dependencies for new consumers).
 - [ ] Align major versions to branch lines in the next breaking release cycle (`1.x` line mapped to `1.*`, `2.x` line mapped to `2.0.0+`), with explicit deprecation/removal policy for obsolete package names.
 
-### 2026-04-18 single-install evaluation progress
-- PR #21 (`feature/unified-package-govcms-surface`) expands `@truecms/design-system` dependencies to cover the full `govcms8_uikit_starter` package surface and removes the peer-dependency-only trap that prevented true single-install downstream use.
+### 2026-04-18/19 single-install evaluation progress
+- Merged PR #21 (`feature/unified-package-govcms-surface`) expands `@truecms/design-system` dependencies to cover the full `govcms8_uikit_starter` package surface and removes the peer-dependency-only trap that prevented true single-install downstream use.
 - Unified Drupal CSS entrypoints were updated to build from source `_dependencies.scss` entry surfaces in a clean checkout instead of relying on prebuilt `lib/css` artefacts.
 - Added integration coverage in `tests/integration/build/unified-prepublish.test.ts` that packs the unified tarball, installs it into a temp npm project, and asserts the GovCMS starter theme's expected `@truecms/*` package set is available from that single install.
 - Verification on the clean branch passed:
   - `pnpm run build:unified`
   - `pnpm exec jest --runInBand --config jest.integration.config.cjs tests/integration/build/unified-build-output.test.ts tests/integration/build/unified-prepublish.test.ts`
   - `pnpm run test:unified`
-- Remaining blocker: downstream GovCMS pilot should wait for a prerelease/publication of the updated unified package before switching consumer branches.
+- Merged PR #22 (`feature/fix-npm-release-publish-args`) fixes npm release workflow argument handling so dist-tag publishing works correctly.
+- Published prerelease confirmed: `@truecms/design-system@beta` = `1.1.0`.
+- Downstream consumer confirmation landed via merged `govcms8_uikit_starter` PR #4, so the single-install evaluation and pilot handoff are complete.
+- Post-merge sanity sweep on `2026-04-19` passed on `2.x` with `pnpm run build:unified`.
 
 ## Verification Gates
 - [x] No regression in canonical markup/classes/behavior.

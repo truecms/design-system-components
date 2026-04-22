@@ -2,6 +2,8 @@ name: npm-validator
 
 on:
   push:
+    branches:
+      - 2.x
   pull_request:
     branches:
       - 2.x

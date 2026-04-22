@@ -62,6 +62,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Scan npm packages against compromised package list
+        id: npm_validator
+        uses: salsadigitalauorg/npm-validator-action@v2.1.6
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -263,6 +267,9 @@ jobs:
             dist/reports/${{ inputs.report_suffix }}/a11y/*.json
             dist/reports/${{ inputs.report_suffix }}/performance.json
             dist/reports/${{ inputs.report_suffix }}/performance-summary.json
+            ${{ steps.npm_validator.outputs.report-path }}
+            ${{ steps.npm_validator.outputs.summary-path }}
+            ${{ steps.npm_validator.outputs.inventory-path }}
           if-no-files-found: ignore
 
       - name: Clean tarballs
@@ -284,6 +291,7 @@ jobs:
             echo "| Node | ${{ inputs.node_label }} |"
             echo "| Branch | ${GITHUB_REF_NAME} |"
             echo
+            echo "- Scanned package manifests and lockfiles with npm-validator."
             echo "- Verified install, build, tests, and audit."
             echo "- Artifacts: dist/reports/${{ inputs.report_suffix }}/ and dist/tarballs/${{ inputs.tarball_summary_file }}."
           } >> "$GITHUB_STEP_SUMMARY"

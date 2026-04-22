@@ -3,6 +3,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { packWorkspaceTarballs } = require('../../../scripts/pack-workspace-tarballs.js');
+
 function getExpectedStarterThemePackages(rootDir: string): string[] {
   const packageJsonPath = path.join(
     rootDir,
@@ -64,10 +67,33 @@ describe('unified prepublish smoke test', () => {
 
     const installRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'unified-install-'));
     try {
+      const dependencyPackDestination = path.join(packDestination, 'workspace');
+      const packedWorkspace = packWorkspaceTarballs({
+        workspaceDir: rootDir,
+        destination: dependencyPackDestination,
+        stdio: 'pipe',
+      }) as {
+        packages: Array<{ name: string; tarballPath: string }>;
+      };
+      const dependencyTarballs = expectedStarterThemePackages
+        .map((pkg) => packedWorkspace.packages.find((entry) => entry.name === pkg))
+        .filter(
+          (entry): entry is { name: string; tarballPath: string } => Boolean(entry),
+        );
+
       execSync('npm init -y', {
         cwd: installRoot,
         stdio: 'pipe',
       });
+      if (dependencyTarballs.length > 0) {
+        const installArgs = dependencyTarballs
+          .map(({ tarballPath: dependencyTarball }) => `"${dependencyTarball}"`)
+          .join(' ');
+        execSync(`npm install --ignore-scripts ${installArgs}`, {
+          cwd: installRoot,
+          stdio: 'pipe',
+        });
+      }
       execSync(`npm install --ignore-scripts "${tarballPath}"`, {
         cwd: installRoot,
         stdio: 'pipe',

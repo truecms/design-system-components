@@ -1,5 +1,11 @@
 @truecms/link-list CHANGELOG
 
+## 5.0.1
+
+### Patch Changes
+
+- Republish component packages with patched development dependencies after the Dependabot security updates.
+
 ## 5.0.0
 
 ### Major Changes

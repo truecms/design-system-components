@@ -1,5 +1,11 @@
 # @truecms/design-system
 
+## 1.1.1
+
+### Patch Changes
+
+- Republish the unified design system package against the latest patched component releases after the Dependabot security updates.
+
 ## 1.1.0
 
 ### Minor Changes

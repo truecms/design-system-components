@@ -47,7 +47,7 @@
     "test:design-system": "jest --runInBand --config jest.integration.config.cjs",
     "test:bundle-size": "node scripts/metrics/compare-bundle-size.mjs --baseline reports/bundles-baseline.json --unified reports/bundles-unified.json --cap 0.3",
     "test:migrations": "jest --runInBand --config jest.integration.config.cjs --runTestsByPath tests/integration/migration.smoke.test.ts tests/integration/drupal/unified-migration.test.ts tests/integration/react/unified-migration.test.ts tests/integration/build/unified-build-output.test.ts tests/integration/build/unified-prepublish.test.ts",
-    "build:unified": "vite build --config vite.config.ts",
+    "build:unified": "vite build --config vite.config.mts",
     "test:unified": "pnpm run test:migrations && pnpm run test:bundle-size",
     "publish:unified": "echo \"Publishing unified package via Changesets is handled by the standard release workflow\""
   },

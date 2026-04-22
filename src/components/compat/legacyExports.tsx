@@ -7,13 +7,6 @@
  * can migrate by updating import paths only.
  */
 
-import AUbutton from '@truecms/buttons';
-import AUaccordion from '@truecms/accordion';
-import AUheader, { AUheaderBrand } from '@truecms/header';
-
-export {
-  AUbutton,
-  AUaccordion,
-  AUheader,
-  AUheaderBrand,
-};
+export { default as AUbutton } from '@truecms/buttons';
+export { default as AUaccordion } from '@truecms/accordion';
+export { default as AUheader, AUheaderBrand } from '@truecms/header';

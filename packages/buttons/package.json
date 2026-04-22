@@ -1,6 +1,6 @@
 {
   "name": "@truecms/buttons",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Buttons signal action. Use them to move the user through the service.",
   "keywords": [
     "auds",

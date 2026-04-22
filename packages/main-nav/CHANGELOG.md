@@ -1,5 +1,13 @@
 @truecms/main-nav CHANGELOG
 
+## 3.0.1
+
+### Patch Changes
+
+- Republish component packages with patched development dependencies after the Dependabot security updates.
+- Updated dependencies
+  - @truecms/link-list@5.0.1
+
 ## 3.0.0
 
 ### Major Changes

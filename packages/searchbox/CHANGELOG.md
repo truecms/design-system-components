@@ -1,5 +1,13 @@
 @truecms/searchbox CHANGELOG
 
+## 2.0.1
+
+### Patch Changes
+
+- Republish component packages with patched development dependencies after the Dependabot security updates.
+- Updated dependencies
+  - @truecms/buttons@5.0.1
+
 ## 2.0.0
 
 ### Major Changes

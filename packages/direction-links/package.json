@@ -1,6 +1,6 @@
 {
   "name": "@truecms/direction-links",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Use direction links to link up and down within the DOM or back to a parent page.",
   "keywords": [
     "auds",

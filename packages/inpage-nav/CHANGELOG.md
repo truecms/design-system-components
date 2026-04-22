@@ -1,5 +1,12 @@
 @truecms/inpage-nav CHANGELOG
 
+## 5.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @truecms/link-list@5.0.1
+
 ## 5.0.0
 
 ### Major Changes

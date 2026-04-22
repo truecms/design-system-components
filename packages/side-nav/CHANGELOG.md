@@ -1,5 +1,13 @@
 @truecms/side-nav CHANGELOG
 
+## 7.0.1
+
+### Patch Changes
+
+- Republish component packages with patched development dependencies after the Dependabot security updates.
+- Updated dependencies
+  - @truecms/link-list@5.0.1
+
 ## 7.0.0
 
 ### Major Changes

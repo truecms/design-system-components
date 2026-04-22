@@ -1,0 +1,47 @@
+name: npm-validator
+
+on:
+  push:
+    branches:
+      - 2.x
+  pull_request:
+    branches:
+      - 2.x
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Uncomment if enabling issue creation.
+  # issues: write
+
+jobs:
+  scan:
+    name: npm-validator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: NPM Compromised Package Scanner
+        id: npm_validator
+        uses: salsadigitalauorg/npm-validator-action@v2
+
+      - name: Show results
+        run: |
+          echo "Findings: ${{ steps.npm_validator.outputs.findings }}"
+          echo "Report path: ${{ steps.npm_validator.outputs.report-path }}"
+          echo "Summary path: ${{ steps.npm_validator.outputs.summary-path }}"
+          echo "Inventory path: ${{ steps.npm_validator.outputs.inventory-path }}"
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-validator-report
+          path: ${{ steps.npm_validator.outputs.report-path }}
+
+      - name: Upload inventory artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-validator-package-inventory
+          path: ${{ steps.npm_validator.outputs.inventory-path }}

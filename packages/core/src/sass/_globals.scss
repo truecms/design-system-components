@@ -87,16 +87,17 @@ $dependencies: (
 
 	$index: string.index( $string, $search );
 
-	@return if( $index,
-		string.slice( $string, 1, $index - 1 ) +
-		$replace +
-		AU-replace(
-			string.slice( $string, $index + string.length( $search ) ),
-			$search,
-			$replace
-		),
-		$string
-	);
+	@if $index {
+		@return string.slice( $string, 1, $index - 1 ) +
+			$replace +
+			AU-replace(
+				string.slice( $string, $index + string.length( $search ) ),
+				$search,
+				$replace
+			);
+	}
+
+	@return $string;
 }
 
 
@@ -228,13 +229,13 @@ $dependencies: (
 			$base: $base * $base;
 		}
 
-		@return if( $exponent < 0, math.div( 1, $rest ), $rest );
+		@return $rest;
 	}
 
 	// decimal number
 	@else {
 		@if $base <= 0 {
-			@return 0 / 0;
+			@return math.div( 0, 0 );
 		}
 
 		$normalized: math.div( $base, $SQRT2 );
@@ -261,7 +262,11 @@ $dependencies: (
 		$divider: 1;
 		$deviderExponent: $log;
 
-		$baseExponent: if( $deviderExponent >= 0, 2, math.div( 1, 2 ) );
+		$baseExponent: 2;
+
+		@if $deviderExponent < 0 {
+			$baseExponent: math.div( 1, 2 );
+		}
 
 		@if $deviderExponent < 0 {
 			$deviderExponent: $deviderExponent * -1;
@@ -329,7 +334,12 @@ $dependencies: (
 		$rgb: list.nth( $rgba, $i );
 		$rgb: math.div( $rgb, 255 );
 
-		$rgb: if( $rgb < .03928, math.div( $rgb, 12.92 ), AU-pow( math.div( $rgb + .055, 1.055 ), 2.4 ) );
+		@if $rgb < .03928 {
+			$rgb: math.div( $rgb, 12.92 );
+		}
+		@else {
+			$rgb: AU-pow( math.div( $rgb + .055, 1.055 ), 2.4 );
+		}
 
 		$rgba2: list.append( $rgba2, $rgb );
 	}

@@ -22,25 +22,31 @@ describe('Drupal migration accessibility (fixture)', () => {
     // Chromium render the source text inside <pre>, which produces unrelated
     // contrast failures.
     expect(html).toContain('au-header');
-    fs.writeFileSync(htmlFixturePath, renderedHtml, 'utf8');
-    const url = pathToFileURL(htmlFixturePath).toString();
 
-    const results = await pa11y(url, {
-      includeNotices: false,
-      includeWarnings: false,
-      runners: ['axe'],
-      chromeLaunchConfig: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      },
-    });
+    try {
+      fs.writeFileSync(htmlFixturePath, renderedHtml, 'utf8');
+      const url = pathToFileURL(htmlFixturePath).toString();
 
-    const seriousIssues = results.issues.filter(
-      (issue) =>
-        issue.type === 'error' &&
-        issue.code !== 'document-title' &&
-        issue.code !== 'html-has-lang',
-    );
+      const results = await pa11y(url, {
+        includeNotices: false,
+        includeWarnings: false,
+        runners: ['axe'],
+        chromeLaunchConfig: {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        },
+      });
 
-    expect(seriousIssues).toHaveLength(0);
+      const seriousIssues = results.issues.filter(
+        (issue) =>
+          issue.type === 'error' &&
+          issue.code !== 'document-title' &&
+          issue.code !== 'html-has-lang',
+      );
+
+      expect(seriousIssues).toHaveLength(0);
+    }
+    finally {
+      fs.rmSync(htmlFixtureDir, { recursive: true, force: true });
+    }
   });
 });

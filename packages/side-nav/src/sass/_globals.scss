@@ -39,15 +39,14 @@ $AU-side-nav-breakpoint: sm !default;
   $chain: $element;
   @for $i from 1 to $depth + 1 {
 		$chain: 'ul ' + $chain;
-		$indent: if(
-			$i < 2,
-			( $indent-size * $i + 1 ) * 1unit,
-			( $indent-size * $i + 1 ) * 1.25unit
-		);
+		$indent: ( $indent-size * $i + 1 ) * 1.25unit;
+
+		@if $i < 2 {
+			$indent: ( $indent-size * $i + 1 ) * 1unit;
+		}
 
     & #{$chain} {
       @include AU-space( padding-left, $indent );
     }
   }
 }
-

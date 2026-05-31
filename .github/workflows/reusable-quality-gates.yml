@@ -169,8 +169,11 @@ jobs:
       - name: Ensure Puppeteer Chrome is installed
         run: |
           set -euo pipefail
-          rm -rf "${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}/chrome"
+          rm -rf \
+            "${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}/chrome" \
+            "${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}/chrome-headless-shell"
           pnpm exec puppeteer browsers install chrome
+          pnpm exec puppeteer browsers install chrome-headless-shell
 
       - name: Run tests
         run: |

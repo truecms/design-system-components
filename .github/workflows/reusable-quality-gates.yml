@@ -169,7 +169,24 @@ jobs:
       - name: Ensure Puppeteer Chrome is installed
         run: |
           set -euo pipefail
-          pnpm exec puppeteer browsers install chrome
+          rm -rf \
+            "${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}/chrome" \
+            "${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}/chrome-headless-shell"
+          cache_dir="${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}"
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [ -z "${chrome_path}" ]; then
+            chrome_path="$(node -e "const puppeteer = require('puppeteer'); console.log(puppeteer.executablePath());")"
+            chrome_revision="$(node -e "const match = process.argv[1].match(/(?:linux|mac|mac_arm|win32|win64)-([^/]+)/); if (!match) throw new Error('Unable to parse Chrome revision from ' + process.argv[1]); console.log(match[1]);" "${chrome_path}")"
+            browsers_bin="$(node -e "const path = require('path'); const puppeteerPkg = require.resolve('puppeteer/package.json'); const browsersMain = require.resolve('@puppeteer/browsers', { paths: [path.dirname(puppeteerPkg)] }); console.log(path.join(path.dirname(browsersMain), 'main-cli.js'));")"
+            node "${browsers_bin}" install "chrome@${chrome_revision}" --path "${cache_dir}"
+            node "${browsers_bin}" install "chrome-headless-shell@${chrome_revision}" --path "${cache_dir}"
+            if [ ! -x "${chrome_path}" ]; then
+              chrome_path="$(find "${cache_dir}/chrome" -type f \( -name chrome -o -name "Google Chrome for Testing" \) 2>/dev/null | head -n 1 || true)"
+            fi
+          fi
+          test -x "${chrome_path}"
+          echo "Using Chrome executable: ${chrome_path}"
+          echo "PUPPETEER_EXECUTABLE_PATH=${chrome_path}" >> "${GITHUB_ENV}"
 
       - name: Run tests
         run: |

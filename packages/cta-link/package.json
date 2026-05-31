@@ -1,6 +1,6 @@
 {
   "name": "@truecms/cta-link",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Use cta links to draw attention to a primary call to action.",
   "keywords": [
     "auds",
@@ -35,7 +35,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

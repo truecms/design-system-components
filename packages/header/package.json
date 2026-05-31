@@ -1,6 +1,6 @@
 {
   "name": "@truecms/header",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "Headers provide a consistent start to pages.",
   "keywords": [
     "auds",
@@ -34,7 +34,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -1,5 +1,13 @@
 @truecms/control-input CHANGELOG
 
+## 5.0.1
+
+### Patch Changes
+
+- Publish the Sass deprecation cleanup and current security dependency updates.
+- Updated dependencies
+  - @truecms/core@6.0.1
+
 ## 5.0.0
 
 ### Major Changes

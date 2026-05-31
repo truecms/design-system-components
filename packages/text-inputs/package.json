@@ -1,6 +1,6 @@
 {
   "name": "@truecms/text-inputs",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Single and multi-line text inputs.",
   "keywords": [
     "auds",
@@ -40,7 +40,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

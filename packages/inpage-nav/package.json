@@ -1,6 +1,6 @@
 {
   "name": "@truecms/inpage-nav",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Use inpage-nav links to help users scan and jump to content of a page.",
   "keywords": [
     "auds",
@@ -37,8 +37,8 @@
     "@truecms/link-list": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0",
-    "@truecms/link-list": "^5.0.1"
+    "@truecms/core": "^6.0.1",
+    "@truecms/link-list": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

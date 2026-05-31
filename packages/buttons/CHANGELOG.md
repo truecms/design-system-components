@@ -1,5 +1,12 @@
 @truecms/buttons CHANGELOG
 
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @truecms/core@6.0.1
+
 ## 5.0.1
 
 ### Patch Changes

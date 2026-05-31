@@ -1,6 +1,6 @@
 {
   "name": "@truecms/direction-links",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Use direction links to link up and down within the DOM or back to a parent page.",
   "keywords": [
     "auds",
@@ -38,7 +38,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

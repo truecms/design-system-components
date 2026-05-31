@@ -1,6 +1,6 @@
 {
   "name": "@truecms/control-input",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Control inputs include radio buttons and checkboxes. They allow users to select one or more options.",
   "keywords": [
     "auds",
@@ -32,7 +32,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

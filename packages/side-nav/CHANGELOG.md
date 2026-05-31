@@ -1,5 +1,15 @@
 @truecms/side-nav CHANGELOG
 
+## 7.0.2
+
+### Patch Changes
+
+- Publish the Sass deprecation cleanup and current security dependency updates.
+- Updated dependencies
+  - @truecms/core@6.0.1
+  - @truecms/accordion@9.0.1
+  - @truecms/link-list@5.0.2
+
 ## 7.0.1
 
 ### Patch Changes

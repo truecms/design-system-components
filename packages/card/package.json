@@ -1,6 +1,6 @@
 {
   "name": "@truecms/card",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A container for all types of content",
   "keywords": [
     "auds",
@@ -32,7 +32,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

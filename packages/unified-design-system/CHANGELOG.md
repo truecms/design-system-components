@@ -1,5 +1,41 @@
 # @truecms/design-system
 
+## 1.1.2
+
+### Patch Changes
+
+- Publish the Sass deprecation cleanup and current security dependency updates.
+- Updated dependencies
+  - @truecms/core@6.0.1
+  - @truecms/control-input@5.0.1
+  - @truecms/grid-12@4.0.1
+  - @truecms/responsive-media@4.0.1
+  - @truecms/select@4.0.1
+  - @truecms/side-nav@7.0.2
+  - @truecms/text-inputs@4.0.1
+  - @truecms/accordion@9.0.1
+  - @truecms/body@4.0.1
+  - @truecms/breadcrumbs@5.0.2
+  - @truecms/buttons@5.0.2
+  - @truecms/callout@5.0.1
+  - @truecms/card@2.0.1
+  - @truecms/cta-link@4.0.2
+  - @truecms/direction-links@5.0.2
+  - @truecms/footer@5.0.1
+  - @truecms/form@2.0.1
+  - @truecms/header@6.0.2
+  - @truecms/headings@4.0.1
+  - @truecms/inpage-nav@5.0.2
+  - @truecms/keyword-list@5.0.2
+  - @truecms/link-list@5.0.2
+  - @truecms/main-nav@3.0.2
+  - @truecms/page-alerts@4.0.1
+  - @truecms/progress-indicator@5.0.2
+  - @truecms/searchbox@2.0.2
+  - @truecms/skip-link@4.0.1
+  - @truecms/table@2.0.1
+  - @truecms/tags@6.0.2
+
 ## 1.1.1
 
 ### Patch Changes

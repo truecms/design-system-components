@@ -1,6 +1,6 @@
 {
   "name": "@truecms/progress-indicator",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Indicator of progress through a multitude of pages mostly used for forms.",
   "keywords": [
     "auds",
@@ -32,7 +32,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

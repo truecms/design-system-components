@@ -1,5 +1,11 @@
 @truecms/core CHANGELOG
 
+## 6.0.1
+
+### Patch Changes
+
+- Publish the Sass deprecation cleanup and current security dependency updates.
+
 ## 6.0.0
 
 ### Major Changes

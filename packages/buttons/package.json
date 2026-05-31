@@ -1,6 +1,6 @@
 {
   "name": "@truecms/buttons",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Buttons signal action. Use them to move the user through the service.",
   "keywords": [
     "auds",
@@ -32,7 +32,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.0"
+    "@truecms/core": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

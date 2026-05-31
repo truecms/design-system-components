@@ -35,7 +35,7 @@ describe('unified prepublish smoke test', () => {
 
     const packDestination = fs.mkdtempSync(path.join(os.tmpdir(), 'unified-pack-'));
     const packOutput = execSync(
-      `npm pack --pack-destination "${packDestination}"`,
+      `pnpm -s pack --pack-destination "${packDestination}"`,
       {
         cwd: packageDir,
         encoding: 'utf8',

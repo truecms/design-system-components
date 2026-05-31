@@ -1,5 +1,14 @@
 @truecms/searchbox CHANGELOG
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @truecms/core@6.0.1
+  - @truecms/text-inputs@4.0.1
+  - @truecms/buttons@5.0.2
+
 ## 2.0.1
 
 ### Patch Changes

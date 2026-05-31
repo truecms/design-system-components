@@ -74,11 +74,17 @@ const verifyWorkspaceTarballs = ({
     name: installPrefix,
     private: true,
     version: '0.0.0',
-    dependencies: {}
+    dependencies: {},
+    pnpm: {
+      overrides: {}
+    }
   };
 
   for (const entry of packages) {
-    installPackageJson.dependencies[entry.name] = `file:${entry.tarballPath}`;
+    const tarballReference = `file:${entry.tarballPath}`;
+    installPackageJson.dependencies[entry.name] = tarballReference;
+    installPackageJson.pnpm.overrides[entry.name] = tarballReference;
+    installPackageJson.pnpm.overrides[`${entry.name}@${entry.version}`] = tarballReference;
   }
 
   fs.writeFileSync(
@@ -86,7 +92,7 @@ const verifyWorkspaceTarballs = ({
     JSON.stringify(installPackageJson, null, 2)
   );
 
-  execSync('pnpm install --ignore-scripts', { cwd: installDir, stdio: 'inherit' });
+  execSync('npm install --ignore-scripts', { cwd: installDir, stdio: 'inherit' });
 
   const summary = packages.map((entry) => ({
     tarball: entry.tarballFile,

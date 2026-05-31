@@ -260,12 +260,10 @@ const GetFolders = ( thisPath, verbose ) => {
  * @param  {string} css  - The location where the CSS should be written to
  */
 const Sassify = ( scss, css ) => {
-	const includePaths = [ Path.resolve(process.cwd(), 'lib', 'sass') ];
-	const compiled = Sass.renderSync({
-		file: scss,
-		indentType: 'tab',
-		precision: 8,
-		includePaths,
+	const loadPaths = [ Path.resolve(process.cwd(), 'lib', 'sass') ];
+	const compiled = Sass.compile( scss, {
+		loadPaths,
+		silenceDeprecations: [ 'import' ],
 		style: 'compressed',
 	});
 

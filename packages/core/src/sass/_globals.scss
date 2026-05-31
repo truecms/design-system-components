@@ -44,6 +44,13 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SASS VERSIONING
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:string';
+
 $name: "[replace-name]";
 $version: "[replace-version]";
 $dependencies: (
@@ -66,28 +73,31 @@ $dependencies: (
  * @return {string}          - The manipulated string with replaced values
  */
 @function AU-replace( $string, $search, $replace: '' ) {
-	@if type-of( $string ) != 'string' {
+	@if meta.type-of( $string ) != 'string' {
 		@error "I have a bad feeling about this; the AU-replace first argument must be a string!";
 	}
 
-	@if type-of( $search ) != 'string' {
+	@if meta.type-of( $search ) != 'string' {
 		@error "We’ll always have Paris; the AU-replace second argument must be a string!";
 	}
 
-	@if type-of( $replace ) != 'string' {
+	@if meta.type-of( $replace ) != 'string' {
 		@error "Hasta la vista, baby; the AU-replace third argument must be a string!";
 	}
 
-	$index: str-index( $string, $search );
+	$index: string.index( $string, $search );
 
-	@return if( $index,
-		str-slice( $string, 1, $index - 1 ) +
-		$replace +
-		AU-replace(
-			str-slice( $string, $index + str-length( $search )
-		), $search, $replace ),
-		$string
-	);
+	@if $index {
+		@return string.slice( $string, 1, $index - 1 ) +
+			$replace +
+			AU-replace(
+				string.slice( $string, $index + string.length( $search ) ),
+				$search,
+				$replace
+			);
+	}
+
+	@return $string;
 }
 
 
@@ -103,21 +113,21 @@ $dependencies: (
  * @return {string}      - An optimized data-uri
  */
 @function AU-svguri( $svg ) {
-	@if type-of( $svg ) != 'string' {
+	@if meta.type-of( $svg ) != 'string' {
 		@error "With great power comes great responsibility; the AU-svguri function only takes a string!";
 	}
 
-	@if not str-index( $svg, xmlns ) { // Add missing namespace
+	@if not string.index( $svg, 'xmlns' ) { // Add missing namespace
 		$svg: AU-replace( $svg, '<svg','<svg xmlns="http://www.w3.org/2000/svg"' );
 	}
 
 	$encoded:'';
 	$slice: 2000;
 	$index: 0;
-	$loops: ceil( str-length( $svg ) / $slice ); // Chunk up string in order to avoid "stack level too deep" error
+	$loops: math.ceil( math.div( string.length( $svg ), $slice ) ); // Chunk up string in order to avoid "stack level too deep" error
 
 	@for $i from 1 through $loops {
-		$chunk: str-slice( $svg, $index, $index + $slice - 1 );
+		$chunk: string.slice( $svg, $index, $index + $slice - 1 );
 
 		$chunk: AU-replace( $chunk,'"', "'" );
 		$chunk: AU-replace( $chunk,'	', " " );
@@ -167,7 +177,7 @@ $dependencies: (
  * @return {integer}         - The factorial log
  */
 @function AU-factorial( $number ) {
-	@if $number < 0 or $number != floor( $number ) {
+	@if $number < 0 or $number != math.floor( $number ) {
 		@error "You talking to me?; the AU-factorial function only takes positive numbers.";
 	}
 
@@ -203,7 +213,7 @@ $dependencies: (
 	$SQRT2: 1.4142135623730951;
 
 	// full number
-	@if $exponent == floor( $exponent ) {
+	@if $exponent == math.floor( $exponent ) {
 		$rest: 1;
 
 		@if $exponent < 0 {
@@ -215,20 +225,20 @@ $dependencies: (
 				$rest: $rest * $base;
 			}
 
-			$exponent: floor($exponent * 0.5);
+			$exponent: math.floor( $exponent * 0.5 );
 			$base: $base * $base;
 		}
 
-		@return if( $exponent < 0, 1 / $rest, $rest );
+		@return $rest;
 	}
 
 	// decimal number
 	@else {
 		@if $base <= 0 {
-			@return 0 / 0;
+			@return math.div( 0, 0 );
 		}
 
-		$normalized: ( $base / $SQRT2 );
+		$normalized: math.div( $base, $SQRT2 );
 		$log: 0;
 
 		@if $normalized < 0 {
@@ -244,7 +254,7 @@ $dependencies: (
 
 		@else if $normalized >= 1 {
 			@while $normalized >= 1 {
-				$normalized: $normalized / 2;
+				$normalized: math.div( $normalized, 2 );
 				$log: $log + 1;
 			}
 		}
@@ -252,7 +262,11 @@ $dependencies: (
 		$divider: 1;
 		$deviderExponent: $log;
 
-		$baseExponent: if( $deviderExponent >= 0, 2, 1 / 2 );
+		$baseExponent: 2;
+
+		@if $deviderExponent < 0 {
+			$baseExponent: math.div( 1, 2 );
+		}
 
 		@if $deviderExponent < 0 {
 			$deviderExponent: $deviderExponent * -1;
@@ -263,11 +277,11 @@ $dependencies: (
 				$divider: $divider * $baseExponent;
 			}
 			$baseExponent: $baseExponent * $baseExponent;
-			$deviderExponent: floor( $deviderExponent * 0.5 );
+			$deviderExponent: math.floor( $deviderExponent * 0.5 );
 		}
 
-		$base: $base / $divider;
-		$base: ( $base - 1 ) / ( $base + 1 );
+		$base: math.div( $base, $divider );
+		$base: math.div( $base - 1, $base + 1 );
 		$base2: $base * $base;
 		$iterator: 1;
 		$tempBase: $base;
@@ -277,14 +291,14 @@ $dependencies: (
 			$base: $base * $base2;
 			$iterator: $iterator + 2;
 			$tempBase2: $tempBase;
-			$tempBase: $tempBase + $base / $iterator;
+			$tempBase: $tempBase + math.div( $base, $iterator );
 		}
 
 		$logarithm: ( $LN2 * $log + 2 * $tempBase ) * $exponent;
 		$return: 0;
 
 		@for $quarter from 0 to 24 {
-			$return: $return + AU-pow( $logarithm, $quarter ) / AU-factorial( $quarter );
+			$return: $return + math.div( AU-pow( $logarithm, $quarter ), AU-factorial( $quarter ) );
 		}
 
 		@return $return;
@@ -306,23 +320,31 @@ $dependencies: (
  * @return {float}          - The luminance
  */
 @function AU-color-luminance( $color ) {
-	@if type-of( $color ) != 'color' {
+	@if meta.type-of( $color ) != 'color' {
 		@error "Go ahead, make my day; the AU-color-luminance function only takes a color!";
 	}
 
-	$rgba: red( $color ), green( $color ), blue( $color );
+	$rgba:
+		color.channel( $color, 'red', $space: rgb ),
+		color.channel( $color, 'green', $space: rgb ),
+		color.channel( $color, 'blue', $space: rgb );
 	$rgba2: ();
 
 	@for $i from 1 through 3 {
-		$rgb: nth( $rgba, $i );
-		$rgb: $rgb / 255;
+		$rgb: list.nth( $rgba, $i );
+		$rgb: math.div( $rgb, 255 );
 
-		$rgb: if( $rgb < .03928, $rgb / 12.92, AU-pow( ( $rgb + .055 ) / 1.055, 2.4 ) );
+		@if $rgb < .03928 {
+			$rgb: math.div( $rgb, 12.92 );
+		}
+		@else {
+			$rgb: AU-pow( math.div( $rgb + .055, 1.055 ), 2.4 );
+		}
 
-		$rgba2: append( $rgba2, $rgb );
+		$rgba2: list.append( $rgba2, $rgb );
 	}
 
-	@return .2126 * nth( $rgba2, 1 ) + .7152 * nth( $rgba2, 2 ) + 0.0722 * nth( $rgba2, 3 );
+	@return .2126 * list.nth( $rgba2, 1 ) + .7152 * list.nth( $rgba2, 2 ) + 0.0722 * list.nth( $rgba2, 3 );
 }
 
 
@@ -343,20 +365,20 @@ $dependencies: (
  * @return {integer}              - The contrast ratio
  */
 @function AU-color-contrast( $foreground, $background, $silent: false, $rounded: true ) {
-	@if type-of( $foreground ) != 'color' {
+	@if meta.type-of( $foreground ) != 'color' {
 		@error "Elementary, my dear Watson; the AU-color-contrast function only takes a color as first argument!";
 	}
 
-	@if type-of( $background ) != 'color' {
+	@if meta.type-of( $background ) != 'color' {
 		@error "You can’t handle the truth; the AU-color-contrast function only takes a color as second argument!";
 	}
 
 	$luminance1: AU-color-luminance( $foreground ) + .05;
 	$luminance2: AU-color-luminance( $background ) + .05;
-	$ratio: $luminance1 / $luminance2;
+	$ratio: math.div( $luminance1, $luminance2 );
 
 	@if $luminance2 > $luminance1 {
-		$ratio: 1 / $ratio;
+		$ratio: math.div( 1, $ratio );
 	}
 
 	@if $ratio < 4.5 and $silent == false {
@@ -364,7 +386,7 @@ $dependencies: (
 	}
 
 	@if $rounded == true {
-		$ratio: round( $ratio * 10 ) / 10;
+		$ratio: math.div( math.round( $ratio * 10 ), 10 );
 	}
 
 	@return $ratio;
@@ -388,11 +410,11 @@ $dependencies: (
  * @return {Color}                                 - Returns the nearest accessible color
  */
 @function AU-color-a11y( $toMakeA11y, $background, $ratioKey: 'small' ) {
-	@if type-of( $toMakeA11y ) != 'color' {
+	@if meta.type-of( $toMakeA11y ) != 'color' {
 		@error "Where we’re going, we don’t need roads; the AU-a11ycolor function only takes a color as the first attribute!";
 	}
 
-	@if type-of( $background ) != 'color' {
+	@if meta.type-of( $background ) != 'color' {
 		@error "You shall not pass; the AU-a11ycolor function only takes a color as the second attribute!";
 	}
 
@@ -405,7 +427,7 @@ $dependencies: (
 		'large': 3,
 		'small': 4.5,
 	);
-	$ratio: map-get( $ratios, $ratioKey );
+	$ratio: map.get( $ratios, $ratioKey );
 
 	// Check the ratio straight away, if it passes return the value as hex
 	@if AU-color-contrast( $toMakeA11y, $background, true, false ) >= $ratio {
@@ -413,8 +435,8 @@ $dependencies: (
 	}
 
 	// Ratio didn't pass so we need to find the nearest color
-	$a11yLightness: lightness( $toMakeA11y );
-	$minHexDiff: 100 / 255; // 255 Colors / 100% HSL
+	$a11yLightness: color.channel( $toMakeA11y, 'lightness', $space: hsl );
+	$minHexDiff: math.div( 100, 255 ); // 255 Colors / 100% HSL
 
 	$isBlackBgContrast: AU-color-contrast( #000, $background, true, false ) >= $ratio;
 	$isWhiteBgContrast: AU-color-contrast( #fff, $background, true, false ) >= $ratio;
@@ -448,13 +470,13 @@ $dependencies: (
 
 	// Binary search until we find the colour that meets contrast
 	@while( $foundColor == '' ) {
-		$midLightness: ( $minLightness + $maxLightness ) / 2;
+		$midLightness: math.div( $minLightness + $maxLightness, 2 );
 		$midColor: hsl(
-			hue( $toMakeA11y ),
-			saturation( $toMakeA11y ),
+			color.channel( $toMakeA11y, 'hue', $space: hsl ),
+			color.channel( $toMakeA11y, 'saturation', $space: hsl ),
 			$midLightness
 		);
-		$resetColor: mix( $midColor, $midColor );
+		$resetColor: color.mix( $midColor, $midColor );
 
 		// If we meet contrast
 		@if AU-color-contrast( $resetColor, $background, true, false ) >= $ratio {
@@ -492,7 +514,7 @@ $dependencies: (
  * @return {Color}                       - Returns the lowest contrast color
  */
  @function AU-color-lowest-contrast( $colors, $background ){
-	$current-lowest: nth( $colors, 1 );
+	$current-lowest: list.nth( $colors, 1 );
 
 	// Loop through the $colors list
 	@each $color in $colors {
@@ -526,27 +548,27 @@ $dependencies: (
 	$fallback: ();
 	$has_fallback: false;
 
-	@if type-of( $property ) != 'string' {
+	@if meta.type-of( $property ) != 'string' {
 		@error "I’m sorry Dave, I can’t do that; the AU-space function only takes a string as first argument!";
 	}
 
 	// Loop through the $values list
 	@each $value in $values {
 		// This is a pixel on unitless unit. Let’s convert it to rems
-		@if type-of( $value ) == 'number' and unit( $value ) == 'unit' {
-			$value: $value / 1unit; // This is to remove the unit value
-			$rem: $value / ( ( $value / $unit ) * 0 + 1 );
+		@if meta.type-of( $value ) == 'number' and math.unit( $value ) == 'unit' {
+			$value: math.div( $value, 1unit ); // This is to remove the unit value
+			$rem: math.div( $value, ( math.div( $value, $unit ) * 0 + 1 ) );
 
-			$fallback: join( $fallback, round( $value * ( $unit * $unit ) ) + 0px );
-			$output: join( $output, #{ $rem }rem );
+			$fallback: list.append( $fallback, math.round( $value * ( $unit * $unit ) ) + 0px );
+			$output: list.append( $output, #{ $rem }rem );
 
 			$has_fallback: true;
 		}
 
 		// We don’t know what this is so we don’t change it.
 		@else {
-			$fallback: join( $fallback, $value );
-			$output: join( $output, $value );
+			$fallback: list.append( $fallback, $value );
+			$output: list.append( $output, $value );
 		}
 	}
 
@@ -584,7 +606,7 @@ $dependencies: (
  * @return {string}               - The code passed in via @content wrapped inside a media query
  */
 @mixin AU-media( $breakpoint ) {
-	@if type-of( $breakpoint ) != 'string' {
+	@if meta.type-of( $breakpoint ) != 'string' {
 		@error "Captain I’m giving it all she’s got but; the AU-media mixin only takes a string!";
 	}
 
@@ -685,29 +707,29 @@ $dependencies: (
 */
 @mixin AU-fontgrid( $fontsize-key, $lineheight-key: 'default' ) {
 
-	@if type-of( $fontsize-key ) != 'string' {
+	@if meta.type-of( $fontsize-key ) != 'string' {
 		@error "Going somewhere, Solo?; the AU-fontgrid mixin fontsize key takes a string!";
 	}
 
-	@if type-of( $lineheight-key ) != 'string' {
+	@if meta.type-of( $lineheight-key ) != 'string' {
 		@error "Tell Jabba I've got his money; the AU-fontgrid mixin lineheight key takes a string!";
 	}
 
-	@if not map-has-key( $AU-fontsize-map, $fontsize-key ) {
-		@error "You shall not pass; the AU-fontgrid mixin only takes the following fontsize keys strings: " + map-keys( $AU-fontsize-map );
+	@if not map.has-key( $AU-fontsize-map, $fontsize-key ) {
+		@error "You shall not pass; the AU-fontgrid mixin only takes the following fontsize keys strings: " + map.keys( $AU-fontsize-map );
 	}
 
-	@if not map-has-key( $AU-lineheight-map, $lineheight-key ) {
-		@error "There's a snake in my boot; the AU-fontgrid mixin only takes the following lineheight keys strings: " + map-keys( $AU-lineheight-map );
+	@if not map.has-key( $AU-lineheight-map, $lineheight-key ) {
+		@error "There's a snake in my boot; the AU-fontgrid mixin only takes the following lineheight keys strings: " + map.keys( $AU-lineheight-map );
 	}
 
 	// Get the value from supplied key for pixel and calculate the rem value
-	$fontsize-px: map-get( $AU-fontsize-map, $fontsize-key );
-	$fontsize-rem: $fontsize-px / $AU-rem;
+	$fontsize-px: map.get( $AU-fontsize-map, $fontsize-key );
+	$fontsize-rem: math.div( $fontsize-px, $AU-rem );
 
 	// Change the lineheight if it doesn't hit a AU-unit e.g. 40px font size with 1.5 lineheight = 50px should be 52px
-	$lineheight-pixel: round( ( map-get( $AU-lineheight-map, $lineheight-key ) * $fontsize-px ) / $AU-unit ) * $AU-unit;
-	$lineheight: $lineheight-pixel / $fontsize-px;
+	$lineheight-pixel: math.round( math.div( map.get( $AU-lineheight-map, $lineheight-key ) * $fontsize-px, $AU-unit ) ) * $AU-unit;
+	$lineheight: math.div( $lineheight-pixel, $fontsize-px );
 
 	// Mixin output
 	font-size: $fontsize-px + 0px;   // Pixel fallback for non-rem support
@@ -805,18 +827,18 @@ $AU-color-lowest-contrast: AU-color-lowest-contrast(
 
 // Override the background if it's not accessible and generate shades
 $AU-color-background:              AU-color-a11y( $AU-color-background, $AU-color-lowest-contrast );
-$AU-color-background-shade:        darken( $AU-color-background, 4% );
-$AU-color-background-alt:          darken( $AU-color-background, 8% );
-$AU-color-background-alt-shade:    darken( $AU-color-background, 12% );
+$AU-color-background-shade:        color.adjust( $AU-color-background, $lightness: -4%, $space: hsl );
+$AU-color-background-alt:          color.adjust( $AU-color-background, $lightness: -8%, $space: hsl );
+$AU-color-background-alt-shade:    color.adjust( $AU-color-background, $lightness: -12%, $space: hsl );
 $AU-color-foreground-alt-hint:     #61696B !default;
 
 
 // Generated border and muted colours
-$AU-color-foreground-muted:  mix( $AU-color-foreground-text, $AU-color-background );
-$AU-color-foreground-border: mix( $AU-color-foreground-text, $AU-color-background );
+$AU-color-foreground-muted:  color.mix( $AU-color-foreground-text, $AU-color-background );
+$AU-color-foreground-border: color.mix( $AU-color-foreground-text, $AU-color-background );
 
 // If the background is light
-@if ( lightness( $AU-color-background ) > 50 ) {
+@if ( color.channel( $AU-color-background, 'lightness', $space: hsl ) > 50 ) {
 	$AU-color-foreground-muted:  AU-color-a11y( $AU-color-foreground-muted, $AU-color-background-alt-shade );
 	$AU-color-foreground-border: AU-color-a11y( $AU-color-foreground-border, $AU-color-background-alt-shade, 'large');
 }
@@ -845,16 +867,16 @@ $AU-colordark-lowest-contrast: AU-color-lowest-contrast(
 
 // Override the background if it's not accessible and generate shades
 $AU-colordark-background:           AU-color-a11y( $AU-colordark-background, $AU-colordark-lowest-contrast );
-$AU-colordark-background-shade:     darken( $AU-colordark-background, 4% );
-$AU-colordark-background-alt:       darken( $AU-colordark-background, 8% );
-$AU-colordark-background-alt-shade: darken( $AU-colordark-background, 12% );
+$AU-colordark-background-shade:     color.adjust( $AU-colordark-background, $lightness: -4%, $space: hsl );
+$AU-colordark-background-alt:       color.adjust( $AU-colordark-background, $lightness: -8%, $space: hsl );
+$AU-colordark-background-alt-shade: color.adjust( $AU-colordark-background, $lightness: -12%, $space: hsl );
 
 // Generated border and muted colours
-$AU-colordark-foreground-muted:  mix( $AU-colordark-foreground-text, $AU-colordark-background );
-$AU-colordark-foreground-border: mix( $AU-colordark-foreground-text, $AU-colordark-background );
+$AU-colordark-foreground-muted:  color.mix( $AU-colordark-foreground-text, $AU-colordark-background );
+$AU-colordark-foreground-border: color.mix( $AU-colordark-foreground-text, $AU-colordark-background );
 
 // If the background is light
-@if ( lightness( $AU-colordark-background ) > 50 ) {
+@if ( color.channel( $AU-colordark-background, 'lightness', $space: hsl ) > 50 ) {
 	$AU-colordark-foreground-muted:  AU-color-a11y( $AU-colordark-foreground-muted, $AU-colordark-background-alt-shade );
 	$AU-colordark-foreground-border: AU-color-a11y( $AU-colordark-foreground-border, $AU-colordark-background-alt-shade, 'large');
 }

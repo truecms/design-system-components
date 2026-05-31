@@ -30,6 +30,13 @@ function emitUnifiedTypeDeclarations() {
 
 export default defineConfig({
   plugins: [emitUnifiedTypeDeclarations()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: ['import', 'legacy-js-api'],
+      },
+    },
+  },
   build: {
     // We are building a small set of entrypoints for the unified package:
     // - React components barrel

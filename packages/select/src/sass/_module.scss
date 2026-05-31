@@ -6,6 +6,7 @@
 // - sass-versioning
 // - globals
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+@use 'sass:color';
 
 
 @import '_globals.scss';
@@ -64,19 +65,19 @@
 	// state styling
 	&.au-select--dark:invalid,
 	&:invalid {
-		background-color: mix( $AU-color-error, $AU-color-background, 5% );
+		background-color: color.mix( $AU-color-error, $AU-color-background, $weight: 5% );
 		border-color: $AU-color-error;
 	}
 
 	&.au-select--dark.au-select--invalid,
 	&.au-select--invalid {
-		background-color: mix( $AU-color-error, $AU-color-background, 5% );
+		background-color: color.mix( $AU-color-error, $AU-color-background, $weight: 5% );
 		border-color: $AU-color-error;
 	}
 
 	&.au-select--dark.au-select--valid,
 	&.au-select--valid {
-		background-color: mix( $AU-color-success, $AU-color-background, 5% );
+		background-color: color.mix( $AU-color-success, $AU-color-background, $weight: 5% );
 		border-color: $AU-color-success;
 	}
 

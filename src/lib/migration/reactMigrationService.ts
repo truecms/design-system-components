@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { getDrupalCssFileNames, getCssPublicPaths } from '../../drupal/asset-manifest';
+
 export interface MigrationSnapshot {
   html: string;
   cssFileNames: string[];
@@ -51,16 +53,13 @@ export function getReactMigrationSnapshots(
     publicPaths: baselineMeta.publicPaths,
   };
 
-  // For now the unified snapshot mirrors the baseline filenames and
-  // public paths. Once the unified build is wired, this function can
-  // be updated to derive its data from the new bundles while keeping
-  // filenames and paths identical.
+  // The unified snapshot reads real emitted CSS from the Vite build manifest.
+  // This ensures the test fails if an asset is renamed or dropped in vite.config.ts.
   const unified: MigrationSnapshot = {
     html,
-    cssFileNames: baselineMeta.cssFileNames,
-    publicPaths: baselineMeta.publicPaths,
+    cssFileNames: getDrupalCssFileNames(),
+    publicPaths: getCssPublicPaths('/apps/sample-app/css'),
   };
 
   return { baseline, unified };
 }
-

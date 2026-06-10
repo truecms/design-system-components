@@ -1,9 +1,10 @@
 {
   "cssFileNames": [
-    "react-app.css"
+    "govau-components.css",
+    "govau-theme.css"
   ],
   "publicPaths": [
-    "/apps/sample-app/css/react-app.css"
+    "/apps/sample-app/css/govau-components.css",
+    "/apps/sample-app/css/govau-theme.css"
   ]
 }
-

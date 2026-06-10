@@ -10,8 +10,13 @@ import {
 import {
   validateDrupalMigration as validateViaApi,
 } from '../../../src/lib/migration/api';
+import { ensureUnifiedBuild } from '../helpers/ensureBuild';
 
 describe('Drupal unified package migration', () => {
+  beforeAll(() => {
+    ensureUnifiedBuild();
+  });
+
   const fixtureRoot = path.resolve(
     process.cwd(),
     'tests/integration/drupal/fixtures/sample-theme',

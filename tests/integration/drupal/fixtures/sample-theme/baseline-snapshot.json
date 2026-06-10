@@ -1,11 +1,10 @@
 {
   "cssFileNames": [
-    "govau-theme.css",
-    "govau-components.css"
+    "govau-components.css",
+    "govau-theme.css"
   ],
   "publicPaths": [
-    "/themes/custom/sample_theme/css/govau-theme.css",
-    "/themes/custom/sample_theme/css/govau-components.css"
+    "/themes/custom/sample_theme/css/govau-components.css",
+    "/themes/custom/sample_theme/css/govau-theme.css"
   ]
 }
-

@@ -25,7 +25,6 @@ jobs:
             suffix: '22.x'
           - node-version: '24.x'
             suffix: '24.x'
-    continue-on-error: ${{ matrix.node-version == '24.x' }}
     uses: ./.github/workflows/reusable-quality-gates.yml
     with:
       node_version: ${{ matrix.node-version }}
@@ -33,6 +32,7 @@ jobs:
       report_suffix: install-check-${{ matrix.suffix }}
       artifact_name: install-check-artifacts-${{ matrix.suffix }}
       run_test_design_system: true
+      tolerate_failure: ${{ matrix.node-version == '24.x' }}
       tarball_summary_file: install-check-pack-summary.json
       tarball_install_prefix: install-all-tarballs
 

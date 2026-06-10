@@ -47,6 +47,13 @@ on:
         required: false
         type: string
         default: 'false'
+      tolerate_failure:
+        # Marks the run informational (e.g. Node 24.x leg) — job failure
+        # does not fail the calling workflow. continue-on-error is not
+        # permitted on workflow-call jobs, so it lives here instead.
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -54,6 +61,7 @@ permissions:
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ inputs.tolerate_failure }}
     timeout-minutes: 45
     env:
       CI: true

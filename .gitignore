@@ -32,3 +32,6 @@ coverage/
 Thumbs.db
 *.tmp
 *.swp
+
+# Generated at test time by generate:bundle-report (baseline stays committed)
+reports/bundles-unified.json

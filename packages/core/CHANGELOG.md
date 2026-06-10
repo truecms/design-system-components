@@ -41,6 +41,8 @@
 
 ## Versions
 
+- [v6.0.1 - Patch release: security dependency updates and CI hardening (2026.05.31)](#v601)
+- [v6.0.0 - Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, @truecms/pancake* dependencies)](#v600)
 - [v5.0.1 - ba15a33: Initial @truecms publish and Node 22+ baseline; migrate from @govau, update CI/CD, and refresh dependencies (provenance enabled).](#v501)
 - [v5.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v500)
 - [v4.0.0 - Added new breakpoints for xl (extra large) and also xs (extra small)](#v400)
@@ -70,6 +72,14 @@
 ---
 
 ## Release History
+
+### v6.0.1
+
+- Patch release: security dependency updates and CI hardening (2026.05.31).
+
+### v6.0.0
+
+- Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, and @truecms/pancake* dependency declarations); Node 22 / pnpm 9 baseline.
 
 ### v5.0.1
 

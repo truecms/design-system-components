@@ -62,6 +62,8 @@
 
 ## Versions
 
+- [v6.0.2 - Patch release: security dependency updates and CI hardening (2026.05.31)](#v602)
+- [v6.0.0 - Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, @truecms/pancake* dependencies)](#v600)
 - [v5.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v500)
 - [v4.1.13 - Header image should be a block element on XS and SM breakpoints (Fix based on the new grid breakpoints)](#v4113)
 - [v4.1.12 - Remove --save-dev flag from readme instructions](#v4112)
@@ -92,6 +94,14 @@
 ---
 
 ## Release History
+
+### v6.0.2
+
+- Patch release: security dependency updates and CI hardening (2026.05.31).
+
+### v6.0.0
+
+- Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, and @truecms/pancake* dependency declarations); Node 22 / pnpm 9 baseline.
 
 ### v5.0.0
 

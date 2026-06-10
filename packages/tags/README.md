@@ -152,6 +152,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/tags/t
 
 ## Release History
 
+* v6.0.2 - Patch release: security dependency updates and CI hardening (2026.05.31)
+* v6.0.0 - Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, @truecms/pancake* dependencies)
 * v5.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v4.0.1 - Update core package dependency to use the latest version

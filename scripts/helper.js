@@ -89,7 +89,7 @@ const createAutoprefixerPlugin = () => {
 // GLOBALS
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 /**
- * Create a path if it doesn’t exist
+ * Create a path if it doesn't exist
  *
  * @param  {string} dir - The path to be checked and created if not found
  */
@@ -135,7 +135,7 @@ const CopyTemp = ( source, destination, replacements ) => {
 	const files = Fs.readdirSync( source ); // create target folder
 
 	for( let file of files ) {
-		if( !file.startsWith('.') || file === '.babelrc' ) { // don’t copy hidden files
+		if( !file.startsWith('.') || file === '.babelrc' ) { // don't copy hidden files
 			const current = Fs.lstatSync( Path.join( source, file ) );
 
 			if( current.isDirectory() ) {
@@ -182,12 +182,12 @@ const ReplaceFileContent = ( searches, fileName ) => {
 		content = content.split( replacing ).join( searches[ replacing ] ); // replacing globally without regex
 	}
 
-	Fs.writeFileSync( fileName, content, ( error ) => {
-		if( error ) {
-			HELPER.log.error(`Doh! ${ error }`);
-			return;
-		}
-	});
+	try {
+		Fs.writeFileSync( fileName, content );
+	}
+	catch( error ) {
+		HELPER.log.error(`Doh! ${ error }`);
+	}
 
 	HELPER.log.success(`Replaced file strings inside ${ Chalk.yellow( fileName ) }`);
 };
@@ -469,12 +469,6 @@ HELPER.precompile = (() => {
 			}
 		},
 
-		img: () => {
-		},
-
-		svg: () => {
-		},
-
 		/**
 		 * Compile and autoprefix Sass
 		 */
@@ -676,11 +670,6 @@ HELPER.compile = (() => {
 			getAllReact( '/lib/js/react.js', '/tests/react/' );
 		},
 
-		img: () => {
-		},
-
-		svg: () => {
-		},
 	}
 
 })();
@@ -731,15 +720,16 @@ HELPER.generate = (() => {
 					for( let module of allModules ) {
 						const packageJson = require( Path.normalize( `${ packagesPath }/${ module }/package.json` ) );
 						const packageDependencies = packageJson.dependencies || {};
-						const pancakeModule = packageJson.pancake && packageJson.pancake['pancake-module'] ?
-							packageJson.pancake['pancake-module'] :
-							{};
+						// Detect jquery/react support from actual source files, not removed pancake block
+						const hasJquery = Fs.existsSync( Path.normalize(`${ packagesPath }/${ module }/src/js/jquery.js`) );
+						const hasReact = Fs.existsSync( Path.normalize(`${ packagesPath }/${ module }/src/js/react.js`) );
 
 						audsJson[ packageJson.name ] = { // add to auds.json
 							name: packageJson.name,
 							version: packageJson.version,
 							peerDependencies: HELPER.generate.getAllDependencies( packageDependencies ),
-							'pancake-module': pancakeModule,
+							jquery: hasJquery,
+							react: hasReact,
 						};
 					}
 				}
@@ -798,24 +788,24 @@ HELPER.generate = (() => {
 		 * @param {array} allModules - An array of all modules
 		 */
 			index: ( allModules ) => {
+				const packagesPath = Path.normalize(`${ __dirname }/../packages/`);
 				let index = Fs.readFileSync( Path.normalize(`${ __dirname }/../.templates/index/index.html`), 'utf-8'); // this will be the index file
 				let replacement = '';
 
 			// iterate over all packages
 				if( allModules !== undefined && allModules.length > 0 ) {
 					for( let module of allModules ) {
-						const pkg = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
-						const pancakeModule = pkg.pancake && pkg.pancake['pancake-module'] ?
-							pkg.pancake['pancake-module'] :
-							{};
+						// Detect jquery/react support from actual source files, not removed pancake block
+						const hasJquery = Fs.existsSync( Path.normalize(`${ packagesPath }/${ module }/src/js/jquery.js`) );
+						const hasReact = Fs.existsSync( Path.normalize(`${ packagesPath }/${ module }/src/js/react.js`) );
 						let jquery = '';
 						let react = '';
 
-						if( pancakeModule.jquery ) {
+						if( hasJquery ) {
 							jquery = `<a class="link" href="packages/${ module }/tests/jquery/">jquery</a>`;
 						}
 
-						if( pancakeModule.react ) {
+						if( hasReact ) {
 							react = `<a class="link" href="packages/${ module }/tests/react/">react</a>`;
 						}
 
@@ -977,46 +967,41 @@ HELPER.scaffolding = (() => {
  */
 
 
+// unified-design-system is a Vite-built umbrella package with a different manifest shape; skip it from legacy validation
+const EXCLUDED_FROM_HELPER_VALIDATION = ['unified-design-system'];
+
 HELPER.test = (() => {
-	/**
-	 * PRIVATE
-	 */
-	const some = ( thisPath, verbose ) => {
-	};
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // PUBLIC METHODS
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 		return {
-			init: () => {
-				const packagesPath = Path.normalize(`${ __dirname }/../packages/`);
-				const allModules = GetFolders( packagesPath );
-				const legacyPancakeModules = allModules.filter( ( module ) => {
-					const packagePath = Path.normalize(`${ __dirname }/../packages/${ module }/package.json`);
-					const packageJson = require( packagePath );
+			init: ( packagesPath ) => {
+				const resolvedPackagesPath = packagesPath || Path.normalize(`${ __dirname }/../packages/`);
+				const allModules = GetFolders( resolvedPackagesPath ).filter(
+					( module ) => !EXCLUDED_FROM_HELPER_VALIDATION.includes( module )
+				);
 
-					return packageJson.pancake !== undefined
-						&& packageJson.pancake['pancake-module'] !== undefined;
-				});
+				HELPER.log.success(`Validating ${ allModules.length } packages: ${ allModules.join(', ') }`);
 
-				HELPER.test.dependencies( legacyPancakeModules );
-				HELPER.test.packagejson( legacyPancakeModules );
-				HELPER.test.changelog( legacyPancakeModules );
+				HELPER.test.dependencies( allModules, resolvedPackagesPath );
+				HELPER.test.packagejson( allModules, resolvedPackagesPath );
+				HELPER.test.changelog( allModules, resolvedPackagesPath );
 			},
 
 		/**
 		 * Test all dependencies
 		 *
-		 * @param {array} allModules - An array of all modules
+		 * @param {array}  allModules   - An array of all modules
+		 * @param {string} packagesPath - Optional override for the packages directory path
 		 */
-		dependencies: ( allModules ) => {
+		dependencies: ( allModules, packagesPath ) => {
+			const resolvedPackagesPath = packagesPath || Path.normalize(`${ __dirname }/../packages/`);
 			let pancakes = {};
 			let dependencies = [];
 
 			if( allModules !== undefined && allModules.length > 0 ) {
 				for( let module of allModules ) {
-					const packagesPKG = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
+					const packagesPKG = require( Path.normalize(`${ resolvedPackagesPath }/${ module }/package.json`) );
 
 					pancakes[ packagesPKG.name ] = packagesPKG.version; // adding to our library of pancakes
 
@@ -1039,7 +1024,7 @@ HELPER.test = (() => {
 					HELPER.log.error(`Peer Dependencies ${ module.name }:${ module.version } failed for ${ module.from }`);
 
 					console.log('\n');
-					process.exit( 1 );
+					throw new Error(`Peer dependency mismatch: ${ module.name }:${ module.version } failed for ${ module.from }`);
 				}
 			}
 
@@ -1049,17 +1034,19 @@ HELPER.test = (() => {
 		/**
 		 * Test all package.json files
 		 *
-		 * @param {array} allModules - An array of all modules
+		 * @param {array}  allModules   - An array of all modules
+		 * @param {string} packagesPath - Optional override for the packages directory path
 		 */
-		packagejson: ( allModules ) => {
-			let error = ''; // let’s assume the best
+		packagejson: ( allModules, packagesPath ) => {
+			const resolvedPackagesPath = packagesPath || Path.normalize(`${ __dirname }/../packages/`);
+			let error = ''; // let's assume the best
 			const strict = String(process.env.STRICT_CHANGELOG || '').toLowerCase() === 'true';
 
 			if( allModules !== undefined && allModules.length > 0 ) {
 				for( let module of allModules ) {
-					const packagesPKG = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
-					const hasSass = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/sass/_module.scss`) );
-					const hasReact = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/js/react.js`) );
+					const packagesPKG = require( Path.normalize(`${ resolvedPackagesPath }/${ module }/package.json`) );
+					const hasSass = Fs.existsSync( Path.normalize(`${ resolvedPackagesPath }/${ module }/src/sass/_module.scss`) );
+					const hasReact = Fs.existsSync( Path.normalize(`${ resolvedPackagesPath }/${ module }/src/js/react.js`) );
 					const dependencies = { ...(packagesPKG.dependencies || {}) };
 					// const hasJQuery = Fs.existsSync( Path.normalize(`${ __dirname }/../packages/${ module }/src/js/jquery.js`) );
 
@@ -1118,7 +1105,7 @@ HELPER.test = (() => {
                     }
 
                     if( hasReact && Object.keys( packagesPKG.devDependencies || {} ).length < 10 ) {
-                        error += `The module ${ module } doesn’t have the right amount of devDependencies.\n`;
+                        error += `The module ${ module } doesn't have the right amount of devDependencies.\n`;
                     }
 
 				}
@@ -1131,24 +1118,26 @@ HELPER.test = (() => {
 				HELPER.log.error(`Some package.json files contain inconsistencies:\n   ${ error.split('\n').join('\n   ') }`);
 
 				console.log('\n');
-				process.exit( 1 );
+				throw new Error(`package.json inconsistencies detected`);
 			}
 		},
 
 		/**
 		 * Test all changelog files
 		 *
-		 * @param {array} allModules - An array of all modules
+		 * @param {array}  allModules   - An array of all modules
+		 * @param {string} packagesPath - Optional override for the packages directory path
 		 */
-			changelog: ( allModules ) => {
-				let error = ''; // let’s assume the best
+			changelog: ( allModules, packagesPath ) => {
+				const resolvedPackagesPath = packagesPath || Path.normalize(`${ __dirname }/../packages/`);
+				let error = ''; // let's assume the best
 				const strict = String(process.env.STRICT_CHANGELOG || '').toLowerCase() === 'true';
 
 			if( allModules !== undefined && allModules.length > 0 ) {
 				for( let module of allModules ) {
-					const packagesPKG = require( Path.normalize(`${ __dirname }/../packages/${ module }/package.json`) );
-					const changelog = Fs.readFileSync( Path.normalize(`${ __dirname }/../packages/${ module }/CHANGELOG.md`), 'utf8' );
-					const readme = Fs.readFileSync( Path.normalize(`${ __dirname }/../packages/${ module }/README.md`), 'utf8' );
+					const packagesPKG = require( Path.normalize(`${ resolvedPackagesPath }/${ module }/package.json`) );
+					const changelog = Fs.readFileSync( Path.normalize(`${ resolvedPackagesPath }/${ module }/CHANGELOG.md`), 'utf8' );
+					const readme = Fs.readFileSync( Path.normalize(`${ resolvedPackagesPath }/${ module }/README.md`), 'utf8' );
 					const version = packagesPKG.version.split('-next')[ 0 ];
 
 					// Extract first entry under "## Versions" accepting either '-' or '*' bullets
@@ -1171,32 +1160,32 @@ HELPER.test = (() => {
 					if( !versionsEntry ){
 						HELPER.log.error( `Could not find the Version content in changelog for ${ module }` );
 						HELPER.log.error( `> Note: This is usually due to incorrect spacing` );
-						process.exit( 1 );
+						throw new Error(`Missing Version content in changelog for ${ module }`);
 					}
 
 					// Check that there is a current changelog content
 					if( !currentChange ){
 						HELPER.log.error( `Could not find the Changelog content for ${ module }` );
 						HELPER.log.error( `> Note: This is usually due to incorrect spacing` );
-						process.exit( 1 );
+						throw new Error(`Missing Changelog content for ${ module }`);
 					}
 
 					// testing CHANGELOG.md file for latest version
 					const listedVersion = versionsEntry[1];
 					const listedAnchor = versionsEntry[2];
 					if( !listedVersion.startsWith( version ) ) {
-						error += `The module ${ module } does not have the current version in it’s changelog "Versions" section.\n`;
+						error += `The module ${ module } does not have the current version in it's changelog "Versions" section.\n`;
 					}
 					else if( !listedAnchor.startsWith( version.replace(/[.]/g, '') ) ) {
 						error += `The module ${ module } has the wrong link for the current version ${ version } in the changelog "Versions" section.\n`;
 					}
 					else if( !currentChange.startsWith( version ) ) {
-						error += `The module ${ module } does not have the current version in it’s changelog "Release History" section.\n`;
+						error += `The module ${ module } does not have the current version in it's changelog "Release History" section.\n`;
 					}
 
 					// testing README.md file for latest version
 					if( !readme.split('## Release History' + Os.EOL + Os.EOL + '* v')[ 1 ].startsWith( version ) ) {
-						error += `The module ${ module } does not have the current version in it’s readme "Release History" section.\n`;
+						error += `The module ${ module } does not have the current version in it's readme "Release History" section.\n`;
 					}
 				}
 			}
@@ -1209,7 +1198,7 @@ HELPER.test = (() => {
 					HELPER.log.error(`Some changelogs contain inconsistencies:\n   ${ error.split('\n').join('\n   ') }`);
 
 					console.log('\n');
-					process.exit( 1 );
+					throw new Error(`Changelog inconsistencies detected`);
 				}
 				else {
 					console.warn(`Some changelogs contain inconsistencies (non-strict):\n   ${ error.split('\n').join('\n   ') }`);

@@ -18,6 +18,7 @@ export function ensureUnifiedBuild(): void {
     execSync('pnpm -s run build:unified', {
       cwd: ROOT_DIR,
       stdio: 'pipe',
+      maxBuffer: 64 * 1024 * 1024,
     });
   }
 }

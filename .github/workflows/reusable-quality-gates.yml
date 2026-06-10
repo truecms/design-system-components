@@ -159,6 +159,11 @@ jobs:
 
           node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
+      - name: Lint
+        run: |
+          set -euo pipefail
+          pnpm run lint
+
       - name: Build packages
         run: |
           set -euo pipefail

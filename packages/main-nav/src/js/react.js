@@ -54,9 +54,11 @@ const AUmainNavMenu = ({ items, linkComponent }) => {
 	}
 
 	// Create the menu with children
+	/* eslint-disable no-undef, react/jsx-no-undef -- [replace-imports] placeholder: AUlinkList is injected by the Pancake build system */
 	return (
 		<AUlinkList items={ GenerateMenu( items ) } linkComponent={ linkComponent } />
 	);
+	/* eslint-enable no-undef, react/jsx-no-undef */
 }
 
 

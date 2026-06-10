@@ -37,6 +37,7 @@ const AUbreadcrumbs = ({ dark, label, items, linkComponent, className = '', ...a
 		aria-label={ label }
 		{ ...attributeOptions }
 	>
+		{ /* eslint-disable-next-line no-undef, react/jsx-no-undef -- [replace-imports] placeholder: AUlinkList is injected by the Pancake build system */ }
 		<AUlinkList inline linkComponent={ linkComponent } items={ items } />
 	</nav>
 );

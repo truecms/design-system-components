@@ -30,7 +30,6 @@ let Chalk;
 
 try {
 	// Prefer CommonJS consumption when the runtime supports it.
-	// eslint-disable-next-line global-require, import/no-dynamic-require
 	const loaded = require('chalk');
 	Chalk = loaded.default || loaded;
 }

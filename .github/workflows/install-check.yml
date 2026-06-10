@@ -10,17 +10,22 @@ on:
       - 2.x
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   install-check:
     name: Node ${{ matrix.node-version }} install sweep
+    # 24.x is informational (non-blocking) — see audit remediation M1
     strategy:
       fail-fast: false
       matrix:
         include:
           - node-version: '22.x'
             suffix: '22.x'
-          - node-version: 'lts/*'
-            suffix: 'lts-star'
+          - node-version: '24.x'
+            suffix: '24.x'
+    continue-on-error: ${{ matrix.node-version == '24.x' }}
     uses: ./.github/workflows/reusable-quality-gates.yml
     with:
       node_version: ${{ matrix.node-version }}
@@ -30,7 +35,6 @@ jobs:
       run_test_design_system: true
       tarball_summary_file: install-check-pack-summary.json
       tarball_install_prefix: install-all-tarballs
-    secrets: inherit
 
   dry-run-release:
     name: Dry run release validation
@@ -46,4 +50,3 @@ jobs:
       write_changesets_summary: true
       tarball_summary_file: pack-summary.json
       tarball_install_prefix: dry-run-all-tarballs
-    secrets: inherit

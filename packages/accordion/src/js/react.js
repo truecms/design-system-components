@@ -212,15 +212,15 @@ class AUaccordion extends React.PureComponent {
 							target.style.display = '';
 							target.style.height = '';
 
-							// run after opening
-							if( typeof callbacks.afterOpen === 'function' ) {
+							// run after closing
+							if( typeof callbacks.afterClose === 'function' ) {
 								callbacks.afterClose();
 							}
 						}
 						else {
 
-							// run after closing
-							if( typeof callbacks.afterClose === 'function' ) {
+							// run after opening
+							if( typeof callbacks.afterOpen === 'function' ) {
 								callbacks.afterOpen();
 							}
 						}

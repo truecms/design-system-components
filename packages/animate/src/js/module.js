@@ -309,7 +309,7 @@ var AU = AU || {};
 				callback: function() { // making sure we fire the callback only once
 					elements[ 0 ].AUtoggleInteration ++;
 
-					if( elements[ 0 ].AUtoggleInteration === elements[ 0 ].AUinterations ) {
+					if( elements[ 0 ].AUtoggleInteration === elements[ 0 ].AUtoggleInterations ) {
 						var returnParam = options.callback( element, postState );
 
 						// run postfunction once per element

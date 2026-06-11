@@ -147,18 +147,17 @@ class AUaccordion extends React.PureComponent {
 	 * @param  {string}  elements  - The DOM node/s to toggle
 	 * @param  {integer} speed     - The speed in ms for the animation
 	 * @param  {object}  callbacks - An object of four optional callbacks: { onOpen, afterOpen, onClose, afterClose }
+	 * @param  {object}  event     - The event object from the click handler [optional]
 	 *
 	 */
-	accordionToggle( elements, speed, callbacks ) {
+	accordionToggle( elements, speed, callbacks, event ) {
 		const SetAriaRoles = this.setAriaRoles;
 		const ToggleClasses = this.toggleClasses;
 
 		// stop event propagation
-		try {
-			window.event.cancelBubble = true;
+		if( event && typeof event.stopPropagation === 'function' ) {
 			event.stopPropagation();
 		}
-		catch( error ) {}
 
 		// making sure we can iterate over just one DOM element
 		if( elements.length === undefined ) {
@@ -247,13 +246,6 @@ class AUaccordion extends React.PureComponent {
 	accordionOpen( elements, speed ) {
 		const ToggleClasses = this.toggleClasses;
 
-		// stop event propagation
-		try {
-			window.event.cancelBubble = true;
-			event.stopPropagation();
-		}
-		catch( error ) {}
-
 		if( elements.length === undefined ) {
 			elements = [ elements ];
 		}
@@ -309,13 +301,6 @@ class AUaccordion extends React.PureComponent {
 
 		const ToggleClasses = this.toggleClasses;
 
-		// stop event propagation
-		try {
-			window.event.cancelBubble = true;
-			event.stopPropagation();
-		}
-		catch( error ) {}
-
 		if( elements.length === undefined ) {
 			elements = [ elements ];
 		}
@@ -360,7 +345,7 @@ class AUaccordion extends React.PureComponent {
 			afterOpen: this.props.afterOpen,
 			onClose: this.props.onClose,
 			afterClose: this.props.afterClose,
-		});
+		}, event );
 	}
 
 

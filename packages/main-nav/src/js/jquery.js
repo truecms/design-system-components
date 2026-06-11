@@ -17,12 +17,14 @@
  */
 $.fn.AUmainNav = function( callbacks ) {
 
+	// eslint-disable-next-line no-undef -- Legacy jQuery plugin: $elements is an intentional implicit global shared with addListeners
 	$elements = this;
 
 	var mainNavObject = {
 		addListeners: function() {
 
 			// each main navigation event handlers
+			// eslint-disable-next-line no-undef -- Legacy jQuery plugin: $elements defined above
 			$elements
 				.not('.js-au-main-nav-rendered') // making sure we only add the event listeners once
 				.each( function( i, mainNav ) {

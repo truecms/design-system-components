@@ -28,8 +28,38 @@ function emitUnifiedTypeDeclarations() {
   };
 }
 
+function emitBuildManifest() {
+  return {
+    name: 'emit-build-manifest',
+    writeBundle(_options: unknown, bundle: Record<string, { type: string }>) {
+      const css: string[] = [];
+      const js: string[] = [];
+
+      for (const fileName of Object.keys(bundle).sort()) {
+        if (fileName.endsWith('.css')) {
+          css.push(fileName);
+        } else if (fileName.endsWith('.js')) {
+          js.push(fileName);
+        }
+      }
+
+      const manifest = { css, js, generatedAt: null };
+      const distDir = path.resolve(
+        process.cwd(),
+        'packages/unified-design-system/dist',
+      );
+      fs.mkdirSync(distDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(distDir, 'build-manifest.json'),
+        JSON.stringify(manifest, null, 2) + '\n',
+        'utf8',
+      );
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [emitUnifiedTypeDeclarations()],
+  plugins: [emitUnifiedTypeDeclarations(), emitBuildManifest()],
   css: {
     preprocessorOptions: {
       scss: {

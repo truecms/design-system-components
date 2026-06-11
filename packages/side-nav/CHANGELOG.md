@@ -79,6 +79,8 @@
 
 ## Versions
 
+- [v7.0.2 - Patch release: security dependency updates and CI hardening (2026.05.31)](#v702)
+- [v7.0.0 - Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, @truecms/pancake* dependencies)](#v700)
 - [v6.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v600)
 - [v5.0.9 - Update core package dependency to use the latest version](#v509)
 - [v5.0.8 - Remove --save-dev flag from readme instructions](#v508)
@@ -107,6 +109,14 @@
 ---
 
 ## Release History
+
+### v7.0.2
+
+- Patch release: security dependency updates and CI hardening (2026.05.31).
+
+### v7.0.0
+
+- Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, and @truecms/pancake* dependency declarations); Node 22 / pnpm 9 baseline.
 
 ### v6.0.0
 

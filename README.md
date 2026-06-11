@@ -1,6 +1,6 @@
 # GOV.AU Design System Components (Node 22 modernisation)
 
-> This repository is a modernisation fork of the Australian Government Design System components. The upstream service was decommissioned in 2020; to keep long-running programmes unblocked we migrated the code to the TrueCMS GitHub organisation, continue to publish under the new `@truecms` npm scope, and mirror the legacy `@gov.au/*` tags so existing consumers remain supported.
+> This repository is a modernisation fork of the Australian Government Design System components. The upstream service was decommissioned in 2020; to keep long-running programmes unblocked we migrated the code to the TrueCMS GitHub organisation and continue to publish under the `@truecms` npm scope. The legacy `@gov.au/*` packages remain frozen at their final published versions; existing consumers migrate to `@truecms/*` via the guided installation workflow below.
 
 This migration allows the maintainers to provide funded support for agencies and vendors who still rely on the original component APIs. Active development now happens in the open under the TrueCMS banner, but compatibility guarantees, accessibility goals, and public licensing remain unchanged.
 
@@ -95,7 +95,6 @@ Releases are orchestrated with Changesets and pnpm:
 1. Collect changes using `pnpm changeset` and merge the generated markdown files.
 2. When ready to publish, trigger the **npm Release** workflow from the GitHub Actions tab. Supply `dry_run=false` once a release candidate is approved, or keep the default `true` for validation.
 3. The workflow first runs release quality gates, then executes publish via `pnpm run release` (Changesets) under the selected scope.
-4. Release artefacts are mirrored to the legacy `@gov.au/*` names via npm dist-tags so downstream teams can opt in at their own pace.
 
 ## Unified design system migration (Vite/Tailwind/React)
 

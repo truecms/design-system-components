@@ -19,7 +19,7 @@
     "test:helper": "node ../../scripts/helper.js test",
     "test": "npm-run-all --parallel test:*",
     "prepublish": "npm run test:helper",
-    "build:pre": "node ../../scripts/helper.js precompile publish",
+    "build:pre": "node ../../scripts/helper.js precompile",
     "build:js": "npm run build:pre && node ../../scripts/helper.js compile",
     "build": "npm run build:js",
     "serve": "browser-sync tests --files \"tests/**/*.html, tests/**/*.css, tests/**/*.js\"",

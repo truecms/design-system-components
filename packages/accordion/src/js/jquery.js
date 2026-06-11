@@ -89,7 +89,7 @@ $.fn.AUaccordion = function( callbacks ) {
 						.on('click', function( event ) {
 							event.preventDefault();
 
-							AU.accordion.Toggle( $( accordion ).children('.js-au-accordion')[ 0 ], speed, callbacks );
+							AU.accordion.Toggle( $( accordion ).children('.js-au-accordion')[ 0 ], speed, callbacks, event );
 						})
 						.addClass('js-au-accordion-rendered'); // marking as processed
 			});

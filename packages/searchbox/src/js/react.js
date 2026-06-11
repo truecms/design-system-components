@@ -52,12 +52,14 @@ const AUsearchbox = ({ label, btnText, dark, responsive, id, icon, wrapper, clas
 								`${className}`} {...attributeOptions}>
 			{ label && <label htmlFor={id } className="au-search__label">{label}</label> }
 
+			{ /* eslint-disable no-undef, react/jsx-no-undef -- [replace-imports] placeholder: AUtextInput and AUbutton are injected by the Pancake build system */ }
 			<AUtextInput dark={dark} id={id} type="search" {...inputProps} />
 			<div className="au-search__btn">
 				<AUbutton dark={dark} {...btnProps}>
 						<span className="au-search__submit-btn-text">{btnText}</span>
 				</AUbutton>
 			</div>
+			{ /* eslint-enable no-undef, react/jsx-no-undef */ }
 		</Wrapper>
 )
 };

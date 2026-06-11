@@ -15,6 +15,9 @@ describe('unified build output', () => {
     execSync('pnpm -s run build:unified', {
       cwd: rootDir,
       stdio: 'pipe',
+      // The prebuild of all workspace packages produces >1MB of output,
+      // which overflows execSync's default maxBuffer.
+      maxBuffer: 64 * 1024 * 1024,
     });
   });
 

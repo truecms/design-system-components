@@ -108,16 +108,15 @@ var AU = AU || {};
 	 * @param  {string}  elements  - The DOM node/s to toggle
 	 * @param  {integer} speed     - The speed in ms for the animation
 	 * @param  {object}  callbacks - An object of four optional callbacks: { onOpen, afterOpen, onClose, afterClose }
+	 * @param  {object}  event     - The event object from the click handler [optional]
 	 *
 	 */
-	accordion.Toggle = function( elements, speed, callbacks ) {
+	accordion.Toggle = function( elements, speed, callbacks, event ) {
 
 		// stop event propagation
-		try {
-			window.event.cancelBubble = true;
+		if( event && typeof event.stopPropagation === 'function' ) {
 			event.stopPropagation();
 		}
-		catch( error ) {}
 
 		// making sure we can iterate over just one DOM element
 		if( elements.length === undefined ) {
@@ -210,13 +209,6 @@ var AU = AU || {};
 	 */
 	accordion.Open = function( elements, speed ) {
 
-		// stop event propagation
-		try {
-			window.event.cancelBubble = true;
-			event.stopPropagation();
-		}
-		catch( error ) {}
-
 		if( elements.length === undefined ) {
 			elements = [ elements ];
 		}
@@ -269,13 +261,6 @@ var AU = AU || {};
 	 *
 	 */
 	accordion.Close = function( elements, speed ) {
-
-		// stop event propagation
-		try {
-			window.event.cancelBubble = true;
-			event.stopPropagation();
-		}
-		catch( error ) {}
 
 		if( elements.length === undefined ) {
 			elements = [ elements ];

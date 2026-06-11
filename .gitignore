@@ -12,6 +12,7 @@ validation-status.json
 *.css
 !src/styles/drupal/*.css
 packages/*/tests/*/*.js
+!packages/*/tests/unit/*.spec.js
 !packages/*/tests/react/index.js
 !packages/*/tests/react/webpack.config.js
 packages/*/lib/
@@ -32,3 +33,6 @@ coverage/
 Thumbs.db
 *.tmp
 *.swp
+
+# Generated at test time by generate:bundle-report (baseline stays committed)
+reports/bundles-unified.json

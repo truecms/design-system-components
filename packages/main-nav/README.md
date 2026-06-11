@@ -235,6 +235,8 @@ The visual test: https://design-system-components.truecms.com.au/packages/main-n
 
 ## Release History
 
+* v3.0.2 - Patch release: security dependency updates and CI hardening (2026.05.31)
+* v3.0.0 - Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, @truecms/pancake* dependencies)
 * v2.0.0 - 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported
 
 * v1.0.9 - main nav to be collapsible upto MD breakpoint (Fix based on the new grid breakpoints)

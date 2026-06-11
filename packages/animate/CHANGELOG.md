@@ -35,6 +35,7 @@
 
 ## Versions
 
+- [v3.0.0 - Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, @truecms/pancake* dependencies)](#v300)
 - [v2.0.0 - # 7f941cd: Document stewardship responsibilities under the TrueCMS organisation, lock the Node 22 baseline into the governance docs, and ship bundle parity plus dry-run release safeguards so Drupal 11 users and npm consumers remain supported.](#v200)
 - [v1.0.14 - Fix unsafe-eval CSP issue](#v1014)
 - [v1.0.13 - Remove --save-dev flag from readme instructions](#v1013)
@@ -60,6 +61,10 @@
 ---
 
 ## Release History
+
+### v3.0.0
+
+- Major release: removed legacy Pancake build coupling (postinstall hook, pancake config, and @truecms/pancake* dependency declarations); Node 22 / pnpm 9 baseline.
 
 ### v2.0.0
 

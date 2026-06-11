@@ -42,7 +42,8 @@ const AUsideNavMenu = ({ items, linkComponent }) => {
 
 			// If it has children create a menu again
 			if( item.children ){
-				link.children = <AUlinkList items={ GenerateMenu( item.children ) } linkComponent={ item.linkComponent } />
+				// eslint-disable-next-line no-undef, react/jsx-no-undef -- [replace-imports] placeholder: AUlinkList is injected by the Pancake build system
+			link.children = <AUlinkList items={ GenerateMenu( item.children ) } linkComponent={ item.linkComponent } />
 			}
 
 			// return the link, maybe with children
@@ -53,9 +54,11 @@ const AUsideNavMenu = ({ items, linkComponent }) => {
 	}
 
 	// Create the menu with children
+	/* eslint-disable no-undef, react/jsx-no-undef -- [replace-imports] placeholder: AUlinkList is injected by the Pancake build system */
 	return (
 		<AUlinkList items={ GenerateMenu( items ) } linkComponent={ linkComponent } />
 	);
+	/* eslint-enable no-undef, react/jsx-no-undef */
 }
 
 
@@ -98,6 +101,7 @@ const AUsideNav = ({
 	attributeOptions,
 }) => (
 		<aside aria-label={ ariaLabel }>
+			{ /* eslint-disable no-undef, react/jsx-no-undef -- [replace-imports] placeholder: AUaccordion is injected by the Pancake build system */ }
 			<AUaccordion
 				closed={closed}
 				speed={speed}
@@ -120,6 +124,7 @@ const AUsideNav = ({
 					<AUsideNavMenu items={items} linkComponent={linkComponent} />
 				</div>
 			</AUaccordion>
+			{ /* eslint-enable no-undef, react/jsx-no-undef */ }
 		</aside>
 	);
 

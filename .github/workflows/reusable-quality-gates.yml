@@ -47,10 +47,21 @@ on:
         required: false
         type: string
         default: 'false'
+      tolerate_failure:
+        # Marks the run informational (e.g. Node 24.x leg) — job failure
+        # does not fail the calling workflow. continue-on-error is not
+        # permitted on workflow-call jobs, so it lives here instead.
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
 
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ inputs.tolerate_failure }}
     timeout-minutes: 45
     env:
       CI: true
@@ -68,9 +79,7 @@ jobs:
           sudo apt-get install -y libc6 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libgbm1 libpango-1.0-0 libcairo2 jq
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -141,7 +150,7 @@ jobs:
         run: |
           set -euo pipefail
           export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_BASELINE_PATH="reports/performance-baseline.json"
           export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
 
           start=$(date +%s)
@@ -150,11 +159,16 @@ jobs:
 
           node scripts/performance-metrics.js record --step install --duration "$((end - start))"
 
+      - name: Lint
+        run: |
+          set -euo pipefail
+          pnpm run lint
+
       - name: Build packages
         run: |
           set -euo pipefail
           export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_BASELINE_PATH="reports/performance-baseline.json"
           export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
 
           start=$(date +%s)
@@ -193,7 +207,7 @@ jobs:
           set -euo pipefail
           export PA11Y_REPORT_DIR="dist/reports/${{ inputs.report_suffix }}/a11y"
           export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_BASELINE_PATH="reports/performance-baseline.json"
           export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
 
           start=$(date +%s)
@@ -214,7 +228,7 @@ jobs:
         run: |
           set -euo pipefail
           export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_BASELINE_PATH="reports/performance-baseline.json"
           export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
 
           start=$(date +%s)
@@ -226,12 +240,8 @@ jobs:
       - name: Audit production dependencies
         run: |
           set -euo pipefail
-          pnpm audit --prod --json > audit-report.json
-          if [ "$(jq '.vulnerabilities | length' audit-report.json)" -gt 0 ]; then
-            echo '::error::Vulnerabilities detected in production dependency graph'
-            cat audit-report.json
-            exit 1
-          fi
+          pnpm audit --prod --json > audit-report.json || true
+          node scripts/check-audit-report.js audit-report.json
         shell: bash
 
       - name: Dry run publish with Changesets
@@ -262,7 +272,7 @@ jobs:
         run: |
           set -euo pipefail
           export PERFORMANCE_OUTPUT_PATH="dist/reports/${{ inputs.report_suffix }}/performance.json"
-          export PERFORMANCE_BASELINE_PATH="specs/001-already-began-task/fixtures/performance/baseline.json"
+          export PERFORMANCE_BASELINE_PATH="reports/performance-baseline.json"
           export PERFORMANCE_MATRIX_LABEL="${{ inputs.report_suffix }}"
           export PERFORMANCE_SUMMARY_PATH="dist/reports/${{ inputs.report_suffix }}/performance-summary.json"
           node scripts/performance-metrics.js finalize
@@ -286,7 +296,6 @@ jobs:
         if: always()
         run: |
           rm -rf dist/tarballs dist/reports
-          pnpm store prune
 
       - name: Write job summary
         if: always()

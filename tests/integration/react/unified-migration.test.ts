@@ -10,8 +10,13 @@ import {
 import {
   validateReactMigration as validateViaApi,
 } from '../../../src/lib/migration/api';
+import { ensureUnifiedBuild } from '../helpers/ensureBuild';
 
 describe('React unified package migration', () => {
+  beforeAll(() => {
+    ensureUnifiedBuild();
+  });
+
   const fixtureRoot = path.resolve(
     process.cwd(),
     'tests/integration/react/fixtures/sample-app',

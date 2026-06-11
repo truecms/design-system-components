@@ -75,7 +75,7 @@ Highest priority repository. Make this repo release-ready and publishable first.
 - Follow-up remediation is now tracked in issue #23: reduce Sass deprecation warnings on the `2.x` unified package path before promoting the package beyond beta.
 
 ## Verification Gates
-- [x] No regression in canonical markup/classes/behavior.
+- [ ] No regression in canonical markup/classes/behavior.
 - [x] Accessibility baseline remains green.
 - [x] Unified package build artifacts are installable by fixture consumers.
 
@@ -127,3 +127,7 @@ Use `../MULTI_REPO_ROADMAP.md` for cross-repo blockers and sequencing.
   - `https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/INSTALL.md` (`200`)
   - `https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/INSTRUCTIONS.md` (`200`)
 - Legacy placeholder-image cleanup tracking issue was closed after verification (`#7`), with zero `placehold.it` matches on both `origin/2.x` and `origin/master`.
+
+### 2026-06-10 verification gates reopened (audit)
+- A repository audit found the unified migration verification tests were tautological: `src/lib/migration/reactMigrationService.ts` mirrored the baseline into the "unified" snapshot by construction, and the Drupal comparison tested a hardcoded constant in `src/drupal/asset-manifest.ts` against a committed fixture. The "No regression in canonical markup/classes/behavior" gate is reopened until migration tests assert against real `vite build` output (remediation in progress on this branch).
+- M1/M2 command evidence from 2026-02-13 remains factually accurate (commands ran and passed) but should not be read as behavioral verification.

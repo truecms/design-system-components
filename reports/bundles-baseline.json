@@ -1,19 +1,24 @@
 {
   "bundles": [
     {
-      "id": "packages/unified-design-system/dist/css/govau-theme.css",
+      "id": "css/govau-components.css",
       "type": "css",
-      "size_bytes": 0
+      "size_bytes": 74184
     },
     {
-      "id": "packages/unified-design-system/dist/js/components.js",
+      "id": "css/govau-theme.css",
+      "type": "css",
+      "size_bytes": 42299
+    },
+    {
+      "id": "js/components.js",
       "type": "js",
       "size_bytes": 77
     },
     {
-      "id": "packages/unified-design-system/dist/js/drupal.js",
+      "id": "js/drupal.js",
       "type": "js",
-      "size_bytes": 1
+      "size_bytes": 621
     }
   ]
 }

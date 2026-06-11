@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 
 const BOOLEAN_TRUE_VALUES = new Set(['true', '1', 'yes', 'y', 'on']);
 const BOOLEAN_FALSE_VALUES = new Set(['false', '0', 'no', 'n', 'off']);

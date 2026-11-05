@@ -44,11 +44,11 @@ If you are testing before merge (for example from `feature/d11`), replace `2.x` 
 
 | Tool    | Minimum | Recommended |
 |---------|---------|-------------|
-| Node.js | 22.0.0  | 22.x (Active LTS) |
+| Node.js | 22.13.0 | 22.x (Active LTS) |
 | npm     | 10.0.0  | 10.x bundled with Node 22 |
 | pnpm    | 9.0.0   | 9.12.x via Corepack |
 
-Earlier Node releases are no longer supported. Automated workflows and published packages declare these engine constraints to prevent accidental installs on unsupported runtimes.
+Development and browser tests require Node.js 22.13.0 or later in the 22.x line, or Node.js 24 or later. Published component packages retain their Node.js 22.0.0 minimum. Earlier Node releases are no longer supported. Automated workflows and published packages declare these engine constraints to prevent accidental installs on unsupported runtimes.
 
 ## Local development
 

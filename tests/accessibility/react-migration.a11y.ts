@@ -1,4 +1,4 @@
-import pa11y from 'pa11y';
+import pa11y from './runPa11y';
 import path from 'node:path';
 import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';

@@ -79,3 +79,32 @@ Logs from these runs should be attached to release pull requests or maintenance 
 - Keep the Install Check workflow on pnpm commands and monitor tarball verification after Pancake replacements land (Task T205 complete).
 - Complete the package README/CHANGELOG sweep using the checklist.
 - Continue recording compatibility runs and escalations in release pull requests or maintenance issues to satisfy monitoring requirement FR-005.
+
+## Dependency security maintenance
+
+Use the pinned `pnpm@9.12.2` from `packageManager` for dependency changes and
+frozen installs. The root `pnpm.overrides` prevents vulnerable transitive
+versions from returning when workspace packages refresh their dependencies.
+Keep overrides within the existing major line where a fixed release exists.
+The security fixes for `glob`, `minimatch`, `basic-ftp`, `serialize-javascript`
+and `zod` require a newer major version; run the full build and test checks
+after changing these overrides.
+
+The browser test tools now require Node.js `^22.13.0 || >=24`. Pa11y 10 and
+Puppeteer 25 remove the vulnerable `extract-zip` dependency and use a BiDi
+parser compatible with Zod 4. The accessibility integration tests run Pa11y
+in a child Node process because Jest's CommonJS loader on Node 22 cannot load
+Puppeteer's ESM entry point. Published component runtime requirements remain
+unchanged.
+
+One development dependency has no fixed upstream release. Its committed
+pnpm patch applies during installation:
+
+- `deepmerge@4.3.1`: excludes `__proto__` keys when copying either input,
+  including nested objects. This addresses [GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4).
+
+`tests/security/dependency-patches.spec.js` checks this patch as part of
+`pnpm test:unit-test`. Package audits and Dependabot still report the original
+version because local patches do not change registry advisory data. Do not
+suppress this advisory. Replace the patch with an upstream fixed release
+when available and retain the regression tests.

@@ -1,5 +1,13 @@
 @truecms/responsive-media CHANGELOG
 
+## 4.0.2
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/core@6.0.2
+
 ## 4.0.1
 
 ### Patch Changes

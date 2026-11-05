@@ -1,5 +1,11 @@
 @truecms/animate CHANGELOG
 
+## 3.0.1
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+
 ## 3.0.0
 
 ### Major Changes

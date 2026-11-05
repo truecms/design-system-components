@@ -1,5 +1,11 @@
 @truecms/core CHANGELOG
 
+## 6.0.2
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+
 ## 6.0.1
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 @truecms/side-nav CHANGELOG
 
+## 7.0.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/accordion@9.0.2
+  - @truecms/animate@3.0.1
+  - @truecms/core@6.0.2
+  - @truecms/link-list@5.0.3
+
 ## 7.0.2
 
 ### Patch Changes

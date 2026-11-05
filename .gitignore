@@ -32,3 +32,5 @@ coverage/
 Thumbs.db
 *.tmp
 *.swp
+
+.logs/

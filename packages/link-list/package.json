@@ -1,6 +1,6 @@
 {
   "name": "@truecms/link-list",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "A simple list of inline links.",
   "keywords": [
     "auds",
@@ -36,8 +36,8 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/body": "^4.0.1",
-    "@truecms/core": "^6.0.1"
+    "@truecms/body": "^4.0.2",
+    "@truecms/core": "^6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

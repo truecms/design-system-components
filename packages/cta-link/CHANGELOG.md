@@ -1,5 +1,13 @@
 @truecms/cta-link CHANGELOG
 
+## 4.0.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/core@6.0.2
+
 ## 4.0.2
 
 ### Patch Changes

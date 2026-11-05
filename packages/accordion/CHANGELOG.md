@@ -1,5 +1,14 @@
 @truecms/accordion CHANGELOG
 
+## 9.0.2
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/animate@3.0.1
+  - @truecms/core@6.0.2
+
 ## 9.0.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@truecms/animate",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A JavaScript function to animate CSS properties of page elements.",
   "keywords": [
     "auds",

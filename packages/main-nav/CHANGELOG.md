@@ -1,5 +1,15 @@
 @truecms/main-nav CHANGELOG
 
+## 3.0.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/animate@3.0.1
+  - @truecms/core@6.0.2
+  - @truecms/link-list@5.0.3
+
 ## 3.0.2
 
 ### Patch Changes

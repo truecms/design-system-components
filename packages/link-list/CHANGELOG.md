@@ -1,5 +1,14 @@
 @truecms/link-list CHANGELOG
 
+## 5.0.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/body@4.0.2
+  - @truecms/core@6.0.2
+
 ## 5.0.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 @truecms/progress-indicator CHANGELOG
 
+## 5.0.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/core@6.0.2
+
 ## 5.0.2
 
 ### Patch Changes

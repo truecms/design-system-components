@@ -4,17 +4,17 @@ This document outlines how releases are produced for the design system component
 
 ## Prerequisites
 
-- Node.js 22 (`nvm use 22` locally) and pnpm 9+
+- Node.js 22.13+ in the 22.x line, or Node.js 24+, and the pinned pnpm 9.12.2
 - GitHub Actions secret `NPM_TOKEN_TRUECMS` containing an npm Access Token with publish rights to the `@truecms` scope
 - Changesets entry for every change destined for release
 - Clean working tree (`pnpm install --frozen-lockfile` succeeds without modifications)
 
 ## Release Workflow Overview
 
-1. Merge approved pull requests into `master` (or `main` if your fork still uses it).
-2. Run `pnpm changeset` to create or update release notes.
-3. Commit and push the changeset file, then open a pull request.
-4. Once merged, trigger the **npm Release** workflow from the Actions tab or tag a version (`git tag vX.Y.Z && git push --tags`). When dispatching manually, confirm the inputs:
+1. Collect release notes with `pnpm changeset`, then run `pnpm run prepare:version`.
+2. Refresh the lockfile with `pnpm install --lockfile-only` and complete local verification.
+3. Commit the package versions, changelogs, and lockfile; merge the release pull request into `2.x`.
+4. Create the dated GitHub release from the exact merged commit. Alternatively, dispatch the **npm Release** workflow once with the intended ref. When dispatching manually, confirm the inputs:
    - `npm_scope` defaults to `@truecms` and rarely needs to change.
    - `dist_tag` defaults to `latest`; use `next`, `dev`, or a custom tag to stage releases.
    - `dry_run` defaults to `true`; set to `false` only when you are ready to publish for real.
@@ -24,7 +24,7 @@ Pre-release smoke tags ending in `-dev`, `-next`, `-rc`, `-beta`, or `-alpha` au
 The workflow performs the following checks automatically:
 
 - Installs dependencies using Node 22 and pnpm
-- Builds packages and runs the full test suite
+- Builds all component packages in both validation and publication jobs, and runs the full test suite
 - Executes `pnpm run build:site-dist` to ensure documentation assets still build
 - Audits production dependencies and fails on any vulnerability
 - Publishes via Changesets with provenance metadata when the npm token is present
@@ -35,7 +35,7 @@ The workflow performs the following checks automatically:
 Every pull request also triggers the **Dry run release validation** job inside `install-check.yml`. This job:
 
 - Rebuilds packages, reruns the full test suite, and rebuilds the documentation bundle on Node 22.
-- Executes `pnpm run release -- --dry-run` to confirm Changesets can publish without contacting npm.
+- Executes `pnpm run pack:tarballs` to validate packaging without registry writes. Changesets does not support a publish dry-run flag.
 - Packs every workspace tarball, installs them in a disposable workspace, and records the results in `dist/tarballs/pack-summary.json`.
 - Persists `changesets-summary.json` (the raw release plan) and `dist/tarballs/pack-summary.json` as workflow artifacts for auditing.
 
@@ -75,3 +75,8 @@ Ensure `NPM_TOKEN_TRUECMS` is available in the environment before running `pnpm 
 - Verify the publish summary in the workflow logs to confirm each package version incremented as expected.
 - Run `pnpm outdated` locally to ensure no unexpected regressions remain.
 - Notify consumers via the release notes channel (`#design-system-releases` on Slack) and update any dependent repositories.
+
+Release tags follow the dated `vYYYY.MM.DD` series. Package versions use
+individual semantic versions managed by Changesets. Create the GitHub release
+from the exact release commit to trigger publication; do not also dispatch a
+second publish run for the same release.

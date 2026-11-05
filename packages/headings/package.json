@@ -1,6 +1,6 @@
 {
   "name": "@truecms/headings",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Class styles for display headings.",
   "keywords": [
     "auds",
@@ -36,7 +36,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.1"
+    "@truecms/core": "^6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

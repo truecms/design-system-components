@@ -1,6 +1,6 @@
 {
   "name": "@truecms/responsive-media",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Caters for video/slideshow dimensions and aspect ratios across various viewports/widths.",
   "keywords": [
     "auds",
@@ -37,7 +37,7 @@
     "@truecms/core": "workspace:*"
   },
   "peerDependencies": {
-    "@truecms/core": "^6.0.1"
+    "@truecms/core": "^6.0.2"
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",

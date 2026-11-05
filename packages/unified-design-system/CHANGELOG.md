@@ -1,5 +1,42 @@
 # @truecms/design-system
 
+## 1.1.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/accordion@9.0.2
+  - @truecms/animate@3.0.1
+  - @truecms/body@4.0.2
+  - @truecms/breadcrumbs@5.0.3
+  - @truecms/buttons@5.0.3
+  - @truecms/callout@5.0.2
+  - @truecms/card@2.0.2
+  - @truecms/control-input@5.0.2
+  - @truecms/core@6.0.2
+  - @truecms/cta-link@4.0.3
+  - @truecms/direction-links@5.0.3
+  - @truecms/footer@5.0.2
+  - @truecms/form@2.0.2
+  - @truecms/grid-12@4.0.2
+  - @truecms/header@6.0.3
+  - @truecms/headings@4.0.2
+  - @truecms/inpage-nav@5.0.3
+  - @truecms/keyword-list@5.0.3
+  - @truecms/link-list@5.0.3
+  - @truecms/main-nav@3.0.3
+  - @truecms/page-alerts@4.0.2
+  - @truecms/progress-indicator@5.0.3
+  - @truecms/responsive-media@4.0.2
+  - @truecms/searchbox@2.0.3
+  - @truecms/select@4.0.2
+  - @truecms/side-nav@7.0.3
+  - @truecms/skip-link@4.0.2
+  - @truecms/table@2.0.2
+  - @truecms/tags@6.0.3
+  - @truecms/text-inputs@4.0.2
+
 ## 1.1.2
 
 ### Patch Changes

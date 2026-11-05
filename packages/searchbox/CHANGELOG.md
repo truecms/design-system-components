@@ -1,5 +1,15 @@
 @truecms/searchbox CHANGELOG
 
+## 2.0.3
+
+### Patch Changes
+
+- Refresh security dependencies and rebuild component distributions with the updated toolchain.
+- Updated dependencies
+  - @truecms/buttons@5.0.3
+  - @truecms/core@6.0.2
+  - @truecms/text-inputs@4.0.2
+
 ## 2.0.2
 
 ### Patch Changes

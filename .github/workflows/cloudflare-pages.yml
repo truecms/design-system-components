@@ -50,16 +50,17 @@ jobs:
 
       - name: Publish to Cloudflare Pages (production/preview)
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ secrets.CLOUDFLARE_PAGES_PROJECT }}
-          directory: site-dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           # For direct uploads (no Git-connected Pages), 'production' forces a production deploy.
           # For PRs we publish a preview labeled by PR number.
-          branch: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
+          command: >-
+            pages deploy site-dist
+            --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT }}
+            --branch=${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
 
       - name: Upload Pages artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false

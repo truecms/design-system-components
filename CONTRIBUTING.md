@@ -15,7 +15,7 @@ Thanks for helping keep the Australian Government Design System components alive
   corepack prepare pnpm@9 --activate
   ```
 - Ensure the following minimum tooling versions:
-  - Node.js `>=22.0.0`
+  - Node.js `^22.13.0 || >=24`
   - npm `>=10.0.0`
   - pnpm `>=9.0.0`
 

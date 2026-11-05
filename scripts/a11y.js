@@ -116,7 +116,7 @@ const RunPa11y = async ( scenarios ) => {
     } : {};
 
     const browser = await Puppeteer.launch({
-        headless: 'new',
+        headless: true,
         ...sandboxOverrides,
     });
 
